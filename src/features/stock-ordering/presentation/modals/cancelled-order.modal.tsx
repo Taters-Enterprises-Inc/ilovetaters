@@ -1,7 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { useEffect, useState } from "react";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { StockOrderingWatingSkeleton } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {

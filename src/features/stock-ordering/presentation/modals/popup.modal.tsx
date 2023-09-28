@@ -3,15 +3,18 @@ import { updateCancelledStatus } from "features/stock-ordering/core/stock-orderi
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { useAppDispatch } from "features/config/hooks";
 import { AiFillWarning } from "react-icons/ai";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 interface CompleteModalProps {
   open: boolean;
   onClose: () => void;
+  children?: React.ReactNode;
   title: string;
   message: string;
   remarks?: string;
   id?: string;
   cancelOrder?: boolean;
+  customButton?: boolean;
   orderCancelled?: (isCancelled: boolean) => void;
 }
 
@@ -50,28 +53,33 @@ export function PopupModal(props: CompleteModalProps) {
               <AiFillWarning className="text-2xl text-tertiary" />
               <span>{props.message}</span>
             </div>
-            <div className="flex space-x-3">
-              {props.cancelOrder && (
+
+            <div className="space-y-4">{props.children}</div>
+
+            {!props.customButton && (
+              <div className="flex space-x-3">
+                {props.cancelOrder && (
+                  <Button
+                    fullWidth
+                    size="small"
+                    onClick={handleCancelOrder}
+                    variant="contained"
+                    sx={STOCK_ORDERING_BUTTON_STYLE}
+                  >
+                    Yes
+                  </Button>
+                )}
                 <Button
                   fullWidth
                   size="small"
-                  onClick={handleCancelOrder}
                   variant="contained"
-                  sx={{ color: "white", backgroundColor: "#CC5801" }}
+                  onClick={() => props.onClose()}
+                  sx={STOCK_ORDERING_BUTTON_STYLE}
                 >
-                  Yes
+                  {props.cancelOrder ? "No" : "Ok"}
                 </Button>
-              )}
-              <Button
-                fullWidth
-                size="small"
-                variant="contained"
-                onClick={() => props.onClose()}
-                sx={{ color: "white", backgroundColor: "#CC5801" }}
-              >
-                {props.cancelOrder ? "No" : "Ok"}
-              </Button>
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

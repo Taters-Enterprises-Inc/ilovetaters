@@ -1311,7 +1311,11 @@ export const STOCK_ORDER_CATEGORY: Array<{
 export const TAB_NAVIGATION = [
   { label: "NEW ORDR", label2: "(MULTI-M SUPPLIER)", label3: "New Order" },
   { label: "REVIEW ORDR", label2: "(TEI PROCUREMENT)", label3: "Review Order" },
-  { label: "DISP ORDR", label2: "(MULTI-M SUPPLIER)", label3: "Dispay Order" },
+  {
+    label: "DISP ORDR",
+    label2: "(MULTI-M SUPPLIER)",
+    label3: "Dispatch Order",
+  },
   { label: "RECV ORDR", label2: "(TEI STORE)", label3: "Receive Order" },
   {
     label: "DEL RECV APPRV",

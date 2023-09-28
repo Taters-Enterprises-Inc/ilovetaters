@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Column } from "features/shared/presentation/components/data-table";
 import { StockOrderLogs } from "./stock-order-logs";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 import { useEffect, useState } from "react";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";

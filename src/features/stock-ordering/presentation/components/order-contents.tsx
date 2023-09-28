@@ -33,6 +33,8 @@ import {
   SupplierViewOrderModal,
 } from "../modals";
 import { FaEye } from "react-icons/fa";
+import { FcHighPriority } from "react-icons/fc";
+
 import {
   getStockOrders,
   resetGetStockOrders,
@@ -409,7 +411,11 @@ export function OrderContents() {
                       <DataTableCell>{order.short_name}</DataTableCell>
                       <DataTableCell>
                         <IconButton onClick={() => handleAction(order.id)}>
-                          <FaEye className="text-lg" />
+                          {order.logistic_id ? (
+                            <FcHighPriority className="text-2xl" />
+                          ) : (
+                            <FaEye className="text-2xl" />
+                          )}
                         </IconButton>
                       </DataTableCell>
                     </DataTableRow>

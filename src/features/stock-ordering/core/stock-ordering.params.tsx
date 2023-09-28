@@ -9,6 +9,7 @@ export interface InsertNewOrderParam {
   selectedAddress: string;
   deliveryScheduleData: string;
   remarks: string;
+  logisticType: string;
   category: {
     category_id: string;
     category_name: string;

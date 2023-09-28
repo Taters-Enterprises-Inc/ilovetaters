@@ -14,7 +14,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { dispatchOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   GetProductDataState,

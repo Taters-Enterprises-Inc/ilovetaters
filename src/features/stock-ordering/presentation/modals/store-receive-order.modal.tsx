@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 import { StockOrderTable, StockOrderingWatingSkeleton } from "../components";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import {
   GetProductDataState,
   getProductData,

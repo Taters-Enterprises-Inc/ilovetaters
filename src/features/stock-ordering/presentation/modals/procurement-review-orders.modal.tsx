@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import { TextField, Button, Switch, ButtonGroup } from "@mui/material";
 import { useEffect, useState } from "react";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import {
   GetProductDataState,
   getProductData,

@@ -19,6 +19,8 @@ export interface GetProductDataModel {
     transport_route: string;
     region_id: number;
     region_name: string;
+    logistic_id: string;
+    logistic_type: string;
 
     //files
     updated_delivery_goods_receipt: string;

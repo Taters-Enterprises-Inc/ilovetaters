@@ -24,6 +24,8 @@ export const productDataInitialState = {
     region_name: "",
     updated_delivery_goods_receipt: "",
     updated_delivery_region_receipt: "",
+    logistic_id: "",
+    logistic_type: "",
     tracking: [],
     remarks: [],
   },

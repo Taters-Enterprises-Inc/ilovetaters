@@ -1,18 +1,19 @@
 import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup, TextField } from "@mui/material";
+import { Autocomplete, Button, IconButton, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  DatePicker,
+  DesktopDatePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { StockOrderConfirmTable } from "../components";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
-import {
-  insertNewOrder,
-  selectInsertNewOrder,
-} from "../slices/insert-new-order.slice";
+import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import {
@@ -21,6 +22,8 @@ import {
   selectGetDeliverySchedule,
 } from "../slices/get-delivery-schedule.slice";
 import { PopupModal } from "./popup.modal";
+import { TbUrgent } from "react-icons/tb";
+import { truncateSync } from "fs";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -47,13 +50,19 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [selectedStore, setSelectedStore] = useState<selectedStore>();
   const [selectedAddress, setSelectedAddress] = useState("");
   const [category, setCategory] = useState<category>();
-  const [isEdit, setIsEdit] = useState(false);
-  const [isEditCancelled, setisEditCancelled] = useState(false);
-  const [deliveryDate, setDeliveryData] = useState("");
-  const [deliveryDateError, setDeliveryDateError] = useState(false);
+  const [deliveryDate, setDeliveryData] = useState<string | null>("");
   const [remarks, setRemarks] = useState("");
   const [rows, setRows] = useState<OrderTableData[]>([]);
+  const [logisticType, setLogisticType] = useState<{
+    id: string | null | undefined;
+    name: string | null | undefined;
+  }>();
+
+  const [isEdit, setIsEdit] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
+  const [deliveryDateError, setDeliveryDateError] = useState(false);
+  const [isEditCancelled, setisEditCancelled] = useState(false);
+  const [emergencyOrderEnabled, setEmergencyOrderEnabled] = useState(false);
 
   useEffect(() => {
     if (getOrderInformation.data) {
@@ -67,6 +76,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setRemarks("");
       setRows([]);
       setIsEdit(false);
+      setLogisticType(undefined);
+      setEmergencyOrderEnabled(false);
       dispatch(getDeliverySchedule());
     }
   }, [props.open]);
@@ -91,6 +102,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         deliveryScheduleData: deliveryDate ?? "",
         selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
         remarks: remarks,
+        logisticType: emergencyOrderEnabled ? logisticType?.id ?? "" : "",
         category: {
           category_id: category?.category_id ?? "",
           category_name: category?.category_name ?? "",
@@ -122,7 +134,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   ) => {
     const dayIndex = dayjs(date).day();
 
-    if (schedule?.is_mwf) {
+    if (schedule?.is_mwf && !emergencyOrderEnabled) {
       return (
         dayIndex === 2 || dayIndex === 4 || dayIndex === 6 || dayIndex === 0
       );
@@ -140,11 +152,14 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       .set("hour", 14)
       .set("minute", 0)
       .set("second", 0);
-
-    if (dayjs().isBefore(targetTime)) {
-      return Number(schedule?.leadtime);
+    if (!emergencyOrderEnabled) {
+      if (dayjs().isBefore(targetTime)) {
+        return Number(schedule?.leadtime);
+      } else {
+        return Number(schedule?.leadtime) + 1;
+      }
     } else {
-      return Number(schedule?.leadtime) + 1;
+      return 0;
     }
   };
 
@@ -176,6 +191,17 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     setIsEdit(false);
   };
 
+  const handleEmergencyButton = () => {
+    setDeliveryData(null);
+    setLogisticType(undefined);
+    if (emergencyOrderEnabled) {
+      setEmergencyOrderEnabled(false);
+    } else {
+      setEmergencyOrderEnabled(true);
+      setOpenPopup(true);
+    }
+  };
+
   const handleRequestedDeliveryDate = (
     date: string | number | Date | dayjs.Dayjs | null | undefined
   ) => {
@@ -199,6 +225,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
+
+  console.log(logisticType);
 
   return (
     <>
@@ -282,9 +310,14 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                           label="Delivery date"
                           views={["year", "month", "day"]}
                           onChange={handleRequestedDeliveryDate}
-                          value={dayjs(deliveryDate)}
+                          value={deliveryDate ? dayjs(deliveryDate) : null}
                           renderInput={(params) => (
-                            <TextField required {...params} size="small" />
+                            <TextField
+                              id="requestedDedliveryDate"
+                              required
+                              {...params}
+                              size="small"
+                            />
                           )}
                           minDate={dayjs().add(handleLeadTime(), "day")}
                           shouldDisableDate={deliverySchedules}
@@ -325,27 +358,57 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                         </Button>
                       </>
                     ) : (
-                      <>
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={editProduct}
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
-                        >
-                          Edit
-                        </Button>
+                      <div className="flex flex-col space-y-2 w-full">
+                        <div className="flex space-x-3">
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            onClick={editProduct}
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
+                          >
+                            Edit
+                          </Button>
 
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          disabled={isQuantityEmpty() || deliveryDateError}
-                          type="submit"
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
-                        >
-                          Confirm
-                        </Button>
-                      </>
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            disabled={isQuantityEmpty() || deliveryDateError}
+                            type="submit"
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
+                          >
+                            {emergencyOrderEnabled
+                              ? "Emergency Confirm"
+                              : "Confirm"}
+                          </Button>
+                          <IconButton
+                            onClick={handleEmergencyButton}
+                            aria-label="emergency-button"
+                          >
+                            <TbUrgent
+                              className={`${
+                                emergencyOrderEnabled ? "text-primary" : ""
+                              }`}
+                            />
+                          </IconButton>
+                        </div>
+                        {emergencyOrderEnabled && logisticType && (
+                          <div className="flex justify-between space-x-3 ">
+                            <div>
+                              <span className="font-bold">Note: </span>
+                              <span>
+                                For delivery logistic type, additional fees will
+                                be applied
+                              </span>
+                            </div>
+                            <div>
+                              <span className="font-bold">Logistic type: </span>
+                              <span>{logisticType?.name}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )}
+                    <div></div>
                   </div>
                 </div>
               )}
@@ -356,15 +419,92 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
       <PopupModal
         open={openPopup}
+        customButton
         onClose={() => {
           props.onClose();
           setOpenPopup(false);
         }}
-        title={"Can't create order"}
-        message={
-          "Looks like your store is not register on delivery schedule. Please contact TEI MIS Department."
+        title={
+          emergencyOrderEnabled ? "Select logistic type" : "Can't create order"
         }
-      />
+        message={
+          emergencyOrderEnabled
+            ? "Note: Selecting delivery as logistic applies delivery charge"
+            : "Looks like your store is not register on delivery schedule. Please contact TEI MIS Department."
+        }
+      >
+        {emergencyOrderEnabled && (
+          // <Autocomplete
+          //   disablePortal
+          //   id="logistic-type"
+          //   options={[
+          //     { id: "1", name: "Delivery" },
+          //     { id: "2", name: "Pick-up" },
+          //   ]}
+          //   onChange={
+          //     (event, value) => console.log(value)
+          //     // setLogisticType({ id: value?.id, name: value?.name })
+          //   }
+          //   value={logisticType}
+          //   size="small"
+          //   fullWidth
+          //   renderInput={(params) => (
+          //     <TextField {...params} label="Logistic type" />
+          //   )}
+          // />
+
+          <MaterialInputAutoComplete
+            colorTheme={"black"}
+            required
+            fullWidth
+            size={"small"}
+            options={[
+              { id: "1", name: "Delivery" },
+              { id: "2", name: "Pick-up" },
+            ]}
+            getOptionLabel={(option) => option.name || ""}
+            value={logisticType}
+            label={"Logistic Type"}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(event, value) => {
+              setLogisticType(value);
+            }}
+          />
+        )}
+        <div className="flex space-x-3">
+          {emergencyOrderEnabled && (
+            <Button
+              fullWidth
+              disabled={logisticType ? false : true}
+              size="small"
+              variant="contained"
+              onClick={() => setOpenPopup(false)}
+              sx={STOCK_ORDERING_BUTTON_STYLE}
+            >
+              Select
+            </Button>
+          )}
+          <Button
+            fullWidth
+            size="small"
+            variant="contained"
+            onClick={() => {
+              if (!emergencyOrderEnabled) {
+                setOpenPopup(false);
+                props.onClose();
+              } else {
+                setOpenPopup(false);
+                setDeliveryData(null);
+                setLogisticType(undefined);
+                setEmergencyOrderEnabled(false);
+              }
+            }}
+            sx={STOCK_ORDERING_BUTTON_STYLE}
+          >
+            {emergencyOrderEnabled ? "Cancel" : "OK"}
+          </Button>
+        </div>
+      </PopupModal>
     </>
   );
 }

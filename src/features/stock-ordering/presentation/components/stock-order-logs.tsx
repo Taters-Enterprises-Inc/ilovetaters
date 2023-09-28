@@ -145,13 +145,19 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
               <div className="flex flex-col text-xs md:text-base space-y-2">
                 <div className="flex space-x-3">
                   <div>
-                    <span className="font-semibold">Order product type: </span>
+                    <span className="font-bold">Order product type: </span>
                     <span>{props.order_details["category_name"]}</span>
                   </div>
                   <div>
-                    <span className="font-semibold">Region: </span>
+                    <span className="font-bold">Region: </span>
                     <span>{props.order_details["region_name"]}</span>
                   </div>
+                  {props.order_details["logistic_type"] && (
+                    <div>
+                      <span className="font-bold">Logistic Type: </span>
+                      <span>{props.order_details["logistic_type"]}</span>
+                    </div>
+                  )}
                 </div>
                 <Divider />
                 <div className="space-x-3">
