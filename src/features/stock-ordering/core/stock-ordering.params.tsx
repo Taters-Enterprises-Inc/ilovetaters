@@ -123,3 +123,11 @@ export interface updateCancelledStatus {
   id: string;
   remarks: string;
 }
+
+export interface updateOrderItemsParam {
+  productId: string;
+  productName: string;
+  uom: string;
+  orderQty: string;
+  order_information_id: string;
+}

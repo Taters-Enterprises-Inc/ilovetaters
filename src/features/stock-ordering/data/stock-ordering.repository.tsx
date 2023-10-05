@@ -17,12 +17,14 @@ import {
   updateDeliveryReceiveApproval,
   updateCancelledStatus,
   updateBillingOrderParam,
+  updateOrderItemsParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
 import { GetProductDataModel } from "../core/domain/get-product-data.model";
 import { GetPayBillingSiModel } from "../core/domain/get-pay-billing-si.model";
 import { DeliveryScheduleModel } from "../core/domain/delivery-schedule.model";
+import { OrderTableData } from "../core/domain/order-table-row.model";
 
 export interface GetStockOrderStoresResponse {
   data: {
@@ -146,6 +148,12 @@ export interface GetDeliveryScheduleResponse {
   data: {
     message: string;
     data: Array<DeliveryScheduleModel>;
+  };
+}
+
+export interface updateOrderItemsResponse {
+  data: {
+    message: string;
   };
 }
 
@@ -317,4 +325,16 @@ export function GetDeliveryScheduleRepository(): Promise<GetDeliveryScheduleResp
   return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/schedule/delivery`, {
     withCredentials: true,
   });
+}
+
+export function updateOrderItemsRepository(
+  param: updateOrderItemsParam[]
+): Promise<GetPayBillingSiResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/update/order-items`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }

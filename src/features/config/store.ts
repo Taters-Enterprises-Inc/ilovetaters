@@ -252,7 +252,6 @@ import updateNewOrders from "features/stock-ordering/presentation/slices/update-
 import updateReviewOrders from "features/stock-ordering/presentation/slices/update-review-order.slice";
 import updateConfirmOrders from "features/stock-ordering/presentation/slices/update-confirm-order.slice";
 import updateDispatchOrders from "features/stock-ordering/presentation/slices/update-dispatch-order.slice";
-import updateEnrouteOrders from "features/stock-ordering/presentation/slices/update-enroute-order.slice";
 import updateReceiveOrders from "features/stock-ordering/presentation/slices/update-receive-order.slice";
 import updateBillingOrders from "features/stock-ordering/presentation/slices/update-billing-order.slice";
 import updatePayBillingOrders from "features/stock-ordering/presentation/slices/update-pay-billing.slice";
@@ -262,6 +261,7 @@ import updateOrderCancelled from "features/stock-ordering/presentation/slices/up
 import getPayBillingSi from "features/stock-ordering/presentation/slices/get-pay-billing-si.slice";
 import changePassword from "features/admin/presentation/slices/change-password.slice";
 import getDeliverySchedule from "features/stock-ordering/presentation/slices/get-delivery-schedule.slice";
+import updateOrderItems from "features/stock-ordering/presentation/slices/update-order-items.slice";
 
 export const store = configureStore({
   reducer: {
@@ -517,7 +517,6 @@ export const store = configureStore({
     updateReviewOrders,
     updateConfirmOrders,
     updateDispatchOrders,
-    updateEnrouteOrders,
     updateReceiveOrders,
     updateBillingOrders,
     updatePayBillingOrders,
@@ -527,6 +526,7 @@ export const store = configureStore({
     getPayBillingSi,
     changePassword,
     getDeliverySchedule,
+    updateOrderItems,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

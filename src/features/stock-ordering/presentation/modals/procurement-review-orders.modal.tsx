@@ -142,7 +142,6 @@ export function ProcurementReviewOrdersModal(
               <form className="space-y-3" onSubmit={handleOrderReviewed}>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={false}
-                  isStore={false}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}

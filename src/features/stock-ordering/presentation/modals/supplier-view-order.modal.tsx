@@ -9,7 +9,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   GetProductDataState,
   getProductData,
-  resetGetProductData,
   selectGetProductData,
 } from "../slices/get-product-data.slice";
 import { newOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
@@ -25,7 +24,10 @@ import { AiOutlineDownload } from "react-icons/ai";
 import { PopupModal } from ".";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  STOCK_ORDERING_BUTTON_STYLE,
+} from "features/shared/constants";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -208,6 +210,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
               <form className="overflow-auto" onSubmit={handleSubmit}>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={setEnabled() && !preview}
+                  enableTableEdit={setEnabled()}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}

@@ -120,7 +120,6 @@ export function DeliveryReceiveApprovalModal(
               <>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={false}
-                  isStore={false}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}

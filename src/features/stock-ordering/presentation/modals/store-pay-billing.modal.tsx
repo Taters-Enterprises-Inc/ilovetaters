@@ -79,7 +79,6 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
                     </div>
                     <StockOrderTable
                       isCommitedTextFieldAvailable={false}
-                      isStore={false}
                       activeTab={props.currentTab}
                       setRows={setRows}
                       rowData={rows}

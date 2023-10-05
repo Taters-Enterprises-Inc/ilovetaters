@@ -5,6 +5,7 @@ export const productDataInitialState = {
     id: "",
     ship_to_address: "",
     status_id: 0,
+    category_id: "",
     category_name: "",
     order_placement_date: "",
     requested_delivery_date: "",

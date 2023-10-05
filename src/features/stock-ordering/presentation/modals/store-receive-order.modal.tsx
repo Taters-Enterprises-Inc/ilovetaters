@@ -176,7 +176,6 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
               <form onSubmit={handleSubmit}>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={false}
-                  isStore={true}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}

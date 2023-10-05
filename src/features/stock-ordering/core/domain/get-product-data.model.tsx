@@ -5,6 +5,7 @@ export interface GetProductDataModel {
     id: string;
     ship_to_address: string;
     status_id: number;
+    category_id: string;
     category_name: string;
     order_placement_date: string;
     requested_delivery_date: string;
