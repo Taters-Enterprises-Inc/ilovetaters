@@ -61,6 +61,7 @@ export interface newOrdersParam {
     id: string;
     productId: string;
     commitedQuantity: string;
+    out_of_stock: boolean;
   }[];
 }
 

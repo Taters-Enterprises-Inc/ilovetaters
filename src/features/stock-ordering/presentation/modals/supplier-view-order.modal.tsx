@@ -62,6 +62,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
         id: productsItem.id,
         productId: productsItem.product_id,
         commitedQuantity: productsItem.commited_qty,
+        out_of_stock: productsItem.out_of_stock,
       })) ?? [];
 
     const reviewOrdersParamData: newOrdersParam = {

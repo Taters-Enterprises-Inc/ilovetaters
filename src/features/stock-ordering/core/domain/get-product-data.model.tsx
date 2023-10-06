@@ -57,5 +57,6 @@ export interface GetProductDataModel {
     delivered_qty: string;
     total_cost: string;
     order_information_id: string;
+    out_of_stock: boolean;
   }>;
 }

@@ -15,7 +15,11 @@ import { StockOrderLogs } from "./stock-order-logs";
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
-import { AiFillDelete } from "react-icons/ai";
+import {
+  AiFillCheckSquare,
+  AiFillCloseSquare,
+  AiFillDelete,
+} from "react-icons/ai";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import {
@@ -108,6 +112,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
       delivered_qty: "",
       total_cost: "0",
       order_information_id: "",
+      out_of_stock: false,
     };
 
     const updatedRows = [...props.rowData.product_data, defaultRow];
@@ -215,6 +220,26 @@ export function StockOrderTable(props: StockOrderTableProps) {
     });
   };
 
+  const handleOutofStock = (rowProductId: string, rowIndex: number) => {
+    const updatedRows = props.rowData.product_data.map(
+      (row: any, index: number) => {
+        if (index === rowIndex) {
+          return {
+            ...row,
+            out_of_stock: row.out_of_stock ? false : true,
+            commited_qty: 0,
+          };
+        }
+        return row;
+      }
+    );
+
+    props.setRows({
+      product_data: updatedRows,
+      order_information: props.rowData.order_information,
+    });
+  };
+
   return (
     <>
       <div>
@@ -301,20 +326,42 @@ export function StockOrderTable(props: StockOrderTableProps) {
                       <>
                         <TableCell sx={{ width: 75 }}>
                           {props.isCommitedTextFieldAvailable ? (
-                            <StockOrderHandleQuantity
-                              rows={props.rowData.product_data}
-                              setRows={(rows) => {
-                                props.setRows({
-                                  product_data: rows,
-                                  order_information:
-                                    props.rowData.order_information,
-                                });
-                              }}
-                              rowsIndex={index}
-                              currentValue={row.commited_qty}
-                              propertyKey={"commited_qty"}
-                              precedingPropertyKey={"order_qty"}
-                            />
+                            <div className="flex space-x-1">
+                              {row.out_of_stock ? (
+                                <span className="flex item-end text-base">
+                                  Out of Stock
+                                </span>
+                              ) : (
+                                <StockOrderHandleQuantity
+                                  rows={props.rowData.product_data}
+                                  setRows={(rows) => {
+                                    props.setRows({
+                                      product_data: rows,
+                                      order_information:
+                                        props.rowData.order_information,
+                                    });
+                                  }}
+                                  rowsIndex={index}
+                                  currentValue={row.commited_qty}
+                                  propertyKey={"commited_qty"}
+                                  precedingPropertyKey={"order_qty"}
+                                />
+                              )}
+
+                              <IconButton
+                                onClick={() =>
+                                  handleOutofStock(row.product_id, index)
+                                }
+                              >
+                                {row.out_of_stock ? (
+                                  <AiFillCheckSquare className="text-button" />
+                                ) : (
+                                  <AiFillCloseSquare className="text-button" />
+                                )}
+                              </IconButton>
+                            </div>
+                          ) : row.out_of_stock ? (
+                            <span>out of stock</span>
                           ) : (
                             row.commited_qty ?? <div>--</div>
                           )}
