@@ -8,11 +8,11 @@ export { StockOrderViewContent } from "./stock-order-view-content";
 export { StockOrderConfirmTable } from "./stock-order-confirm-table";
 export { StockOrderTable } from "./stock-order-table";
 export { StockOrderLogs } from "./stock-order-logs";
-export { InitializeModal } from "./initialize-modal";
-export { InitializeProductData } from "./initialize-product-data";
+
 export { StockOrderProductSelector } from "./stock-order-product-selection";
 export { PayMultipleOrder } from "./pay-multiple-order";
 export { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 export { ProfileContent } from "./profile-content";
 export { StockOrderingBadgeWrapper } from "./stock-ordering-badge-wrapper";
 export { InvoiceFilter } from "./invoice-filter";
+export { StockOrderingWatingSkeleton } from "./stock-ordering-no-data-skeleton";

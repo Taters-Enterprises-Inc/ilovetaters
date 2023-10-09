@@ -1,153 +1,100 @@
-import { Button, Divider, List, ListItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
+import { useState } from "react";
 
 interface StockOrderLogsProps {
   order_details: {
-    [key: string]:
-      | string
-      | number
-      | boolean
-      | {
-          date: string;
-          first_name: string;
-          last_name: string;
-          remarks: string;
-        }[];
+    [key: string]: any;
   };
 }
 
+interface trackingModel {
+  name: string;
+  datetime: string;
+  first_name: string;
+  last_name: string;
+}
+
+interface remarksModel {
+  date: string;
+  first_name: string;
+  last_name: string;
+  remarks: string;
+}
+
 export function StockOrderLogs(props: StockOrderLogsProps) {
-  let columns = [
-    { id: "store_name", label: "Store", isButton: false, isDate: false },
+  const documentFiles = [
+    { id: "delivery_receipt", label: "Delivery Receipt", processId: 4 },
     {
-      id: "ship_to_address",
-      label: "Ship to Address",
-      isButton: false,
-      isDate: false,
+      id: "updated_delivery_receipt",
+      label: "Updated Delivery Receipt",
+      processId: 5,
     },
     {
-      id: "order_number",
-      label: "Order Number",
-      isButton: false,
-      isDate: false,
+      id: "sales_invoice",
+      label: "Download sales invoice",
+      processId: 6,
     },
     {
-      id: "requested_delivery_date",
-      label: "Requested Delivery Date",
-      isButton: false,
-      isDate: true,
-    },
-    {
-      id: "commited_delivery_date",
-      label: "Commited Delivery Date",
-      isButton: false,
-      isDate: true,
-    },
-
-    {
-      id: "order_reviewed_date",
-      label: "Order Reviewed Date",
-      isButton: false,
-      isDate: true,
-    },
-
-    {
-      id: "view_delivery_receipt",
-      label: "Download Sales Invoice",
-      isButton: true,
-      isDate: false,
-    },
-    {
-      id: "dispatch_date",
-      label: "Dispatch Date",
-      isButton: false,
-      isDate: true,
-    },
-    {
-      id: "actual_delivery_date",
-      label: "Actual Delivery Date",
-      isButton: false,
-      isDate: true,
-    },
-    {
-      id: "view_updated_delivery_receipt",
-      label: "Download Theoretical Sales Invoice",
-      isButton: true,
-      isDate: false,
-    },
-
-    {
-      id: "view_payment_details",
-      label: "View Payment Details",
-      isButton: true,
-      isDate: false,
-    },
-    {
-      id: "payment_confirmation",
-      label: "payment Confirmation",
-      isButton: false,
-      isDate: true,
+      id: "theoretical_invoice",
+      label: "Generate Theoretical Invoice",
+      processId: 6,
     },
     {
       id: "updated_delivery_goods_receipt",
-      label: "Updated Goods Sales Invoice",
-      isButton: true,
-      isData: false,
+      label: "Updated goods invoice",
+      processId: 7,
     },
     {
       id: "updated_delivery_region_receipt",
-      label: "Updated Goods Region Invoice",
-      isButton: true,
-      isData: false,
+      label: "Updated region invoice",
+      processId: 7,
     },
+    { id: "payment_detail_image", label: "Payment detail image", processId: 8 },
   ];
 
-  const handleOnclick = (id: string) => {
-    switch (id) {
-      case "view_delivery_receipt":
-        // const filename_delivery_receipt = props.order_details
-        //   .view_delivery_receipt as string;
-        // const url_delivery_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filename_delivery_receipt}`;
-        // window.open(url_delivery_receipt, "_blank");
+  const [trackingShowMore, setTrackingShowMore] = useState(false);
+  const [downloadableShowMore, setDownloadableShowMore] = useState(false);
+  const [remarkShowMore, setRemarkShowMore] = useState(false);
 
-        if ("order_number" in props.order_details) {
-          const id = props.order_details.order_number;
-          const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-multim-si-pdf/${id}`;
+  const styledButton = {
+    backgroundColor: "white",
+    ":hover": {
+      backgroundColor: "white",
+    },
+  };
 
-          window.open(link, "_blank");
-        }
-        break;
+  const handleTrackingShowMore = () => {
+    if (props.order_details["tracking"].length < 1) {
+      return "fit-content";
+    } else {
+      if (trackingShowMore) {
+        return "fit-content";
+      } else {
+        return 75;
+      }
+    }
+  };
 
-      case "view_updated_delivery_receipt":
-        if ("order_number" in props.order_details) {
-          const id = props.order_details.order_number;
-          const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
-
-          window.open(link, "_blank");
-        }
-        break;
-
-      case "updated_delivery_goods_receipt":
-        const filename_updated_delivery_goods_receipt = props.order_details
-          .view_delivery_receipt as string;
-        const url_updated_delivery_goods_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filename_updated_delivery_goods_receipt}`;
-        window.open(url_updated_delivery_goods_receipt, "_blank");
-        break;
-
-      case "updated_delivery_region_receipt":
-        const filenameupdated_delivery_region_receipt = props.order_details
-          .view_delivery_receipt as string;
-        const urlupdated_delivery_region_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filenameupdated_delivery_region_receipt}`;
-        window.open(urlupdated_delivery_region_receipt, "_blank");
-        break;
-
-      case "view_payment_details":
-        const filename_payment_details = props.order_details
-          .view_payment_details as string;
-        const url_payment_details = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filename_payment_details}`;
-        window.open(url_payment_details, "_blank");
-
-        break;
+  const handleRemarks = () => {
+    if (props.order_details.remarks.length <= 1) {
+      return "h-fit";
+    } else {
+      if (remarkShowMore) {
+        return "h-fit";
+      } else {
+        return "h-44";
+      }
     }
   };
 
@@ -156,8 +103,8 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     return !isNaN(dateObj.getTime());
   };
 
-  const getOrderData = (value: string | number | boolean, isDate: boolean) => {
-    if (isDate && isValidDate(value as string) && value !== null) {
+  const getOrderDate = (value: string | number | boolean) => {
+    if (isValidDate(value as string) && value !== null) {
       return new Date(value as string).toLocaleDateString("en-PH", {
         month: "long",
         day: "numeric",
@@ -170,101 +117,218 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     return value;
   };
 
-  const handleRemarks = (
-    value: string | number | boolean | { remarks: string }[],
-    identifier: string
-  ) => {
-    if (Array.isArray(value)) {
-      if (value[0] && identifier === "reviewed") {
-        return value[0].remarks;
-      } else if (value[1] && identifier === "approved") {
-        return value[1].remarks;
-      }
+  const handleDownload = (type: string) => {
+    const id = props.order_details.id;
+    let link = "";
+
+    if (type === "sales_invoice") {
+      link = `${REACT_APP_DOMAIN_URL}api/stock/generate-multim-si-pdf/${id}`;
+    } else if (type === "theoretical_invoice") {
+      link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
+    } else {
+      link = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${type}`;
     }
 
-    return null;
+    window.open(link, "_blank");
   };
 
   return (
     <>
-      <div className=" p-4 space-y-2">
-        <div className="border-2 border-t-8 border-secondary rounded-t-lg">
-          <div className="bg-secondary">
-            <span className="text-white px-5">Order Tracking Logs</span>
-          </div>
+      <div className="p-4 space-y-2 overflow-auto max-h-60">
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <span className="text-base font-semibold md:text-lg md:font-bold">
+              Order Information
+            </span>
 
-          <div className="max-h-64 overflow-auto">
-            <List>
-              {columns.map((row: any, index) => (
-                <div key={index}>
-                  {props.order_details[row.id] ? (
-                    <>
-                      {row.isButton ? (
-                        <div className="flex">
-                          <Button
-                            className="basis-full"
-                            onClick={() => handleOnclick(row.id)}
-                            fullWidth
-                            size="small"
-                            variant="text"
-                          >
-                            {row.label}
-                          </Button>
-                        </div>
-                      ) : (
-                        <ListItem className="flex space-x-4" dense={true}>
-                          <span className="basis-1/2 font-semibold capitalize whitespace-normal">
-                            {row.id === "dispatch_date"
-                              ? `${row.label} ${props.order_details.transport_route}:`
-                              : row.label}
-                          </span>
-
-                          <span className="basis-1/2 capitalize whitespace-normal">
-                            {getOrderData(
-                              props.order_details[row.id] as
-                                | string
-                                | number
-                                | boolean,
-                              row.isDate
-                            )}
-                          </span>
-                        </ListItem>
-                      )}
-                      <Divider variant="middle" />
-                    </>
-                  ) : null}
+            <div className="border border-gray-200 shadow rounded-md bg-white p-5 space-y-2">
+              <div className="flex flex-col text-xs md:text-base space-y-2">
+                <div className="flex space-x-3">
+                  <div>
+                    <span className="font-bold">Order product type: </span>
+                    <span>{props.order_details["category_name"]}</span>
+                  </div>
+                  <div>
+                    <span className="font-bold">Region: </span>
+                    <span>{props.order_details["region_name"]}</span>
+                  </div>
+                  {props.order_details["logistic_type"] && (
+                    <div>
+                      <span className="font-bold">Logistic Type: </span>
+                      <span>{props.order_details["logistic_type"]}</span>
+                    </div>
+                  )}
                 </div>
-              ))}
-
-              <ListItem className="flex space-x-4" dense={true}>
-                <span className="basis-1/2 font-semibold break-all capitalize">
-                  Remarks:
+                <Divider />
+                <div className="space-x-3">
+                  <span>Tracking Number: </span>
+                  <span>{"#" + props.order_details["id"]}</span>
+                </div>
+              </div>
+            </div>
+            <div className="border border-gray-200 shadow rounded-md bg-white p-5 space-y-2">
+              <div className="flex flex-col text-xs md:text-base space-y-2">
+                <span className="font-semibold">
+                  {props.order_details["store_name"] as string}
                 </span>
-                <span className="basis-1/2">
-                  {Array.isArray(props.order_details["remarks"]) &&
-                    props.order_details["remarks"].length > 0 && (
-                      <div>
-                        {props.order_details["remarks"].map((log) => (
-                          <div className="border border-gray-300 rounded-lg shadow space-y-2 py-2 px-5">
-                            <span className="text-base whitespace-normal normal-case">
-                              {log.remarks}
-                            </span>
-                            <div className="flex flex-row text-xs space-x-5">
-                              <div className="space-x-2">
-                                <span>{log.first_name}</span>
-                                <span>{log.last_name}</span>
-                              </div>
-                              <Divider orientation="vertical" flexItem />
-                              <span>{log.date}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                </span>
-              </ListItem>
-            </List>
+                <span>{props.order_details["ship_to_address"]}</span>
+              </div>
+            </div>
           </div>
+
+          {props.order_details.remarks.length !== 0 && (
+            <div className="space-y-2">
+              <span className="text-base font-semibold md:text-lg md:font-bold">
+                Remarks
+              </span>
+
+              <div className="border border-gray-200 shadow rounded-md bg-white px-5 pt-5 space-y-2 overflow-hidden">
+                <div className={`"space-y-3 " ${handleRemarks()}`}>
+                  {props.order_details.remarks.map((remark: remarksModel) => (
+                    <>
+                      <div className="flex flex-col space-y-2 py-2">
+                        <div className="flex flex-col">
+                          <span className="font-semibold">
+                            {remark.first_name + " " + remark.last_name}
+                          </span>
+                          <span className="text-sm">{remark.date}</span>
+                        </div>
+                        <span>{remark.remarks}</span>
+                      </div>
+                      <Divider />
+                    </>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={() =>
+                    remarkShowMore
+                      ? setRemarkShowMore(false)
+                      : setRemarkShowMore(true)
+                  }
+                  size="small"
+                  fullWidth
+                  sx={styledButton}
+                >
+                  {props.order_details.remarks.length > 2
+                    ? remarkShowMore
+                      ? "Show Less"
+                      : "Show more"
+                    : null}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {props.order_details["tracking"].length !== 0 && (
+            <div className="space-y-2">
+              <span className="text-base font-semibold md:text-lg md:font-bold">
+                Tracking Log
+              </span>
+
+              <div className="border border-gray-200 shadow rounded-md bg-white px-5 pt-5 space-y-2">
+                <Box
+                  sx={{
+                    maxWidth: "100%",
+                    height: handleTrackingShowMore(),
+                    overflow: "hidden",
+                  }}
+                >
+                  <Stepper
+                    activeStep={props.order_details["tracking"].length}
+                    orientation="vertical"
+                  >
+                    {props.order_details["tracking"].map(
+                      (step: trackingModel, index: number) => (
+                        <Step key={index}>
+                          <StepLabel sx={{ marginRight: 5 }}>
+                            <div className="flex flex-col">
+                              <span className="text:sm md:text-base font-semibold">
+                                {step.name}
+                              </span>
+                              <span className="text-xs">
+                                {getOrderDate(step.datetime)}
+                              </span>
+                              <span className="text-xs">
+                                Performed by:{" "}
+                                {step.first_name + " " + step.last_name}
+                              </span>
+                            </div>
+                          </StepLabel>
+                        </Step>
+                      )
+                    )}
+                  </Stepper>
+                </Box>
+                <Button
+                  onClick={() =>
+                    trackingShowMore
+                      ? setTrackingShowMore(false)
+                      : setTrackingShowMore(true)
+                  }
+                  sx={styledButton}
+                  size="small"
+                  fullWidth
+                >
+                  {props.order_details["status_id"] >= 2
+                    ? trackingShowMore
+                      ? "Show Less"
+                      : "Show more"
+                    : null}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {props.order_details.status_id >= 4 &&
+            props.order_details.status_id < 10 && (
+              <div className="space-y-2">
+                <span className="text-base font-semibold md:text-lg md:font-bold">
+                  Invoices and payment files
+                </span>
+
+                <div className="border border-gray-200 shadow rounded-md bg-white px-5 pt-5 space-y-2 overflow-hidden">
+                  <div
+                    className={`"" ${
+                      !downloadableShowMore ? "h-16" : "h-fit"
+                    } `}
+                  >
+                    {documentFiles.map((row) => (
+                      <>
+                        {row.processId <= props.order_details.status_id && (
+                          <>
+                            <div className="flex justify-between">
+                              <span>{row.label}</span>
+                              <Button
+                                onClick={() => handleDownload(row.id)}
+                                size="small"
+                              >
+                                Download
+                              </Button>
+                            </div>
+                            <Divider />
+                          </>
+                        )}
+                      </>
+                    ))}
+                  </div>
+                  {props.order_details.status_id > 5 && (
+                    <Button
+                      onClick={() =>
+                        downloadableShowMore
+                          ? setDownloadableShowMore(false)
+                          : setDownloadableShowMore(true)
+                      }
+                      size="small"
+                      sx={styledButton}
+                      fullWidth
+                    >
+                      {downloadableShowMore ? "Show Less" : "Show more"}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
         </div>
       </div>
     </>

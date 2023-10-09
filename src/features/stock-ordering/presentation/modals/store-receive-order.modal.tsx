@@ -5,15 +5,14 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderTable,
-} from "../components";
+import { StockOrderTable, StockOrderingWatingSkeleton } from "../components";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { receiveOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   selectupdateReceiveOrders,
@@ -23,6 +22,7 @@ import {
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface StoreReceiveOrderModalProps {
   open: boolean;
@@ -45,18 +45,31 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
-    setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-    setUploadedReciept("");
-    setRemarks("");
-  }, [props.open]);
+    if (props.open && props.id) {
+      dispatch(getProductData({ orderId: props.id }));
 
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const receiveOrderState = useAppSelector(selectupdateReceiveOrders);
+      setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+      setUploadedReciept("");
+      setRemarks("");
+    }
+
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
+
+  useEffect(() => {
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -72,29 +85,16 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (isValidFile(uploadedReceipt)) {
       const receieveOrdersProductDataParam: receiveOrdersParam["product_data"] =
-        rows.product_data.map((product) => ({
+        rows?.product_data.map((product) => ({
           id: product.id,
-          productId: product.productId,
-          deliveryQuantity: product.deliveredQuantity,
-        }));
+          productId: product.product_id,
+          deliveryQuantity: product.delivered_qty,
+        })) ?? [];
 
       const receiveOrdersParamData: receiveOrdersParam = {
         id: props.id,
@@ -141,8 +141,8 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
   const isQuantityEmpty = () => {
     let empty = false;
-    rows.product_data.map((product) => {
-      if (product.commitedQuantity === "") empty = true;
+    rows?.product_data.map((product) => {
+      if (product.commited_qty === "") empty = true;
     });
 
     return empty;
@@ -171,97 +171,111 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
               <IoMdClose />
             </button>
           </div>
+          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
+            {rows ? (
+              <form onSubmit={handleSubmit}>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={setEnabled()}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
 
-          <form onSubmit={handleSubmit}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
-              <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={true}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={setEnabled()}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
-
-              {setEnabled() ? (
-                <div className="space-y-5">
-                  <div className="px-5">
-                    <div className="flex flex-col mt-2">
-                      <span>Remarks: </span>
-                      <TextField
-                        value={remarks}
-                        onChange={(event) => setRemarks(event.target.value)}
-                        inputProps={{ maxLength: 512 }}
-                        multiline
-                      />
-                    </div>
-
-                    <div className="flex flex-col md:flex-row md:space-x-3 space-y-4 mt-2">
-                      <div className="md:basis-1/2 flex flex-col space-y-2">
-                        <span>Actual Delivery Date: </span>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DateTimePicker
-                            label="Delivery date and time"
-                            views={["year", "month", "day", "hours", "minutes"]}
-                            onChange={(date) => {
-                              if (date) {
-                                const formattedDate = dayjs(date).format(
-                                  "YYYY-MM-DD HH:mm:ss"
-                                );
-
-                                setActualDeliveryDate(formattedDate);
-                              }
-                            }}
-                            value={dayjs(actualDeliveryDate)}
-                            minDateTime={dayjs().subtract(7, "day")}
-                            renderInput={(params) => (
-                              <TextField required {...params} size="small" />
-                            )}
-                          />
-                        </LocalizationProvider>
+                {setEnabled() ? (
+                  <div className="space-y-5">
+                    <div className="px-5">
+                      <div className="flex flex-col mt-2">
+                        <span>Remarks: </span>
+                        <TextField
+                          value={remarks}
+                          onChange={(event) => setRemarks(event.target.value)}
+                          inputProps={{ maxLength: 512 }}
+                          multiline
+                        />
                       </div>
 
-                      <div className="md:basis-1/2 flex items-stretch">
-                        <div
-                          className={`${
-                            isValidFile(uploadedReceipt)
-                              ? "basis-4/5"
-                              : "basis-full"
-                          } "flex self-end space-x-5"`}
-                        >
-                          <Button
-                            disabled={isQuantityEmpty()}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={STOCK_ORDERING_BUTTON_STYLE}
-                          >
-                            Confirm
-                          </Button>
+                      <div className="flex flex-col md:flex-row md:space-x-3 space-y-4 mt-2">
+                        <div className="md:basis-1/2 flex flex-col space-y-2">
+                          <span>Actual Delivery Date: </span>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                              label="Delivery date and time"
+                              views={[
+                                "year",
+                                "month",
+                                "day",
+                                "hours",
+                                "minutes",
+                              ]}
+                              onChange={(date) => {
+                                if (date) {
+                                  const formattedDate = dayjs(date).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                  );
+
+                                  setActualDeliveryDate(formattedDate);
+                                }
+                              }}
+                              value={dayjs(actualDeliveryDate)}
+                              minDateTime={dayjs().subtract(7, "day")}
+                              renderInput={(params) => (
+                                <TextField required {...params} size="small" />
+                              )}
+                            />
+                          </LocalizationProvider>
                         </div>
 
-                        {isValidFile(uploadedReceipt) ? (
-                          <div className="basis-1/5 flex  justify-center items-stretch">
-                            <div className="self-end">
-                              <IconButton
-                                onClick={() =>
-                                  setOpenUploadDeliveryRecieptModal(true)
-                                }
-                              >
-                                <MdPreview className=" text-3xl" />
-                              </IconButton>
-                            </div>
+                        <div className="md:basis-1/2 flex items-stretch">
+                          <div
+                            className={`${
+                              isValidFile(uploadedReceipt)
+                                ? "basis-4/5"
+                                : "basis-full"
+                            } "flex self-end space-x-5"`}
+                          >
+                            <Button
+                              disabled={isQuantityEmpty()}
+                              type="submit"
+                              fullWidth
+                              variant="contained"
+                              sx={STOCK_ORDERING_BUTTON_STYLE}
+                            >
+                              Confirm
+                            </Button>
                           </div>
-                        ) : null}
+
+                          {isValidFile(uploadedReceipt) ? (
+                            <div className="basis-1/5 flex  justify-center items-stretch">
+                              <div className="self-end">
+                                <IconButton
+                                  onClick={() =>
+                                    setOpenUploadDeliveryRecieptModal(true)
+                                  }
+                                >
+                                  <MdPreview className=" text-3xl" />
+                                </IconButton>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </form>
+                ) : null}
+              </form>
+            ) : (
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 

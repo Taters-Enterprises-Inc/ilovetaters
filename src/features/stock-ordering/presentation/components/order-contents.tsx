@@ -33,6 +33,8 @@ import {
   SupplierViewOrderModal,
 } from "../modals";
 import { FaEye } from "react-icons/fa";
+import { FcHighPriority } from "react-icons/fc";
+
 import {
   getStockOrders,
   resetGetStockOrders,
@@ -53,6 +55,10 @@ import {
   BackdropLoading,
   DataList,
 } from "features/shared/presentation/components";
+import {
+  selectstockOrderSideBar,
+  togglestockOrderSideBar,
+} from "../slices/stock-order.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -100,6 +106,7 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const stockOrderSideBar = useAppSelector(selectstockOrderSideBar);
 
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
@@ -146,6 +153,9 @@ export function OrderContents() {
   ];
 
   const handleModalToggle = (modal: string) => {
+    if (stockOrderSideBar.status) {
+      dispatch(togglestockOrderSideBar());
+    }
     setModals((prevModals) => ({
       ...prevModals,
       [modal]: !prevModals[modal],
@@ -162,6 +172,7 @@ export function OrderContents() {
 
   const handleAction = (id: string) => {
     handleModalToggle(Object.keys(modals)[Number(tabValue) + 2]);
+
     setOrderId(id);
   };
 
@@ -210,7 +221,7 @@ export function OrderContents() {
       <div className="space-y-3">
         <div className="">
           <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-            Order
+            Order {" > " + TAB_NAVIGATION[Number(tabValue)].label3}
           </span>
         </div>
 
@@ -400,7 +411,11 @@ export function OrderContents() {
                       <DataTableCell>{order.short_name}</DataTableCell>
                       <DataTableCell>
                         <IconButton onClick={() => handleAction(order.id)}>
-                          <FaEye className="text-lg" />
+                          {order.logistic_id ? (
+                            <FcHighPriority className="text-2xl" />
+                          ) : (
+                            <FaEye className="text-2xl" />
+                          )}
                         </IconButton>
                       </DataTableCell>
                     </DataTableRow>

@@ -420,7 +420,14 @@ import {
   selectUpdateConfirmPayment,
   updateConfirmPaymentState,
 } from "features/stock-ordering/presentation/slices/update-confirm-payment.slice";
-import { selectUpdateOrderCancelled, updateOrderCancelledState } from "features/stock-ordering/presentation/slices/update-order-cancelled.slice";
+import {
+  selectUpdateOrderCancelled,
+  updateOrderCancelledState,
+} from "features/stock-ordering/presentation/slices/update-order-cancelled.slice";
+import {
+  selectUpdateOrderItems,
+  updateOrderItemsState,
+} from "features/stock-ordering/presentation/slices/update-order-items.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -664,7 +671,28 @@ export function LoadingAndSnackbarWrapper() {
   const stockUpdateConfirmPaymentState = useAppSelector(
     selectUpdateConfirmPayment
   );
-  const stockCancelOrder = useAppSelector(selectUpdateOrderCancelled)
+  const stockCancelOrder = useAppSelector(selectUpdateOrderCancelled);
+
+  const stockUpdateOrderItems = useAppSelector(selectUpdateOrderItems);
+
+  useEffect(() => {
+    switch (stockUpdateOrderItems.status) {
+      case updateOrderItemsState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateOrderItemsState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateOrderItemsState.success:
+        showAlert(setSuccessAlert, stockUpdateOrderItems.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateOrderItemsState.fail:
+        showAlert(setFailsAlert, stockUpdateOrderItems.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdateOrderItems]);
 
   useEffect(() => {
     switch (stockCancelOrder.status) {

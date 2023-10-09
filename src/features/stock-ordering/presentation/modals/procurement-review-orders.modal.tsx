@@ -3,18 +3,22 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import { TextField, Button, Switch, ButtonGroup } from "@mui/material";
 import { useEffect, useState } from "react";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   selectupdateReviewOrders,
   updateReviewOrders,
   updateReviewOrdersState,
 } from "../slices/update-review-order.slice";
-import { InitializeModal, InitializeProductData } from "../components";
+import { StockOrderingWatingSkeleton } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface ProcurementReviewOrdersModalProps {
   open: boolean;
@@ -35,12 +39,11 @@ export function ProcurementReviewOrdersModal(
 
   const [remarks, setRemarks] = useState("");
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const stockUpdateReviewOrderState = useAppSelector(selectupdateReviewOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -56,33 +59,33 @@ export function ProcurementReviewOrdersModal(
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
+  useEffect(() => {
+    if (props.id && props.open) {
+      dispatch(getProductData({ orderId: props.id }));
+      setIsEditEnabled(false);
+      setRemarks("");
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
 
   useEffect(() => {
-    setIsEditEnabled(false);
-    setRemarks("");
-  }, [props.open]);
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   const handleOrderReviewed = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const reviewOrdersProductDataParam: updatReviewParam["product_data"] =
-      rows.product_data.map((product) => ({
+      rows?.product_data.map((product) => ({
         id: product.id,
-        productId: product.productId,
-        commitedQuantity: product.commitedQuantity,
-      }));
+        productId: product.product_id,
+        commitedQuantity: product.commited_qty,
+      })) ?? [];
 
     const reviewOrdersParamData: updatReviewParam = {
       id: props.id,
@@ -99,8 +102,8 @@ export function ProcurementReviewOrdersModal(
 
   const isQuantityEmpty = () => {
     let empty = false;
-    rows.product_data.map((product) => {
-      if (product.commitedQuantity === "") empty = true;
+    rows?.product_data.map((product) => {
+      if (product.commited_qty === "") empty = true;
     });
 
     return empty;
@@ -134,59 +137,67 @@ export function ProcurementReviewOrdersModal(
               <IoMdClose />
             </button>
           </div>
+          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
+            {rows ? (
+              <form className="space-y-3" onSubmit={handleOrderReviewed}>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
 
-          <form onSubmit={handleOrderReviewed}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={false}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
+                {setEnabled() || isEditEnabled ? (
+                  <div className="px-2 space-y-3">
+                    <div className="flex flex-col">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
 
-              {setEnabled() || isEditEnabled ? (
-                <>
-                  <div className="flex flex-col">
-                    <span>Remarks: </span>
-                    <TextField
-                      value={remarks}
-                      onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 512 }}
-                      multiline
-                    />
+                    <div className="flex space-x-3">
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        disabled={isQuantityEmpty()}
+                        type="submit"
+                        onClick={() => setStatus("1")}
+                        sx={STOCK_ORDERING_BUTTON_STYLE}
+                      >
+                        Send back to New Order
+                      </Button>
+
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        disabled={isQuantityEmpty()}
+                        type="submit"
+                        onClick={() => setStatus("3")}
+                        sx={STOCK_ORDERING_BUTTON_STYLE}
+                      >
+                        Order Reviewed
+                      </Button>
+                    </div>
                   </div>
-
-                  <div className="flex space-x-3">
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      disabled={isQuantityEmpty()}
-                      type="submit"
-                      onClick={() => setStatus("1")}
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Send back to New Order
-                    </Button>
-
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      disabled={isQuantityEmpty()}
-                      type="submit"
-                      onClick={() => setStatus("3")}
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Order Reviewed
-                    </Button>
-                  </div>
-                </>
-              ) : null}
-            </div>
-          </form>
+                ) : null}
+              </form>
+            ) : (
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

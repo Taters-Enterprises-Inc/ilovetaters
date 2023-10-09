@@ -14,22 +14,29 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { dispatchOrderParam } from "features/stock-ordering/core/stock-ordering.params";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import {
   selectupdateDispatchOrders,
   updateDispatchOrders,
   updateDispatchOrdersState,
 } from "../slices/update-dispatch-order.slice";
-import { InitializeModal, InitializeProductData } from "../components";
+import { StockOrderingWatingSkeleton } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AiOutlineDownload } from "react-icons/ai";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { PopupModal } from "./popup.modal";
 import { ExcelPreviewModal } from "./excel-preview.modal";
-import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  STOCK_ORDERING_BUTTON_STYLE,
+} from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 // import { verifyDispatchOrders } from "../slices/verify-dispatch-invoice.slice";
 
 interface SupplierDispatchOrderModalProps {
@@ -58,7 +65,7 @@ export function SupplierDispatchOrderModal(
   const [remarks, setRemarks] = useState("");
   const [openPopUp, setOpenPopUp] = useState(false);
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
@@ -91,7 +98,6 @@ export function SupplierDispatchOrderModal(
   };
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const dispatchOrderState = useAppSelector(selectupdateDispatchOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -107,38 +113,38 @@ export function SupplierDispatchOrderModal(
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
+  useEffect(() => {
+    if (props.open && props.id) {
+      dispatch(getProductData({ orderId: props.id }));
 
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
+      setUploadedReciept("");
+      setDispachedDelivery(null);
+      setTransport("");
+      setRemarks("");
+      setuploadButton(true);
+      setPreview(false);
+      setOpenPopUp(false);
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
 
   useEffect(() => {
-    setUploadedReciept("");
-    setDispachedDelivery(null);
-    setTransport("");
-    setRemarks("");
-    setuploadButton(true);
-    setPreview(false);
-    setOpenPopUp(false);
-  }, [props.open]);
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   const handleDispatchOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const dispatchedOrdersProductDataParam: dispatchOrderParam["product_data"] =
-      rows.product_data.map((product) => ({
+      rows?.product_data.map((product) => ({
         id: product.id,
-        productId: product.productId,
-        dispatchedQuantity: product.dispatchedQuantity,
-      }));
+        productId: product.product_id,
+      })) ?? [];
 
     const dispatchOrdersParamData: dispatchOrderParam = {
       id: props.id,
@@ -162,11 +168,8 @@ export function SupplierDispatchOrderModal(
 
   const isQuantityEmpty = () => {
     let empty = false;
-    rows.product_data.map((product) => {
-      if (
-        product.commitedQuantity === "" ||
-        product.commitedQuantity === null
-      ) {
+    rows?.product_data.map((product) => {
+      if (product.commited_qty === "" || product.commited_qty === null) {
         empty = true;
       }
     });
@@ -201,7 +204,8 @@ export function SupplierDispatchOrderModal(
               <button
                 className="text-2xl text-white"
                 onClick={() => {
-                  //Waiting for download endpoint
+                  const link = `${REACT_APP_DOMAIN_URL}api/stock/export-order-pdf/${props.id}`;
+                  window.open(link, "_blank");
 
                   document.body.classList.remove("overflow-hidden");
                   props.onClose();
@@ -209,7 +213,6 @@ export function SupplierDispatchOrderModal(
               >
                 <AiOutlineDownload />
               </button>
-
               <button
                 className="text-2xl text-white"
                 onClick={() => {
@@ -221,168 +224,176 @@ export function SupplierDispatchOrderModal(
               </button>
             </div>
           </div>
-
-          <form onSubmit={handleDispatchOrder}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={false}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
-              {setEnabled() ? (
-                <div className="flex flex-col px-3 space-y-3">
-                  <div className="flex flex-col space-y-2 md:flex-row md:space-x-3">
-                    <FormControl
-                      sx={{
-                        flexBasis: { md: "50%" },
-                        alignSelf: { md: "flex-end" },
-                      }}
-                      disabled={preview}
-                      required
-                    >
-                      <FormLabel id="transport-route-label">
-                        Transport Route
-                      </FormLabel>
-
-                      <RadioGroup
-                        onChange={(event, value) => setTransport(value)}
-                        value={transport}
-                        row
-                        aria-labelledby="transport-route"
-                      >
-                        <FormControlLabel
-                          value="1"
-                          control={<Radio size="small" />}
-                          label="Ground"
-                        />
-                        <FormControlLabel
-                          value="2"
-                          control={<Radio size="small" />}
-                          label="Ocean"
-                        />
-                        <FormControlLabel
-                          value="3"
-                          control={<Radio size="small" />}
-                          label="Air"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-
-                    <div className="flex flex-col space-y-2 md:basis-1/2">
-                      <span>Dispatched Delivery Date: </span>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <TimePicker
-                          disabled={preview}
-                          label="Dispatch Time Picker"
-                          value={dispatchedDelivery}
-                          onChange={(date) => {
-                            setDispachedDelivery(date);
-                          }}
-                          renderInput={(params) => (
-                            <TextField
-                              required
-                              {...params}
-                              autoComplete="off"
-                              size="small"
-                            />
-                          )}
-                        />
-                      </LocalizationProvider>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col mt-2">
-                    <span>Remarks: </span>
-                    <TextField
-                      value={remarks}
-                      onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 512 }}
-                      multiline
-                    />
-                  </div>
-
-                  <div className="flex flex-col space-y-3">
-                    <div className="flex flex-col md:flex-row gap-3">
-                      <Button
-                        fullWidth
-                        size="small"
-                        sx={STOCK_ORDERING_BUTTON_STYLE}
-                        onClick={() => {
-                          setOpenUploadDeliveryRecieptModal(true);
+          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
+            {rows ? (
+              <form className="space-y-3" onSubmit={handleDispatchOrder}>
+                <StockOrderTable
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                />
+                {setEnabled() ? (
+                  <div className="flex flex-col px-3 space-y-3">
+                    <div className="flex flex-col space-y-2 md:flex-row md:space-x-3">
+                      <FormControl
+                        sx={{
+                          flexBasis: { md: "50%" },
+                          alignSelf: { md: "flex-end" },
                         }}
-                        variant="contained"
+                        disabled={preview}
+                        required
                       >
-                        Upload Sales Invoice
-                      </Button>
+                        <FormLabel id="transport-route-label">
+                          Transport Route
+                        </FormLabel>
 
-                      {preview ? (
-                        <Button
-                          fullWidth
-                          size="small"
-                          type="submit"
-                          variant="contained"
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                        <RadioGroup
+                          onChange={(event, value) => setTransport(value)}
+                          value={transport}
+                          row
+                          aria-labelledby="transport-route"
                         >
-                          Dispatch Order
-                        </Button>
-                      ) : (
-                        <Button
-                          fullWidth
-                          size="small"
-                          variant="contained"
-                          onClick={handlePreviewButton}
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
-                          disabled={
-                            !isValidFile(uploadedReceipt) ||
-                            transport === "" ||
-                            isQuantityEmpty() ||
-                            dispatchedDelivery === null
-                          }
-                        >
-                          Preview
-                        </Button>
-                      )}
+                          <FormControlLabel
+                            value="1"
+                            control={<Radio size="small" />}
+                            label="Ground"
+                          />
+                          <FormControlLabel
+                            value="2"
+                            control={<Radio size="small" />}
+                            label="Ocean"
+                          />
+                          <FormControlLabel
+                            value="3"
+                            control={<Radio size="small" />}
+                            label="Air"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+
+                      <div className="flex flex-col space-y-2 md:basis-1/2">
+                        <span>Dispatched Delivery Date: </span>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <TimePicker
+                            disabled={preview}
+                            label="Dispatch Time Picker"
+                            value={dispatchedDelivery}
+                            onChange={(date) => {
+                              setDispachedDelivery(date);
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                required
+                                {...params}
+                                autoComplete="off"
+                                size="small"
+                              />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </div>
                     </div>
 
-                    <div className="flex justify-between">
-                      {preview && uploadedReceipt && (
+                    <div className="flex flex-col mt-2">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+
+                    <div className="flex flex-col space-y-3">
+                      <div className="flex flex-col md:flex-row gap-3">
                         <Button
-                          onClick={() => setOpenExcelPreview(true)}
+                          fullWidth
                           size="small"
-                          variant="text"
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                          onClick={() => {
+                            setOpenUploadDeliveryRecieptModal(true);
+                          }}
+                          variant="contained"
                         >
-                          {Object.values(uploadedReceipt).map((name) => name)}
-                        </Button>
-                      )}
-                      <div>
-                        <Button size="small" onClick={handleCancelOrder}>
-                          <span className="text-primary underline">
-                            Cancel Order
-                          </span>
+                          Upload Sales Invoice
                         </Button>
 
-                        {preview && (
+                        {preview ? (
                           <Button
+                            fullWidth
                             size="small"
-                            onClick={() => setPreview(false)}
+                            type="submit"
+                            variant="contained"
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
                           >
-                            <span className="text-primary underline">
-                              Re-edit
-                            </span>
+                            Dispatch Order
+                          </Button>
+                        ) : (
+                          <Button
+                            fullWidth
+                            size="small"
+                            variant="contained"
+                            onClick={handlePreviewButton}
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
+                            disabled={
+                              !isValidFile(uploadedReceipt) ||
+                              transport === "" ||
+                              isQuantityEmpty() ||
+                              dispatchedDelivery === null
+                            }
+                          >
+                            Preview
                           </Button>
                         )}
                       </div>
+
+                      <div className="flex justify-between">
+                        {preview && uploadedReceipt && (
+                          <Button
+                            onClick={() => setOpenExcelPreview(true)}
+                            size="small"
+                            variant="text"
+                          >
+                            {Object.values(uploadedReceipt).map((name) => name)}
+                          </Button>
+                        )}
+                        <div>
+                          <Button size="small" onClick={handleCancelOrder}>
+                            <span className="text-primary underline">
+                              Cancel Order
+                            </span>
+                          </Button>
+
+                          {preview && (
+                            <Button
+                              size="small"
+                              onClick={() => setPreview(false)}
+                            >
+                              <span className="text-primary underline">
+                                Re-edit
+                              </span>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </form>
+                ) : null}
+              </form>
+            ) : (
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton
+                    remarks
+                    dispatchDoubleComponent
+                    firstDoubleComponents
+                  />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -406,6 +417,7 @@ export function SupplierDispatchOrderModal(
         message={"Are you sure you want to cancel your order?"}
         remarks={remarks}
         id={props.id}
+        cancelOrder
         orderCancelled={(isCancelled: boolean) =>
           isCancelled && props.onClose()
         }

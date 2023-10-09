@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {
   changePassword,
   changePasswordState,
+  resetChangePassword,
   selectchangePassword,
 } from "../slices/change-password.slice";
 import {
@@ -79,14 +80,19 @@ export function ChangePassword() {
   };
 
   useEffect(() => {
-    if (changeAdminPasswordState.status === changePasswordState.success) {
+    if (
+      changeAdminPasswordState.status === changePasswordState.success &&
+      passwordState
+    ) {
       dispatch(logoutAdmin());
     }
   }, [changeAdminPasswordState, dispatch]);
 
   useEffect(() => {
     if (getLogoutAdminState.status === LogoutAdminState.success) {
+      console.log("Trigger navigate");
       dispatch(getAdminSession());
+      dispatch(resetChangePassword());
       dispatch(resetLogoutAdmin());
       navigate("/admin");
     }

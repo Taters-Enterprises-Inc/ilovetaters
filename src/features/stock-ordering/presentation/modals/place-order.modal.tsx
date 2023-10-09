@@ -19,7 +19,6 @@ import { OrderTableData } from "features/stock-ordering/core/domain/order-table-
 import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
-import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 
 interface PlaceOrdersModalProps {
@@ -50,19 +49,12 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   const [category, setCategory] = useState<category>();
 
   const [rows, setRows] = useState<OrderTableData[]>([]);
-  const [schedule, setDeliverySchedule] = useState<DeliverySchedule>();
 
   useEffect(() => {
     setSelectedStore({ store_id: "", name: "" });
     setCategory({ category_id: "", category_name: "" });
     setSelectedAddress("");
     setDisabled(true);
-    setDeliverySchedule({
-      cutoff: "",
-      is_mwf: false,
-      is_tths: false,
-      leadtime: "",
-    });
   }, [props.open]);
 
   useEffect(() => {
@@ -83,7 +75,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
           selectedAddress: selectedAddress as string,
           category: category,
           OrderData: rows,
-          deliveryScheduleData: schedule as DeliverySchedule,
         },
       })
     );
@@ -216,7 +207,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                       category_id={category.category_id}
                       selected_store={selectedStore}
                       setRows={setRows}
-                      setDeliverySchedule={setDeliverySchedule}
                     />
                   </div>
                 )}

@@ -1,5 +1,3 @@
-import { GridSelectionModel } from "@mui/x-data-grid";
-import { DeliverySchedule } from "./domain/delivery-schedule.model";
 import { OrderTableData } from "./domain/order-table-row.model";
 
 export interface test {
@@ -9,8 +7,9 @@ export interface test {
 export interface InsertNewOrderParam {
   selectedStoreId: string | undefined;
   selectedAddress: string;
-  deliveryScheduleData: string | DeliverySchedule | undefined;
+  deliveryScheduleData: string;
   remarks: string;
+  logisticType: string;
   category: {
     category_id: string;
     category_name: string;
@@ -44,7 +43,7 @@ export interface dispatchOrderParam {
   product_data: {
     id: string;
     productId: string;
-    dispatchedQuantity: string;
+    // dispatchedQuantity: string;
   }[];
 }
 
@@ -62,6 +61,7 @@ export interface newOrdersParam {
     id: string;
     productId: string;
     commitedQuantity: string;
+    out_of_stock: boolean;
   }[];
 }
 
@@ -123,4 +123,12 @@ export interface storeIdParam {
 export interface updateCancelledStatus {
   id: string;
   remarks: string;
+}
+
+export interface updateOrderItemsParam {
+  productId: string;
+  productName: string;
+  uom: string;
+  orderQty: string;
+  order_information_id: string;
 }

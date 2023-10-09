@@ -17,6 +17,8 @@ export interface GetStockOrdersModel {
       billing_id: string;
       billing_amount: string;
       short_name: string;
+      logistic_id: string;
+      logistic_type: string;
     }
   ];
 

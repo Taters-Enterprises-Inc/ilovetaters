@@ -48,7 +48,7 @@ export const changePasswordSlice = createSlice({
   name: "changePassword",
   initialState,
   reducers: {
-    resetchangePassword: (state) => {
+    resetChangePassword: (state) => {
       state.status = changePasswordState.inProgress;
     },
   },
@@ -73,5 +73,5 @@ export const changePasswordSlice = createSlice({
 
 export const selectchangePassword = (state: RootState) => state.changePassword;
 
-export const { resetchangePassword } = changePasswordSlice.actions;
+export const { resetChangePassword } = changePasswordSlice.actions;
 export default changePasswordSlice.reducer;

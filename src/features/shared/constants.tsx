@@ -1309,16 +1309,24 @@ export const STOCK_ORDER_CATEGORY: Array<{
 ];
 
 export const TAB_NAVIGATION = [
-  { label: "NEW ORDR", label2: "(MULTI-M SUPPLIER)" },
-  { label: "REVIEW ORDR", label2: "(TEI PROCUREMENT)" },
-  { label: "DISP ORDR", label2: "(MULTI-M SUPPLIER)" },
-  { label: "RECV ORDR", label2: "(TEI STORE)" },
-  { label: "DEL RECV APPRV", label2: "(TEI STORE MGR)" },
-  { label: "UPD BILL", label2: "(MULTI-M FINANCE)" },
-  { label: "PAY BILL", label2: "(TEI FINANCE)" },
-  { label: "CONF PAY", label2: "(MULTI-M FINANCE)" },
-  { label: "ORDERS", label2: "COMPLETE" },
-  { label: "CANCELLED", label2: "ORDERS" },
+  { label: "NEW ORDR", label2: "(MULTI-M SUPPLIER)", label3: "New Order" },
+  { label: "REVIEW ORDR", label2: "(TEI PROCUREMENT)", label3: "Review Order" },
+  {
+    label: "DISP ORDR",
+    label2: "(MULTI-M SUPPLIER)",
+    label3: "Dispatch Order",
+  },
+  { label: "RECV ORDR", label2: "(TEI STORE)", label3: "Receive Order" },
+  {
+    label: "DEL RECV APPRV",
+    label2: "(TEI STORE MGR)",
+    label3: "Delivery Receive Order",
+  },
+  { label: "UPD BILL", label2: "(MULTI-M FINANCE)", label3: "Update Billing" },
+  { label: "PAY BILL", label2: "(TEI FINANCE)", label3: "Pay Billing" },
+  { label: "CONF PAY", label2: "(MULTI-M FINANCE)", label3: "Confirm Payment" },
+  { label: "ORDERS", label2: "COMPLETE", label3: "Complete Orders" },
+  { label: "CANCELLED", label2: "ORDERS", label3: "Cancelled Order" },
 ];
 
 export const STOCK_ORDERING_BUTTON_STYLE = {
