@@ -177,8 +177,17 @@ export function OrderContents() {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    const queryParams = createQueryParams({ tab: newValue });
-
+    const params = {
+      page_no: null,
+      per_page: perPage,
+      status: status,
+      order_by: orderBy,
+      order: order,
+      store: store,
+      search: search,
+      tab: newValue,
+    };
+    const queryParams = createQueryParams(params);
     navigate({
       pathname: "",
       search: queryParams,
@@ -303,6 +312,7 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      tab: tabValue,
                     };
                     const queryParams = createQueryParams(params);
                     navigate({
@@ -323,6 +333,7 @@ export function OrderContents() {
                         order: isAsc ? "desc" : "asc",
                         store: store,
                         search: search,
+                        tab: tabValue,
                       };
 
                       const queryParams = createQueryParams(params);
@@ -345,6 +356,7 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        tab: tabValue,
                       };
 
                       const queryParams = createQueryParams(params);
@@ -367,6 +379,7 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        tab: tabValue,
                       };
 
                       const queryParams = createQueryParams(params);
@@ -438,6 +451,7 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      tab: tabValue,
                     };
 
                     const queryParams = createQueryParams(params);
@@ -457,6 +471,7 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        tab: tabValue,
                       };
 
                       const queryParams = createQueryParams(params);
@@ -479,6 +494,7 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        tab: tabValue,
                       };
 
                       const queryParams = createQueryParams(params);
