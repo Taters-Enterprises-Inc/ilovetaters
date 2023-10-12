@@ -6,7 +6,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getCateringCategoryPackages,
   selectGetCateringCategoryPackages,
@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
+import { BsFillBagCheckFill } from "react-icons/bs";
 
 export function CateringProducts() {
   const [
@@ -29,6 +30,7 @@ export function CateringProducts() {
 
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -119,6 +121,30 @@ export function CateringProducts() {
             </Link>
           </div>
         </section>
+
+        <section className="container fixed bottom-[100px] sm:bottom-[120px] lg:bottom-[50px] z-10 h-1">
+          <div className="container flex items-start justify-end">
+            <div className="block ">
+              {getSessionState.data?.orders === undefined ||
+              getSessionState.data?.orders == null ||
+              getSessionState.data?.orders.length <= 0 ? null : (
+                <button
+                  onClick={() => {
+                    navigate("/shop/checkout");
+                  }}
+                  className="flex items-center justify-center px-2 py-1 space-x-2 text-white shadow-lg sm:max-h-fit rounded-xl bg-button"
+                >
+                  <BsFillBagCheckFill className="text-xl lg:text-2xl" />
+
+                  <span className="text-base lg:text-lg font-['Bebas_Neue'] tracking-[3px] mt-1">
+                    Checkout Cart
+                  </span>
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+
         <CateringFaqs />
       </section>
 
