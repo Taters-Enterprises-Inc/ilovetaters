@@ -455,34 +455,13 @@ export function StockOrderTable(props: StockOrderTableProps) {
       </div>
       <PopupModal
         open={openPopUpMessage}
-        onClose={() => setOpenPopupMessage(false)}
         title={"Warning!"}
         message={
           "Please be aware that this action is irreversible. Are you certain you want to continue?"
         }
-        customButton
-      >
-        <div className="flex space-x-3">
-          <Button
-            onClick={handleCommitChanges}
-            variant="contained"
-            fullWidth
-            size="small"
-            sx={STOCK_ORDERING_BUTTON_STYLE}
-          >
-            Yes
-          </Button>
-          <Button
-            onClick={handleDiscardChanges}
-            variant="contained"
-            fullWidth
-            size="small"
-            sx={STOCK_ORDERING_BUTTON_STYLE}
-          >
-            No
-          </Button>
-        </div>
-      </PopupModal>
+        handleYesButton={handleCommitChanges}
+        handleNoButton={handleDiscardChanges}
+      />
     </>
   );
 }

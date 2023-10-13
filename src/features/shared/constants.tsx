@@ -1333,3 +1333,16 @@ export const STOCK_ORDERING_BUTTON_STYLE = {
   color: "white",
   backgroundColor: "#CC5801",
 };
+
+export const STOCK_ORDERING_MODAL_TITLE = [
+  { label: "Supplier View Orer" },
+  { label: "Procurement Review Orders" },
+  { label: "Supplier Dispatch Order" },
+  { label: "Store Receive Orders" },
+  { label: "Delivery Receive Approval" },
+  { label: "Update Order Billing" },
+  { label: "Pay Order Billing" },
+  { label: "Confirm Payment" },
+  { label: "Complete Modal" },
+  { label: "Cancelled Orders" },
+];

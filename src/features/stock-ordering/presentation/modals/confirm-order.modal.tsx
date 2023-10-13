@@ -419,11 +419,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
       <PopupModal
         open={openPopup}
-        customButton
-        onClose={() => {
-          props.onClose();
-          setOpenPopup(false);
-        }}
         title={
           emergencyOrderEnabled ? "Select logistic type" : "Can't create order"
         }
@@ -432,27 +427,20 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
             ? "Note: Selecting delivery as logistic applies delivery charge"
             : "Looks like your store is not register on delivery schedule. Please contact TEI MIS Department."
         }
+        okayButton={!emergencyOrderEnabled}
+        handleOkayButton={() => {
+          setOpenPopup(false);
+          props.onClose();
+        }}
+        handleNoButton={() => {
+          setOpenPopup(false);
+          setDeliveryData(null);
+          setLogisticType(undefined);
+          setEmergencyOrderEnabled(false);
+        }}
+        handleYesButton={() => setOpenPopup(false)}
       >
         {emergencyOrderEnabled && (
-          // <Autocomplete
-          //   disablePortal
-          //   id="logistic-type"
-          //   options={[
-          //     { id: "1", name: "Delivery" },
-          //     { id: "2", name: "Pick-up" },
-          //   ]}
-          //   onChange={
-          //     (event, value) => console.log(value)
-          //     // setLogisticType({ id: value?.id, name: value?.name })
-          //   }
-          //   value={logisticType}
-          //   size="small"
-          //   fullWidth
-          //   renderInput={(params) => (
-          //     <TextField {...params} label="Logistic type" />
-          //   )}
-          // />
-
           <MaterialInputAutoComplete
             colorTheme={"black"}
             required
@@ -471,39 +459,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
             }}
           />
         )}
-        <div className="flex space-x-3">
-          {emergencyOrderEnabled && (
-            <Button
-              fullWidth
-              disabled={logisticType ? false : true}
-              size="small"
-              variant="contained"
-              onClick={() => setOpenPopup(false)}
-              sx={STOCK_ORDERING_BUTTON_STYLE}
-            >
-              Select
-            </Button>
-          )}
-          <Button
-            fullWidth
-            size="small"
-            variant="contained"
-            onClick={() => {
-              if (!emergencyOrderEnabled) {
-                setOpenPopup(false);
-                props.onClose();
-              } else {
-                setOpenPopup(false);
-                setDeliveryData(null);
-                setLogisticType(undefined);
-                setEmergencyOrderEnabled(false);
-              }
-            }}
-            sx={STOCK_ORDERING_BUTTON_STYLE}
-          >
-            {emergencyOrderEnabled ? "Cancel" : "OK"}
-          </Button>
-        </div>
       </PopupModal>
     </>
   );

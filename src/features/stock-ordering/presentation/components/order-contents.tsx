@@ -24,6 +24,7 @@ import {
   CancelledModal,
   ConfirmOrdersModal,
   PlaceOrderModal,
+  ProcessModal,
   ProcurementReviewOrdersModal,
   StorePayBillingModal,
   StoreReceiveOrderModal,
@@ -111,16 +112,7 @@ export function OrderContents() {
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
     confirmOrder: false,
-    supplierViewOrder: false,
-    procurementReviewOrder: false,
-    supplierDispatchOrder: false,
-    storeReceiveOrder: false,
-    deliveryReceiveApproval: false,
-    supplierUpdateBilling: false,
-    storePayBilling: false,
-    supplierConfirm: false,
-    complete: false,
-    cancelled: false,
+    processModal: false,
   });
 
   const [orderId, setOrderId] = useState("");
@@ -171,8 +163,7 @@ export function OrderContents() {
   };
 
   const handleAction = (id: string) => {
-    handleModalToggle(Object.keys(modals)[Number(tabValue) + 2]);
-
+    handleModalToggle("processModal");
     setOrderId(id);
   };
 
@@ -605,7 +596,7 @@ export function OrderContents() {
                           pathname: "",
                           search: queryParams,
                         });
-                        handleModalToggle("storePayBilling");
+                        handleModalToggle("processModal");
                       }}
                     />
                   ) : null}
@@ -629,6 +620,14 @@ export function OrderContents() {
         onClose={() => handleModalToggle("confirmOrder")}
       />
 
+      <ProcessModal
+        open={modals.processModal}
+        onClose={() => handleModalToggle("processModal")}
+        currentTab={Number(tabValue)}
+        id={orderId}
+      />
+
+      {/*
       <SupplierViewOrderModal
         open={modals.supplierViewOrder}
         onClose={() => handleModalToggle("supplierViewOrder")}
@@ -697,7 +696,7 @@ export function OrderContents() {
         onClose={() => handleModalToggle("cancelled")}
         currentTab={Number(tabValue)}
         id={orderId}
-      />
+      /> */}
     </>
   );
 }

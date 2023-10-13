@@ -410,7 +410,7 @@ export function SupplierDispatchOrderModal(
         file={uploadedReceipt}
       />
 
-      <PopupModal
+      {/* <PopupModal
         open={openPopUp}
         onClose={() => setOpenPopUp(false)}
         title={"Cancel Order"}
@@ -421,7 +421,7 @@ export function SupplierDispatchOrderModal(
         orderCancelled={(isCancelled: boolean) =>
           isCancelled && props.onClose()
         }
-      />
+      /> */}
     </>
   );
 }

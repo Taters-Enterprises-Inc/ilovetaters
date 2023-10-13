@@ -338,7 +338,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
         </div>
       </div>
 
-      <PopupModal
+      {/* <PopupModal
         open={openPopUp}
         onClose={() => setOpenPopUp(false)}
         title={"Cancel Order"}
@@ -349,7 +349,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
         orderCancelled={(isCancelled: boolean) =>
           isCancelled && props.onClose()
         }
-      />
+      /> */}
     </>
   );
 }
