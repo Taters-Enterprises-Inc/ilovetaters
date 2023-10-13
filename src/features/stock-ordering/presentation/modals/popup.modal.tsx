@@ -43,9 +43,9 @@ export function PopupModal(props: CompleteModalProps) {
     <>
       {/* <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
         <div className="w-[50%] lg:w-[400px] my-32 rounded-[10px]"> */}
-      <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto">
-        <div className="w-[50%] lg:w-[400px] my-32 border-2 border-black rounded-md">
-          <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
+      <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto rounded-t-md ">
+        <div className="w-[50%] lg:w-[400px] my-36 border-2 border-black rounded-md">
+          <div className="bg-secondary flex items-center justify-between p-4">
             <span className="text-sm text-white font-semibold">
               {props.title}
             </span>

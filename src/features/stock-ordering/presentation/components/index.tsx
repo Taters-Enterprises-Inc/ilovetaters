@@ -4,7 +4,6 @@ export { StockOrderDrawerMenu } from "./stock-order-drawer-menu";
 export { OrderContents } from "./order-contents";
 export { StockOrderBreadCrumbs } from "./stock-order-breakcrumbs";
 export { StockOrderHead } from "./stock-order-head";
-export { StockOrderViewContent } from "./stock-order-view-content";
 export { StockOrderConfirmTable } from "./stock-order-confirm-table";
 export { StockOrderTable } from "./stock-order-table";
 export { StockOrderLogs } from "./stock-order-logs";

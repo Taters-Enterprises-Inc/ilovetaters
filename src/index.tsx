@@ -177,7 +177,6 @@ import {
   ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
-  StockOrderView,
 } from "features/stock-ordering/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -411,10 +410,7 @@ root.render(
                                     path="order"
                                     element={<StockOrderOrders />}
                                   />
-                                  <Route
-                                    path="order/view"
-                                    element={<StockOrderView />}
-                                  />
+
                                   <Route
                                     path="profile"
                                     element={<ProfilePage />}
