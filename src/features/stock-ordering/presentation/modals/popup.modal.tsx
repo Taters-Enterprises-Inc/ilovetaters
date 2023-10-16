@@ -1,15 +1,19 @@
 import { Button } from "@mui/material";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { AiFillWarning } from "react-icons/ai";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import { useEffect } from "react";
-import { togglePopupScroll } from "../slices/popup-scroll.slice";
+import {
+  selectpopupScroll,
+  togglePopupScroll,
+} from "../slices/popup-scroll.slice";
 
 interface CompleteModalProps {
   open: boolean;
   children?: React.ReactNode;
   title: string;
-  message: string;
+  message: string | React.ReactElement;
+  icon?: React.ReactElement;
   customButton?: boolean;
   handleYesButton?: () => void;
   handleNoButton?: () => void;
@@ -42,7 +46,11 @@ export function PopupModal(props: CompleteModalProps) {
           </div>
           <div className="flex flex-col bg-paper p-3 rounded-b-md space-y-8">
             <div className="flex space-x-3">
-              <AiFillWarning className="text-5xl text-tertiary" />
+              {props.icon ? (
+                props.icon
+              ) : (
+                <AiFillWarning className="text-5xl text-tertiary" />
+              )}
               <span>{props.message}</span>
             </div>
 

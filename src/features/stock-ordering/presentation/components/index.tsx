@@ -18,6 +18,7 @@ export { StockOrderingWatingSkeleton } from "./stock-ordering-no-data-skeleton";
 
 //Process
 export { StockOrderProcessSupplierViewOrder } from "./stock-order-process-supplier-view-order";
+export { StockOrderProcessProcurementReviewOrder } from "./stock-order-process-procurement-review-order";
 
 //Field
 export { StockOrderRemarks } from "./stock-order-remarks";

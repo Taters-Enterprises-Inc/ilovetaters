@@ -1,8 +1,3 @@
-import { IoMdClose } from "react-icons/io";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { selectGetStockOrderStores } from "../slices/get-store.slice";
-import { AiOutlineDownload } from "react-icons/ai";
 import {
   REACT_APP_DOMAIN_URL,
   STOCK_ORDERING_MODAL_TITLE,
@@ -12,16 +7,26 @@ import {
   StockOrderTable,
   StockOrderingWatingSkeleton,
 } from "../components";
-import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
-import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
-import { useEffect, useState } from "react";
+
 import {
   GetProductDataState,
   getProductData,
   selectGetProductData,
 } from "../slices/get-product-data.slice";
-import { PopupModal } from "./popup.modal";
-import { selectpopupScroll } from "../slices/popup-scroll.slice";
+import { IoMdClose } from "react-icons/io";
+import { useEffect, useState } from "react";
+import { AiOutlineDownload } from "react-icons/ai";
+import { createQueryParams } from "features/config/helpers";
+import { getStockOrderStores } from "../slices/get-store.slice";
+import {
+  closePopupScroll,
+  selectpopupScroll,
+  togglePopupScroll,
+} from "../slices/popup-scroll.slice";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface ProcessModalProps {
   open: boolean;
@@ -45,6 +50,10 @@ export function ProcessModal(props: ProcessModalProps) {
     if (props.id && props.open) {
       dispatch(getProductData({ orderId: props.id }));
     }
+
+    if (popupModalState.status) {
+      dispatch(closePopupScroll());
+    }
   }, [dispatch, props.open, props.id, props.currentTab]);
 
   useEffect(() => {
@@ -55,6 +64,22 @@ export function ProcessModal(props: ProcessModalProps) {
       setRows(getProductDataState.data);
     }
   }, [getProductDataState]);
+
+  useEffect(() => {
+    if (
+      props.currentTab === 0 &&
+      props.open &&
+      rows?.order_information.store_id
+    ) {
+      const query = createQueryParams({
+        store_id: rows.order_information.store_id,
+      });
+
+      if (props.open) {
+        dispatch(getStockOrderStores(query));
+      }
+    }
+  }, [props.currentTab, rows?.order_information.store_id, props.open]);
 
   const handleDownloadTableData = () => {
     const link = `${REACT_APP_DOMAIN_URL}api/stock/export-order-pdf/${props.id}`;

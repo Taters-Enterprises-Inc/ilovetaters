@@ -3,16 +3,21 @@ import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { TextField, Button, ButtonGroup } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StockOrderRemarks } from "./stock-order-remarks";
-import React, { useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import { PopupModal } from "../modals";
-import { updateCancelledStatus } from "features/stock-ordering/core/stock-ordering.params";
+import {
+  newOrdersParam,
+  updateCancelledStatus,
+} from "features/stock-ordering/core/stock-ordering.params";
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
+import { updateNewOrders } from "../slices/update-new-order.slice";
+import { BsCheckCircleFill } from "react-icons/bs";
 
 interface SupplierViewOrderProps {
-  orderid: string;
+  orderId: string;
   rows: GetProductDataModel;
   onClose: (close: boolean) => void;
 }
@@ -27,25 +32,42 @@ export function StockOrderProcessSupplierViewOrder(
   const [remarks, setRemarks] = useState("");
   const [preview, setPreview] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
+  const [preSubmitAlert, setPreSubmitAlert] = useState(false);
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState<
     string | null
   >(null);
 
-  // useEffect(() => {
-  //   if (rows?.order_information.store_id && props.open) {
-  //     const query = createQueryParams({
-  //       store_id: rows.order_information.store_id,
-  //     });
+  const handleOnSubmit = () => {
+    const reviewOrdersProductDataParam: newOrdersParam["product_data"] =
+      props.rows?.product_data.map((productsItem) => ({
+        id: productsItem.id,
+        productId: productsItem.product_id,
+        commitedQuantity: productsItem.commited_qty,
+        out_of_stock: productsItem.out_of_stock,
+      })) ?? [];
 
-  //     dispatch(getStockOrderStores(query));
-  //   }
-  // }, [rows?.order_information]);
+    const reviewOrdersParamData: newOrdersParam = {
+      id: props.orderId,
+      commitedDelivery: CommitedDeliveryDate,
+      remarks: remarks,
+      product_data: reviewOrdersProductDataParam,
+    };
 
-  const handleOnSubmit = () => {};
+    dispatch(updateNewOrders(reviewOrdersParamData));
+
+    props.onClose(true);
+  };
+
+  const handleSubmitOrder = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+
+    setPreSubmitAlert(true);
+    setOpenPopup(true);
+  };
 
   const handleCancelledOrder = () => {
     const cancelParameter: updateCancelledStatus = {
-      id: props.orderid ?? "",
+      id: props.orderId ?? "",
       remarks: remarks ?? "",
     };
     dispatch(updateOrderCancelled(cancelParameter));
@@ -91,7 +113,7 @@ export function StockOrderProcessSupplierViewOrder(
 
   return (
     <>
-      <form onSubmit={handleOnSubmit}>
+      <form onSubmit={handleSubmitOrder}>
         <div className="px-2 space-y-3">
           <StockOrderRemarks remarks={remarks} setRemarks={setRemarks} />
 
@@ -190,9 +212,14 @@ export function StockOrderProcessSupplierViewOrder(
 
       <PopupModal
         open={openPopup}
-        title={"Warning!"}
-        message={"Are you sure you want to cancel the order?"}
-        handleYesButton={handleCancelledOrder}
+        title={preSubmitAlert ? "Confirmation!" : "Warning!"}
+        message={
+          preSubmitAlert
+            ? "Are you sure you want to commit the order?"
+            : "Are you sure you want to cancel the order?"
+        }
+        icon={<BsCheckCircleFill className="text-3xl text-[#00FA9A]" />}
+        handleYesButton={preSubmitAlert ? handleOnSubmit : handleCancelledOrder}
         handleNoButton={() => {
           setOpenPopup(false);
         }}

@@ -116,15 +116,15 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     }
   }, [getProductDataState]);
 
-  useEffect(() => {
-    if (rows?.order_information.store_id && props.open) {
-      const query = createQueryParams({
-        store_id: rows.order_information.store_id,
-      });
+  // useEffect(() => {
+  //   if (rows?.order_information.store_id && props.open) {
+  //     const query = createQueryParams({
+  //       store_id: rows.order_information.store_id,
+  //     });
 
-      dispatch(getStockOrderStores(query));
-    }
-  }, [rows?.order_information]);
+  //     dispatch(getStockOrderStores(query));
+  //   }
+  // }, [rows?.order_information]);
 
   const isQuantityEmpty = () => {
     let empty = false;
