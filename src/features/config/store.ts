@@ -151,7 +151,7 @@ import editAdminSettingShopProduct from "features/admin/presentation/slices/edit
 import deleteAdminSettingShopProduct from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
 import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
 import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
-import addToCartCateringProducts from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
+import addToCartCateringProduct from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 import getCateringCategoryProducts from "features/catering/presentation/slices/get-catering-category-products.slice";
 import getAdminStoreCateringProducts from "features/admin/presentation/slices/get-admin-stores-catering-products.slice";
 import updateStoreCateringProduct from "features/admin/presentation/slices/update-store-catering-product.slice";
@@ -416,7 +416,7 @@ export const store = configureStore({
     deleteAdminSettingShopProduct,
     updateAdminSettingShopProductStatus,
     getAdminProducts,
-    addToCartCateringProducts,
+    addToCartCateringProduct,
     getCateringCategoryProducts,
     getAdminStoreCateringProducts,
     updateStoreCateringProduct,
