@@ -15,6 +15,7 @@ import {
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { updateNewOrders } from "../slices/update-new-order.slice";
 import { BsCheckCircleFill } from "react-icons/bs";
+import { isQuantityEmpty } from "./stock-ordering-utils";
 
 interface SupplierViewOrderProps {
   orderId: string;
@@ -100,17 +101,6 @@ export function StockOrderProcessSupplierViewOrder(
     return dayjs();
   };
 
-  const isQuantityEmpty = () => {
-    let empty = false;
-    props.rows?.product_data.map((product) => {
-      if (product.commited_qty === "" || product.commited_qty === null) {
-        empty = true;
-      }
-    });
-
-    return empty;
-  };
-
   return (
     <>
       <form onSubmit={handleSubmitOrder}>
@@ -177,7 +167,10 @@ export function StockOrderProcessSupplierViewOrder(
                 </Button>
               ) : (
                 <Button
-                  disabled={isQuantityEmpty()}
+                  disabled={isQuantityEmpty(
+                    props.rows.product_data,
+                    props.rows.order_information.status_id
+                  )}
                   fullWidth
                   variant="contained"
                   onClick={(event) => {

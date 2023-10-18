@@ -26,6 +26,7 @@ import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { useAppDispatch } from "features/config/hooks";
 import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
 import dayjs from "dayjs";
+import { isValidFile } from "./stock-ordering-utils";
 
 interface StockOrderProcessSupplierDispatchOrderProps {
   orderId: string;
@@ -62,45 +63,6 @@ export function StockOrderProcessSupplierDispatchOrder(
   const handlePreviewButton = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     setPreview(true);
-  };
-
-  const isQuantityEmpty = () => {
-    let empty = false;
-    props.rows?.product_data.map((product) => {
-      if (product.commited_qty === "" || product.commited_qty === null) {
-        empty = true;
-      }
-    });
-
-    return empty;
-  };
-
-  const isValidFile = (file: string | File | undefined): boolean => {
-    if (!file) {
-      return false;
-    }
-
-    if (typeof file === "string") {
-      return true;
-    }
-
-    // const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "xls", "xlsx"];
-    const allowedExtensions = ["xls", "xlsx"];
-
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const isValidExtension =
-      fileExtension && allowedExtensions.includes(fileExtension);
-
-    if (!isValidExtension) {
-      return false;
-    }
-
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSizeInBytes) {
-      return false;
-    }
-
-    return true;
   };
 
   const handleCancelledOrder = () => {
@@ -232,9 +194,8 @@ export function StockOrderProcessSupplierDispatchOrder(
                   onClick={handlePreviewButton}
                   sx={STOCK_ORDERING_BUTTON_STYLE}
                   disabled={
-                    !isValidFile(uploadedReceipt) ||
+                    !isValidFile(uploadedReceipt, false) ||
                     transport === "" ||
-                    isQuantityEmpty() ||
                     dispatchedDelivery === null
                   }
                 >

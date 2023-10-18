@@ -4,6 +4,7 @@ import {
 } from "features/shared/constants";
 import {
   StockOrderProcessActionEnabler,
+  StockOrderProcessFinancePayBilling,
   StockOrderTable,
   StockOrderingWatingSkeleton,
 } from "../components";
@@ -21,7 +22,6 @@ import { getStockOrderStores } from "../slices/get-store.slice";
 import {
   closePopupScroll,
   selectpopupScroll,
-  togglePopupScroll,
 } from "../slices/popup-scroll.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
@@ -95,6 +95,21 @@ export function ProcessModal(props: ProcessModalProps) {
     props.onClose();
   };
 
+  const processAction = () =>
+    getAdminSessionState.data?.admin.user_details.sos_groups.map((tab) => {
+      if (tab.id === props.currentTab + 1 && rows) {
+        return (
+          <StockOrderProcessActionEnabler
+            tab={props.currentTab}
+            orderId={props.id}
+            row={rows}
+            onClose={handleCloseModal}
+          />
+        );
+      }
+      return null;
+    });
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -146,19 +161,23 @@ export function ProcessModal(props: ProcessModalProps) {
                   rowData={rows}
                 />
 
-                <StockOrderProcessActionEnabler
-                  tab={props.currentTab}
-                  orderId={props.id}
-                  row={rows}
-                  onClose={handleCloseModal}
-                />
+                {processAction()}
               </>
             ) : (
-              <StockOrderingWatingSkeleton
-                remarks
-                firstDoubleComponents
-                secondDoubleComponents
-              />
+              <>
+                {props.currentTab === 6 ? (
+                  <StockOrderProcessFinancePayBilling
+                    onClose={handleCloseModal}
+                    open={props.open}
+                  />
+                ) : (
+                  <StockOrderingWatingSkeleton
+                    remarks
+                    firstDoubleComponents
+                    secondDoubleComponents
+                  />
+                )}
+              </>
             )}
           </div>
         </div>

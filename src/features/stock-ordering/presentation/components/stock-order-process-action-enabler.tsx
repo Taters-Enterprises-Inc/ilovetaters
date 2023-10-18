@@ -1,8 +1,13 @@
-import React from "react";
-import { StockOrderProcessSupplierViewOrder } from "./stock-order-process-supplier-view-order";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
-import { StockOrderProcessProcurementReviewOrder } from "./stock-order-process-procurement-review-order";
-import { StockOrderProcessSupplierDispatchOrder } from "./stock-order-process-supplier-dispatch-order";
+import {
+  StockOrderProcessProcurementReviewOrder,
+  StockOrderProcessStoreManagerDeliveryRecieveOrderApproval,
+  StockOrderProcessStoreRecieveOrder,
+  StockOrderProcessSupplierConfirmPayment,
+  StockOrderProcessSupplierDispatchOrder,
+  StockOrderProcessSupplierUpdateBilling,
+  StockOrderProcessSupplierViewOrder,
+} from ".";
 
 interface StockOrderProcessActionEnablerProps {
   tab: number;
@@ -23,7 +28,6 @@ export function StockOrderProcessActionEnabler(
           onClose={props.onClose}
         />
       );
-      break;
     case 1:
       return (
         <StockOrderProcessProcurementReviewOrder
@@ -32,7 +36,6 @@ export function StockOrderProcessActionEnabler(
           onClose={props.onClose}
         />
       );
-      break;
     case 2:
       return (
         <StockOrderProcessSupplierDispatchOrder
@@ -41,7 +44,41 @@ export function StockOrderProcessActionEnabler(
           onClose={props.onClose}
         />
       );
-      break;
+
+    case 3:
+      return (
+        <StockOrderProcessStoreRecieveOrder
+          orderId={props.orderId}
+          rows={props.row}
+          onClose={props.onClose}
+        />
+      );
+
+    case 4:
+      return (
+        <StockOrderProcessStoreManagerDeliveryRecieveOrderApproval
+          orderId={props.orderId}
+          rows={props.row}
+          onClose={props.onClose}
+        />
+      );
+    case 5:
+      return (
+        <StockOrderProcessSupplierUpdateBilling
+          orderId={props.orderId}
+          rows={props.row}
+          onClose={props.onClose}
+        />
+      );
+
+    case 7:
+      return (
+        <StockOrderProcessSupplierConfirmPayment
+          orderId={props.orderId}
+          rows={props.row}
+          onClose={props.onClose}
+        />
+      );
   }
 
   return null;

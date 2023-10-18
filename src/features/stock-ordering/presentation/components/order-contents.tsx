@@ -20,19 +20,7 @@ import {
   styled,
 } from "@mui/material";
 import { TiDocumentAdd } from "react-icons/ti";
-import {
-  CancelledModal,
-  ConfirmOrdersModal,
-  PlaceOrderModal,
-  ProcessModal,
-  ProcurementReviewOrdersModal,
-  StorePayBillingModal,
-  StoreReceiveOrderModal,
-  SupplierConfirmModal,
-  SupplierDispatchOrderModal,
-  SupplierUpdateBillingModal,
-  SupplierViewOrderModal,
-} from "../modals";
+import { ConfirmOrdersModal, PlaceOrderModal, ProcessModal } from "../modals";
 import { FaEye } from "react-icons/fa";
 import { FcHighPriority } from "react-icons/fc";
 
@@ -48,8 +36,7 @@ import {
   DataTableRow,
 } from "features/shared/presentation/components/data-table";
 import { TAB_NAVIGATION } from "features/shared/constants";
-import { CompleteModal } from "../modals/complete-order.modal";
-import { DeliveryReceiveApprovalModal } from "../modals/delivery-receive-approval.modal";
+
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import {
@@ -626,77 +613,6 @@ export function OrderContents() {
         currentTab={Number(tabValue)}
         id={orderId}
       />
-
-      {/*
-      <SupplierViewOrderModal
-        open={modals.supplierViewOrder}
-        onClose={() => handleModalToggle("supplierViewOrder")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <ProcurementReviewOrdersModal
-        open={modals.procurementReviewOrder}
-        onClose={() => handleModalToggle("procurementReviewOrder")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <SupplierDispatchOrderModal
-        open={modals.supplierDispatchOrder}
-        onClose={() => handleModalToggle("supplierDispatchOrder")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <StoreReceiveOrderModal
-        open={modals.storeReceiveOrder}
-        onClose={() => handleModalToggle("storeReceiveOrder")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <SupplierUpdateBillingModal
-        open={modals.supplierUpdateBilling}
-        onClose={() => handleModalToggle("supplierUpdateBilling")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <StorePayBillingModal
-        open={modals.storePayBilling}
-        onClose={() => handleModalToggle("storePayBilling")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <SupplierConfirmModal
-        open={modals.supplierConfirm}
-        onClose={() => handleModalToggle("supplierConfirm")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <CompleteModal
-        open={modals.complete}
-        onClose={() => handleModalToggle("complete")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <DeliveryReceiveApprovalModal
-        open={modals.deliveryReceiveApproval}
-        onClose={() => handleModalToggle("deliveryReceiveApproval")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      />
-
-      <CancelledModal
-        open={modals.cancelled}
-        onClose={() => handleModalToggle("cancelled")}
-        currentTab={Number(tabValue)}
-        id={orderId}
-      /> */}
     </>
   );
 }
