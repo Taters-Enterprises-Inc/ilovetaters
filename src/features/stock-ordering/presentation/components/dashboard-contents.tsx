@@ -40,17 +40,19 @@ export function DashboardContents() {
                 }}>
                     <ListItem className="flex space-x-5 hover:bg-zinc-200">
                     <Badge badgeContent={3} color="primary"
-                     anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}>
+                     anchorOrigin={{ vertical: 'top', horizontal: 'left',}} 
+                      sx={{ display: { xs: 'none', md: 'block' }}}>
                     <ListItemAvatar>
                       <GoAlertFill size={40}/>
                     </ListItemAvatar>
                     </Badge>
                     <ListItemText primary={<div><Box fontWeight="fontWeightBold">Taters Market Market</Box><Box fontSize={"14px"}>Last Updated: October 6, 2023</Box></div>} 
                     secondary={<div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, consectetur fugit at quia minima animi distinctio assumenda.</div>} />
-                    <Button variant="contained" startIcon={<GoPencil />} onClick={handleOpen} className="p-8">Update</Button>
+                    <Box>
+                      <Button variant="contained" startIcon={<GoPencil />} onClick={handleOpen}>
+                      <Box sx={{ display: { xs: 'none', md: 'block' }}}>Update</Box>
+                      </Button>
+                    </Box>
                     <Modal
                       open={open}
                       onClose={handleClose}
@@ -69,17 +71,31 @@ export function DashboardContents() {
                 
                 <ListItem className="flex space-x-5 hover:bg-zinc-200">
                     <Badge badgeContent={3} color="primary"
-                     anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}>
+                     anchorOrigin={{ vertical: 'top', horizontal: 'left',}} 
+                      sx={{ display: { xs: 'none', md: 'block' }}}>
                     <ListItemAvatar>
                       <GoAlertFill size={40}/>
                     </ListItemAvatar>
                     </Badge>
                     <ListItemText primary={<div><Box fontWeight="fontWeightBold">Taters Trinoma</Box><Box fontSize={"14px"}>Last Updated: October 6, 2023</Box></div>} 
-                    secondary={<div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, consectetur fugit at quia minima animi distinctio assumenda.</div>} />
-                    <Button variant="contained" startIcon={<GoPencil />}>Update</Button>
+                    secondary={<div className="text-justify"><Box>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, consectetur fugit at quia minima animi distinctio assumenda.</Box></div>} />
+                    <Box>
+                      <Button variant="contained" startIcon={<GoPencil />} onClick={handleOpen}>
+                      <Box sx={{ display: { xs: 'none', md: 'block' }}}>Update</Box>
+                      </Button>
+                    </Box>
+                    <Modal
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <Box sx={style}>
+                        <Typography className="text-center py-3">Update the following task?</Typography>
+                        <Box className="flex justify-center space-x-4">
+                          <Button variant="contained" onClick={handleClose}>Cancel</Button>
+                          <Button variant="contained">Update</Button>
+                        </Box>
+                      </Box>
+                    </Modal>
                 </ListItem>
                 
 
@@ -87,17 +103,31 @@ export function DashboardContents() {
 
                 <ListItem className="flex space-x-5 hover:bg-zinc-200">
                     <Badge badgeContent={3} color="primary"
-                     anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}>
+                     anchorOrigin={{ vertical: 'top', horizontal: 'left',}} 
+                      sx={{ display: { xs: 'none', md: 'block' }}}>
                     <ListItemAvatar>
                       <GoAlertFill size={40}/>
                     </ListItemAvatar>
                     </Badge>
                     <ListItemText primary={<div><Box fontWeight="fontWeightBold">Taters SM North Edsa</Box><Box fontSize={"14px"}>Last Updated: October 6, 2023</Box></div>} 
                     secondary={<div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, consectetur fugit at quia minima animi distinctio assumenda.</div>} />
-                    <Button variant="contained" startIcon={<GoPencil />}>Update</Button>
+                    <Box>
+                      <Button variant="contained" startIcon={<GoPencil />} onClick={handleOpen}>
+                      <Box sx={{ display: { xs: 'none', md: 'block' }}}>Update</Box>
+                      </Button>
+                    </Box>
+                    <Modal
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <Box sx={style}>
+                        <Typography className="text-center py-3">Update the following task?</Typography>
+                        <Box className="flex justify-center space-x-4">
+                          <Button variant="contained" onClick={handleClose}>Cancel</Button>
+                          <Button variant="contained">Update</Button>
+                        </Box>
+                      </Box>
+                    </Modal>
                 </ListItem>
 
                 </List>
