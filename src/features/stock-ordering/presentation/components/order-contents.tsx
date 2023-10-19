@@ -102,6 +102,7 @@ export function OrderContents() {
     processModal: false,
   });
 
+  const [payMultipleBillingState, setPayMultipleBillingState] = useState(false);
   const [orderId, setOrderId] = useState("");
 
   const query = useQuery();
@@ -202,6 +203,8 @@ export function OrderContents() {
 
     dispatch(getStockOrders(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
+
+  console.log(payMultipleBillingState);
 
   return (
     <>
@@ -583,6 +586,7 @@ export function OrderContents() {
                           pathname: "",
                           search: queryParams,
                         });
+                        setPayMultipleBillingState(true);
                         handleModalToggle("processModal");
                       }}
                     />
@@ -609,9 +613,13 @@ export function OrderContents() {
 
       <ProcessModal
         open={modals.processModal}
-        onClose={() => handleModalToggle("processModal")}
+        onClose={() => {
+          setPayMultipleBillingState(false);
+          handleModalToggle("processModal");
+        }}
         currentTab={Number(tabValue)}
         id={orderId}
+        payMultipleBilling={payMultipleBillingState}
       />
     </>
   );

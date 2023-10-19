@@ -33,6 +33,7 @@ interface ProcessModalProps {
   onClose: () => void;
   currentTab: number;
   id: string;
+  payMultipleBilling?: boolean;
 }
 
 export function ProcessModal(props: ProcessModalProps) {
@@ -149,33 +150,30 @@ export function ProcessModal(props: ProcessModalProps) {
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows ? (
-              <>
-                <StockOrderTable
-                  isCommitedTextFieldAvailable={props.currentTab === 0}
-                  isDeliveredQtyAvailable={props.currentTab === 3}
-                  enableTableEdit={props.currentTab === 0}
-                  isUpdateBilling={props.currentTab === 5}
-                  activeTab={props.currentTab}
-                  setRows={setRows}
-                  rowData={rows}
-                />
-
-                {processAction()}
-              </>
+            {props.payMultipleBilling ? (
+              <StockOrderProcessFinancePayBilling
+                onClose={handleCloseModal}
+                open={props.open}
+              />
             ) : (
               <>
-                {props.currentTab === 6 ? (
-                  <StockOrderProcessFinancePayBilling
-                    onClose={handleCloseModal}
-                    open={props.open}
-                  />
+                {rows ? (
+                  <>
+                    <StockOrderTable
+                      isCommitedTextFieldAvailable={props.currentTab === 0}
+                      isDeliveredQtyAvailable={props.currentTab === 3}
+                      enableTableEdit={props.currentTab === 0}
+                      isUpdateBilling={props.currentTab === 5}
+                      activeTab={props.currentTab}
+                      setRows={setRows}
+                      rowData={rows}
+                    />
+                    {processAction()}{" "}
+                  </>
                 ) : (
-                  <StockOrderingWatingSkeleton
-                    remarks
-                    firstDoubleComponents
-                    secondDoubleComponents
-                  />
+                  <>
+                    <StockOrderingWatingSkeleton tab={props.currentTab} />
+                  </>
                 )}
               </>
             )}
