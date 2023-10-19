@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import {
   MdDashboardCustomize,
   MdExpandMore,
+  MdOutlineListAlt,
   MdOutlineNavigateNext,
+  MdOutlineStorage,
+  MdStoreMallDirectory,
 } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { RiQuestionAnswerFill, RiQuestionnaireLine } from "react-icons/ri";
@@ -36,15 +39,15 @@ export function StockOrderDrawerMenu() {
   const navigate = useNavigate();
 
   const menuitems = [
-    // {
-    //   text: "Dashboard",
-    //   path: "dashboard",
-    //   icon: <MdDashboardCustomize size={20} />,
-    // },
+    {
+      text: "Dashboard",
+      path: "dashboard",
+      icon: <MdOutlineStorage size={20} />,
+    },
     {
       text: "Order",
       path: "order",
-      icon: <MdDashboardCustomize size={20} />,
+      icon: <MdStoreMallDirectory size={20} />,
     },
     {
       text: "Profile",

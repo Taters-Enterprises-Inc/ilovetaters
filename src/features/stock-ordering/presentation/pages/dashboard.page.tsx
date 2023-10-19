@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { StockOrderHead } from "../components";
+import { DashboardContents } from "../components/dashboard-contents";
 
 export function StockOrderDashboard() {
   return (
@@ -16,6 +17,10 @@ export function StockOrderDashboard() {
           ],
         }}
       />
+
+      <div className="p-8">
+        <DashboardContents />
+      </div>
     </>
   );
 }
