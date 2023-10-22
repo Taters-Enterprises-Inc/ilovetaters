@@ -1,6 +1,8 @@
+import { useAppDispatch } from "features/config/hooks";
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import * as XLSX from "xlsx";
+import { togglePopupScroll } from "../slices/popup-scroll.slice";
 
 interface ExcelPreviewModalProps {
   open: boolean;
@@ -9,7 +11,13 @@ interface ExcelPreviewModalProps {
 }
 
 export function ExcelPreviewModal(props: ExcelPreviewModalProps) {
+  const dispatch = useAppDispatch();
+
   const [sheetData, setSheetData] = useState<any[]>([]);
+
+  useEffect(() => {
+    dispatch(togglePopupScroll());
+  }, [props.open]);
 
   useEffect(() => {
     if (props.file) {
@@ -66,7 +74,7 @@ export function ExcelPreviewModal(props: ExcelPreviewModalProps) {
   return (
     <div
       id="excel-preview-modal"
-      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+      className="fixed inset-0 -top-5 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
       <div className="w-[97%] lg:w-[800px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">

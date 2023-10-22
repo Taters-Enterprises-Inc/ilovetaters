@@ -1,28 +1,38 @@
-import { useEffect } from "react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { Button, CircularProgress, TextField, debounce } from "@mui/material";
-import { useState } from "react";
-import { ExcelPreviewModal, PayBillingModal } from "../modals";
-import {
-  selectUpdatePayBillingOrders,
-  updatePayBillingOrders,
-  updatePayBillingOrdersState,
-} from "../slices/update-pay-billing.slice";
-import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
+import { useEffect, useState } from "react";
 import {
   GetPayBillingSiState,
   getPayBillingSi,
   selectGetPayBillingSi,
 } from "../slices/get-pay-billing-si.slice";
-import { InvoiceFilter } from "./invoice-filter";
+import {
+  selectUpdatePayBillingOrders,
+  updatePayBillingOrders,
+} from "../slices/update-pay-billing.slice";
 import { createQueryParams } from "features/config/helpers";
 import { useNavigate } from "react-router-dom";
+import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
+import { debounce } from "lodash";
+import { CircularProgress, TextField, Button } from "@mui/material";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { PayBillingModal, ExcelPreviewModal, PopupModal } from "../modals";
+import { InvoiceFilter } from "./invoice-filter";
+import { isValidFile } from "./stock-ordering-utils";
+
+interface StockOrderProcessFinancePayBillingProps {
+  onClose: () => void;
+  open: boolean;
+}
+
+interface selectedData {
+  invoice: string | undefined;
+  orderId: string | undefined;
+}
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "Sales Invoice", width: 100 },
@@ -46,31 +56,30 @@ const columns: GridColDef[] = [
   },
 ];
 
-interface PayMultipleOrderProps {
-  onClose: (close: boolean) => void;
-  open: boolean;
-}
-
-interface selectedData {
-  invoice: string | undefined;
-  orderId: string | undefined;
-}
-
-export function PayMultipleOrder(props: PayMultipleOrderProps) {
-  const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
-  const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
-  const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
-  const [remarks, setRemarks] = useState("");
-  const [openExcelPreview, setOpenExcelPreview] = useState(false);
+export function StockOrderProcessFinancePayBilling(
+  props: StockOrderProcessFinancePayBillingProps
+) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
 
   const query = useQuery();
   const invoiceSearch = query.get("invoiceSearch");
 
-  const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
-  const billingState = useAppSelector(selectUpdatePayBillingOrders);
+  const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
+  const [remarks, setRemarks] = useState("");
 
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
+  const [openExcelPreview, setOpenExcelPreview] = useState(false);
+  const [openPopupModal, setOpenPopupModal] = useState(false);
+
+  useEffect(() => {
+    const query = createQueryParams({
+      invoiceSearch: invoiceSearch,
+    });
+    dispatch(getPayBillingSi(query));
+  }, [dispatch, invoiceSearch]);
 
   const InvoiceData = getPayBillingSiState.data?.orders.map((row) => {
     return {
@@ -83,51 +92,16 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     };
   });
 
-  const isValidFile = (file: string | File | undefined): boolean => {
-    if (!file) {
-      return false;
-    }
-
-    if (typeof file === "string") {
-      return true;
-    }
-
-    const allowedExtensions = ["xls", "xlsx"];
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const isValidExtension =
-      fileExtension && allowedExtensions.includes(fileExtension);
-
-    if (!isValidExtension) {
-      return false;
-    }
-
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSizeInBytes) {
-      return false;
-    }
-
-    return true;
-  };
-
-  useEffect(() => {
-    const query = createQueryParams({
-      invoiceSearch: invoiceSearch,
-    });
-    dispatch(getPayBillingSi(query));
-  }, [dispatch, invoiceSearch]);
-
-  const handlePayBilling = async () => {
-    const payBilingParam: updatePayBillingParam = {
-      selectedData: selectedData ?? [],
-      paymentFile: uploadedReceipt,
-      remarks: remarks,
+  const debouncedSearch = debounce((val) => {
+    const params = {
+      invoiceSearch: val === "" ? null : val,
     };
-
-    dispatch(updatePayBillingOrders(payBilingParam));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose(true);
-  };
+    const queryParams = createQueryParams(params);
+    navigate({
+      pathname: "",
+      search: queryParams,
+    });
+  }, 500);
 
   const handleOnSelectionModelChange = (
     selectedInvoice: GridSelectionModel
@@ -141,16 +115,18 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     setSelectedData(selectedRowsData);
   };
 
-  const debouncedSearch = debounce((val) => {
-    const params = {
-      invoiceSearch: val === "" ? null : val,
+  const handlePayBilling = async () => {
+    const payBilingParam: updatePayBillingParam = {
+      selectedData: selectedData ?? [],
+      paymentFile: uploadedReceipt,
+      remarks: remarks,
     };
-    const queryParams = createQueryParams(params);
-    navigate({
-      pathname: "",
-      search: queryParams,
-    });
-  }, 500);
+
+    dispatch(updatePayBillingOrders(payBilingParam));
+
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   return (
     <>
@@ -206,16 +182,16 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
               variant="contained"
               sx={STOCK_ORDERING_BUTTON_STYLE}
             >
-              Pay Billing
+              Upload Billing Receipt
             </Button>
 
             <Button
               fullWidth
               variant="contained"
-              onClick={handlePayBilling}
+              onClick={() => setOpenPopupModal(true)}
               disabled={
                 !(
-                  isValidFile(uploadedReceipt) &&
+                  isValidFile(uploadedReceipt, false) &&
                   uploadedReceipt !== "" &&
                   selectedData?.length !== 0
                 )
@@ -237,6 +213,14 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
           )}
         </div>
       </div>
+
+      <PopupModal
+        open={openPopupModal}
+        title={"Confirmation"}
+        message={"Are you sure you want to release the payment receipt??"}
+        handleNoButton={() => setOpenPopupModal(false)}
+        handleYesButton={handlePayBilling}
+      />
 
       <PayBillingModal
         open={openPayBillingModal}

@@ -62,7 +62,9 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       store_id: selectedStore?.store_id ?? "",
     });
 
-    dispatch(getStockOrderStores(query));
+    if (props.open) {
+      dispatch(getStockOrderStores(query));
+    }
   }, [dispatch, selectedStore]);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {

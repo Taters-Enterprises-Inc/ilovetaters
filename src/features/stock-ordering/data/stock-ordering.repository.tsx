@@ -25,6 +25,7 @@ import { GetProductDataModel } from "../core/domain/get-product-data.model";
 import { GetPayBillingSiModel } from "../core/domain/get-pay-billing-si.model";
 import { DeliveryScheduleModel } from "../core/domain/delivery-schedule.model";
 import { OrderTableData } from "../core/domain/order-table-row.model";
+import { OverdueTaskModel } from "../core/domain/overdue-task.model";
 
 export interface GetStockOrderStoresResponse {
   data: {
@@ -163,6 +164,13 @@ export function GetStockOrderStoresRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/order/stores${store_id}`, {
     withCredentials: true,
   });
+}
+
+export interface GetOverdueTaskResponse {
+  data: {
+    message: string;
+    data: Array<OverdueTaskModel>;
+  };
 }
 
 export function InsertNewOrderRepository(
@@ -337,4 +345,10 @@ export function updateOrderItemsRepository(
       withCredentials: true,
     }
   );
+}
+
+export function GetOverdueTaskRepository(): Promise<GetOverdueTaskResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/get/overdue-task`, {
+    withCredentials: true,
+  });
 }
