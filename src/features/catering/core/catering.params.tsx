@@ -56,8 +56,8 @@ export interface CateringUploadProofOfPaymentParam {
   formData: FormData;
 }
 
-export interface AddToCartProductsParam {
-  products: Array<{
+export interface AddToCartProductParam {
+  product: {
     prod_id: number;
     prod_image_name: string;
     prod_name: string;
@@ -76,5 +76,5 @@ export interface AddToCartProductsParam {
     prod_category: number;
     prod_type: "main" | "addon" | "product";
     promo_discount_percentage: string | null;
-  }>;
+  };
 }

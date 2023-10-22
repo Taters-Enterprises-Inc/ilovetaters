@@ -36,3 +36,6 @@ export const intToShortString = (num: any): any => {
     si[index].s
   );
 };
+
+export const numberWithCommas = (number: number) =>
+  number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");

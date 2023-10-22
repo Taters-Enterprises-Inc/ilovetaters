@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { AddToCartProductsParam } from "features/catering/core/catering.params";
+import { AddToCartProductParam } from "features/catering/core/catering.params";
 import {
-  AddToCartCateringProductsRepository,
-  AddToCartCateringProductsResponse,
+  AddToCartCateringProductRepository,
+  AddToCartCateringProductResponse,
 } from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
 
-export enum AddToCartCateringProductsState {
+export enum AddToCartCateringProductState {
   initial,
   inProgress,
   success,
@@ -15,21 +15,21 @@ export enum AddToCartCateringProductsState {
 }
 
 interface InitialState {
-  status: AddToCartCateringProductsState;
+  status: AddToCartCateringProductState;
   message: string;
 }
 
 const initialState: InitialState = {
-  status: AddToCartCateringProductsState.initial,
+  status: AddToCartCateringProductState.initial,
   message: "",
 };
 
-export const addToCartCateringProducts = createAsyncThunk(
-  "addToCartCateringProducts",
-  async (param: AddToCartProductsParam, { rejectWithValue }) => {
+export const addToCartCateringProduct = createAsyncThunk(
+  "addToCartCateringProduct",
+  async (param: AddToCartProductParam, { rejectWithValue }) => {
     try {
-      const response: AddToCartCateringProductsResponse =
-        await AddToCartCateringProductsRepository(param);
+      const response: AddToCartCateringProductResponse =
+        await AddToCartCateringProductRepository(param);
 
       return response.data;
     } catch (error) {
@@ -45,38 +45,38 @@ export const addToCartCateringProducts = createAsyncThunk(
 );
 
 /* Main Slice */
-export const addToCartCateringProductsSlice = createSlice({
-  name: "addToCartCateringProducts",
+export const addToCartCateringProductSlice = createSlice({
+  name: "addToCartCateringProduct",
   initialState,
   reducers: {
-    resetAddToCartCateringProductsState: (state) => {
-      state.status = AddToCartCateringProductsState.initial;
+    resetAddToCartCateringProductState: (state) => {
+      state.status = AddToCartCateringProductState.initial;
       state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addToCartCateringProducts.pending, (state) => {
-        state.status = AddToCartCateringProductsState.inProgress;
+      .addCase(addToCartCateringProduct.pending, (state) => {
+        state.status = AddToCartCateringProductState.inProgress;
       })
-      .addCase(addToCartCateringProducts.fulfilled, (state, action) => {
+      .addCase(addToCartCateringProduct.fulfilled, (state, action) => {
         if (action.payload) {
           const { message } = action.payload;
-          state.status = AddToCartCateringProductsState.success;
+          state.status = AddToCartCateringProductState.success;
           state.message = message;
         }
       })
-      .addCase(addToCartCateringProducts.rejected, (state, action) => {
-        state.status = AddToCartCateringProductsState.success;
+      .addCase(addToCartCateringProduct.rejected, (state, action) => {
+        state.status = AddToCartCateringProductState.success;
         state.message = action.payload as string;
       });
   },
 });
 
-export const selectAddToCartCateringProducts = (state: RootState) =>
-  state.addToCartCateringProducts;
+export const selectAddToCartCateringProduct = (state: RootState) =>
+  state.addToCartCateringProduct;
 
-export const { resetAddToCartCateringProductsState } =
-  addToCartCateringProductsSlice.actions;
+export const { resetAddToCartCateringProductState } =
+  addToCartCateringProductSlice.actions;
 
-export default addToCartCateringProductsSlice.reducer;
+export default addToCartCateringProductSlice.reducer;

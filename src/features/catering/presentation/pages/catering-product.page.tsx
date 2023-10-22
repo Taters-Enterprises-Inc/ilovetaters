@@ -50,6 +50,7 @@ import ReactGA from "react-ga";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
+import { numberWithCommas } from "features/config/helpers";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -131,7 +132,10 @@ export function CateringProduct() {
 
   const checkFreeItem = (param: {
     freeItemAvailable: (freeItem: Array<ProductModel>) => void;
-    freeItemNotAvailable: () => void;
+    freeItemNotAvailable: (
+      almostItem: ProductModel | null,
+      totalPrice: number
+    ) => void;
   }) => {
     if (
       getCateringPackageDetailsState.data &&
@@ -142,6 +146,7 @@ export function CateringProduct() {
     ) {
       const addons = getCateringPackageDetailsState.data.addons;
       let freeItem: Array<ProductModel> = [];
+      let almostItem: ProductModel | null = null;
       let calculatedPrice = 0;
 
       const orders = getSessionState.data.orders;
@@ -163,6 +168,17 @@ export function CateringProduct() {
             if (totalPrice >= freeThreshold) {
               freeItem.push(addons[i]);
             }
+
+            if (almostItem == null && freeThreshold != undefined) {
+              almostItem = addons[i];
+            } else if (
+              almostItem != null &&
+              almostItem.free_threshold != undefined &&
+              freeThreshold != undefined &&
+              freeThreshold < almostItem.free_threshold
+            ) {
+              almostItem = addons[i];
+            }
           }
         }
       }
@@ -170,7 +186,7 @@ export function CateringProduct() {
       if (freeItem.length > 0) {
         param.freeItemAvailable(freeItem);
       } else {
-        param.freeItemNotAvailable();
+        param.freeItemNotAvailable(almostItem, totalPrice);
       }
     }
   };
@@ -182,7 +198,7 @@ export function CateringProduct() {
       freeItemAvailable: (val) => {
         freeItem = val;
       },
-      freeItemNotAvailable: () => {
+      freeItemNotAvailable: (val) => {
         freeItem = [];
       },
     });
@@ -361,13 +377,15 @@ export function CateringProduct() {
     checkFreeItem({
       freeItemAvailable: () => {
         SweetAlert.fire({
-          title: "Claim you free item!",
+          title: "Claim you free item! 🎉",
           text: "You're eligible to claim a free item!",
           icon: "info",
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: "Check the free item",
           denyButtonText: `Proceed to checkout`,
+          background: "#22201A",
+          color: "white",
         }).then((result) => {
           if (result.isConfirmed) {
             setTimeout(() => {
@@ -383,12 +401,33 @@ export function CateringProduct() {
           }
         });
       },
-      freeItemNotAvailable() {
-        dispatchAddToCartCatering(() => {
-          setQuantity(1);
-          setCurrentMultiFlavors({});
-          navigate("/shop/checkout");
-        });
+      freeItemNotAvailable(val, totalPrice) {
+        if (val && val.free_threshold != null) {
+          SweetAlert.fire({
+            title: "Unlock a Free Item! 🎉",
+            text: `You're on your way to unlocking a free ${
+              val.name
+            }. You'll need to add items worth ₱${numberWithCommas(
+              val.free_threshold - totalPrice
+            )} more to your cart to claim your freebies.`,
+            icon: "info",
+            showDenyButton: true,
+            confirmButtonText: "Okay",
+            denyButtonText: `Proceed to checkout`,
+            background: "#22201A",
+            color: "white",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate("/shop/products");
+            } else if (result.isDenied) {
+              dispatchAddToCartCatering(() => {
+                setQuantity(1);
+                setCurrentMultiFlavors({});
+                navigate("/shop/checkout");
+              });
+            }
+          });
+        }
       },
     });
   };
@@ -397,11 +436,13 @@ export function CateringProduct() {
     checkFreeItem({
       freeItemAvailable: () => {
         SweetAlert.fire({
-          title: "Claim you free item!",
+          title: "Claim you free item! 🎉",
           text: "You're eligible to claim a free item!",
           icon: "info",
           showCancelButton: true,
           confirmButtonText: "Add to cart, then check the item",
+          background: "#22201A",
+          color: "white",
         }).then((result) => {
           if (result.isConfirmed) {
             dispatchAddToCartCatering(() => {
@@ -415,10 +456,29 @@ export function CateringProduct() {
           }
         });
       },
-      freeItemNotAvailable() {
+      freeItemNotAvailable(val, totalPrice) {
         dispatchAddToCartCatering(() => {
           setQuantity(1);
           setCurrentMultiFlavors({});
+          if (val && val.free_threshold != null) {
+            SweetAlert.fire({
+              title: "Unlock a Free Item! 🎉",
+              text: `You're on your way to unlocking a free ${
+                val.name
+              }. You'll need to add items worth ₱${numberWithCommas(
+                val.free_threshold - totalPrice
+              )} more to your cart to claim your freebies.`,
+              icon: "info",
+              showCancelButton: true,
+              confirmButtonText: "Okay",
+              background: "#22201A",
+              color: "white",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                navigate("/shop/products");
+              }
+            });
+          }
         });
       },
     });
