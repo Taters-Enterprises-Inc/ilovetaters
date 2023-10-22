@@ -47,6 +47,7 @@ import {
   selectstockOrderSideBar,
   togglestockOrderSideBar,
 } from "../slices/stock-order.slice";
+import { dateSetup } from "./stock-ordering-utils";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -173,24 +174,6 @@ export function OrderContents() {
     });
   };
 
-  const dateSetup = (date: string, withTime: boolean) => {
-    if (withTime) {
-      return new Date(date).toLocaleDateString("en-PH", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      });
-    } else {
-      return new Date(date).toLocaleDateString("en-PH", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
-    }
-  };
-
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -203,8 +186,6 @@ export function OrderContents() {
 
     dispatch(getStockOrders(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
-
-  console.log(payMultipleBillingState);
 
   return (
     <>

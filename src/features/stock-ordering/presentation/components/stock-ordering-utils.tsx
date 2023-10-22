@@ -52,3 +52,21 @@ export const isQuantityEmpty = (
 
   return empty;
 };
+
+export const dateSetup = (date: string, withTime: boolean) => {
+  if (withTime) {
+    return new Date(date).toLocaleDateString("en-PH", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    });
+  } else {
+    return new Date(date).toLocaleDateString("en-PH", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+};
