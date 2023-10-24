@@ -1,0 +1,45 @@
+{
+  "message": "",
+  "data": [
+    {
+      "id": 0,
+      "title": "Analytical Thinking",
+      "description": "Ability of a process thinker to recognize and own a oroblem, implement a temporary fix, gather and analyze data, identify oot causes, develop plausible alternatives from which to select the best solution/s; uses established tools and techniques, evaluates results, then| standardizes process for continuous improvement."
+    },
+    {
+      "id": 1,
+      "title": "Collaborative Partnering",
+      "description": "Ability to build, maintain, develop, and ! utiize collaborative allances or relationships with business partners within and outside the company in order to gain support for each other and achieve mutually beneficial goals."
+    },
+    {
+      "id": 2,
+      "title": "Communication",
+      "description": " Expresses oneself accurately, receiving and ransmitting information through an effective and organized manner, onveying information clearly and concisely, ensuring clarity and -ommon understanding using various communication media"
+    },
+    {
+      "id": 3,
+      "title": "Creativity",
+      "description": "Cultivating innovative mind set, generating new ideas, iciting enthusiastic interest, influencing positive participation through -of-the-box thinking to yield value for TEl stakeholders."
+    },
+    {
+      "id": 4,
+      "title": "Problem Solving",
+      "description": "Ability of a process thinker to recognize and own a roblem, implement a temporary fix, gather and analyze data, identify causes, develop plausible aiternatives from which to select the best jution/s; uses estabiished tools and techniques, evaluates results, then tandardizes process for continuous improvement. ‘"
+    },
+    {
+      "id": 5,
+      "title": "Reporting",
+      "description": "The ability to gather, process, analyze, and share data, nsuring that the protocols for reporting are observed or complied with in a timely manner."
+    },
+    {
+      "id": 6,
+      "title": "Technical Expertise",
+      "description": "Excels in the technical/functional skill and orofessional knowledge required of the job position being occupied (computer skl marketing skils, human resource management skls, c.) and continuously develops himself/herself in that feld of expertise"
+    },
+    {
+      "id": 7,
+      "title": "Work Management",
+      "description": "Managing the various aspects of one’s duties nd functions by being keen on the minute details, applying appropriate nowledige, skils, and experiences; monitoring one’s own progress and valuating the work to check adherence to work systems and processes 0 achieve an accurate, complete, consistent, and timely output."
+    }
+  ]
+}
