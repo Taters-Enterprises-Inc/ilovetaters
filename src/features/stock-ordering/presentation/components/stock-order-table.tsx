@@ -117,10 +117,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
 
     const updatedRows = [...props.rowData.product_data, defaultRow];
 
-    props.setRows({
-      product_data: updatedRows,
-      order_information: props.rowData.order_information,
-    });
+    handleQuantitysetRow(updatedRows);
   };
 
   const removeRow = () => {
@@ -214,10 +211,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
       }
     );
 
-    props.setRows({
-      product_data: updatedRows,
-      order_information: props.rowData.order_information,
-    });
+    handleQuantitysetRow(updatedRows);
   };
 
   const handleOutofStock = (rowProductId: string, rowIndex: number) => {
@@ -228,16 +222,37 @@ export function StockOrderTable(props: StockOrderTableProps) {
             ...row,
             out_of_stock: row.out_of_stock ? false : true,
             commited_qty: 0,
+            delivered_qty: 0,
           };
         }
         return row;
       }
     );
 
+    handleQuantitysetRow(updatedRows);
+  };
+
+  const handleQuantitysetRow = (rows: GetProductDataModel["product_data"]) => {
     props.setRows({
-      product_data: updatedRows,
+      product_data: rows,
       order_information: props.rowData.order_information,
     });
+  };
+
+  const outOfStockButton = (
+    id: string,
+    isOutofStock: boolean,
+    index: number
+  ) => {
+    return (
+      <IconButton onClick={() => handleOutofStock(id, index)}>
+        {isOutofStock ? (
+          <AiFillCheckSquare className="text-button" />
+        ) : (
+          <AiFillCloseSquare className="text-button" />
+        )}
+      </IconButton>
+    );
   };
 
   return (
@@ -302,73 +317,27 @@ export function StockOrderTable(props: StockOrderTableProps) {
                         row.product_name
                       )}
                     </TableCell>
-                    <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
-                    <TableCell sx={{ width: 75 }}>
-                      {edit ? (
-                        <StockOrderHandleQuantity
-                          rows={props.rowData.product_data}
-                          setRows={(rows) => {
-                            props.setRows({
-                              product_data: rows,
-                              order_information:
-                                props.rowData.order_information,
-                            });
-                          }}
-                          rowsIndex={index}
-                          currentValue={row.order_qty}
-                          propertyKey={"order_qty"}
-                        />
-                      ) : (
-                        row.order_qty
-                      )}
-                    </TableCell>
-                    {!edit && (
+
+                    {row.out_of_stock ? (
+                      <TableCell colSpan={5}>
+                        <div className="flex items-stretch justify-center space-x-3">
+                          <span className="flex self-center font-semibold uppercase">
+                            Out of stock
+                          </span>
+
+                          {props.isCommitedTextFieldAvailable &&
+                            outOfStockButton(
+                              row.product_id,
+                              row.out_of_stock,
+                              index
+                            )}
+                        </div>
+                      </TableCell>
+                    ) : (
                       <>
+                        <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
                         <TableCell sx={{ width: 75 }}>
-                          {props.isCommitedTextFieldAvailable ? (
-                            <div className="flex space-x-1">
-                              {row.out_of_stock ? (
-                                <span className="flex item-end text-base">
-                                  Out of Stock
-                                </span>
-                              ) : (
-                                <StockOrderHandleQuantity
-                                  rows={props.rowData.product_data}
-                                  setRows={(rows) => {
-                                    props.setRows({
-                                      product_data: rows,
-                                      order_information:
-                                        props.rowData.order_information,
-                                    });
-                                  }}
-                                  rowsIndex={index}
-                                  currentValue={row.commited_qty}
-                                  propertyKey={"commited_qty"}
-                                  precedingPropertyKey={"order_qty"}
-                                />
-                              )}
-
-                              <IconButton
-                                onClick={() =>
-                                  handleOutofStock(row.product_id, index)
-                                }
-                              >
-                                {row.out_of_stock ? (
-                                  <AiFillCheckSquare className="text-button" />
-                                ) : (
-                                  <AiFillCloseSquare className="text-button" />
-                                )}
-                              </IconButton>
-                            </div>
-                          ) : row.out_of_stock ? (
-                            <span>out of stock</span>
-                          ) : (
-                            row.commited_qty ?? <div>--</div>
-                          )}
-                        </TableCell>
-
-                        <TableCell sx={{ width: 75 }}>
-                          {props.isDeliveredQtyAvailable ? (
+                          {edit ? (
                             <StockOrderHandleQuantity
                               rows={props.rowData.product_data}
                               setRows={(rows) => {
@@ -379,19 +348,61 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                 });
                               }}
                               rowsIndex={index}
-                              currentValue={row.delivered_qty}
-                              propertyKey={"delivered_qty"}
-                              precedingPropertyKey={"commited_qty"}
+                              currentValue={row.order_qty}
+                              propertyKey={"order_qty"}
                             />
                           ) : (
-                            row.delivered_qty ?? <div>--</div>
+                            row.order_qty
                           )}
                         </TableCell>
-                        <TableCell>
-                          {Number(row.total_cost).toLocaleString("en-US", {
-                            maximumFractionDigits: 2,
-                          }) ?? <div>--</div>}
-                        </TableCell>
+                        {!edit && (
+                          <>
+                            <TableCell sx={{ width: 75 }}>
+                              {props.isCommitedTextFieldAvailable ? (
+                                <div className="flex space-x-1">
+                                  <StockOrderHandleQuantity
+                                    rows={props.rowData.product_data}
+                                    setRows={(rows) =>
+                                      handleQuantitysetRow(rows)
+                                    }
+                                    rowsIndex={index}
+                                    currentValue={row.commited_qty}
+                                    propertyKey={"commited_qty"}
+                                    precedingPropertyKey={"order_qty"}
+                                  />
+
+                                  {outOfStockButton(
+                                    row.product_id,
+                                    row.out_of_stock,
+                                    index
+                                  )}
+                                </div>
+                              ) : (
+                                row.commited_qty ?? <div>--</div>
+                              )}
+                            </TableCell>
+
+                            <TableCell sx={{ width: 75 }}>
+                              {props.isDeliveredQtyAvailable ? (
+                                <StockOrderHandleQuantity
+                                  rows={props.rowData.product_data}
+                                  setRows={(rows) => handleQuantitysetRow(rows)}
+                                  rowsIndex={index}
+                                  currentValue={row.delivered_qty}
+                                  propertyKey={"delivered_qty"}
+                                  precedingPropertyKey={"commited_qty"}
+                                />
+                              ) : (
+                                row.delivered_qty ?? <div>--</div>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {Number(row.total_cost).toLocaleString("en-US", {
+                                maximumFractionDigits: 2,
+                              }) ?? <div>--</div>}
+                            </TableCell>
+                          </>
+                        )}
                       </>
                     )}
                   </TableRow>

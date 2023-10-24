@@ -38,13 +38,21 @@ export const isQuantityEmpty = (
   let empty = false;
   if (process === 1) {
     productData.map((product) => {
-      if (product.commited_qty === "" || product.commited_qty === null) {
+      if (
+        product.commited_qty === "" ||
+        product.commited_qty === null ||
+        product.commited_qty === "0"
+      ) {
         empty = true;
       }
     });
   } else if (process === 4) {
     productData.map((product) => {
-      if (product.delivered_qty === "" || product.delivered_qty === null) {
+      if (
+        (product.delivered_qty === "" && !product.out_of_stock) ||
+        (product.delivered_qty === null && !product.out_of_stock) ||
+        (product.delivered_qty === "0" && !product.out_of_stock)
+      ) {
         empty = true;
       }
     });
