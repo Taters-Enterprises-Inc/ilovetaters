@@ -64,7 +64,7 @@ export function ProcessModal(props: ProcessModalProps) {
     ) {
       setRows(getProductDataState.data);
     }
-  }, [getProductDataState]);
+  }, [getProductDataState.data]);
 
   useEffect(() => {
     if (

@@ -33,6 +33,7 @@ import {
 } from "../slices/get-products.slice";
 import { updateOrderItems } from "../slices/update-order-items.slice";
 import { PopupModal } from "../modals";
+import { getProductData } from "../slices/get-product-data.slice";
 
 interface StockOrderTableProps {
   isCommitedTextFieldAvailable?: boolean;
@@ -175,8 +176,27 @@ export function StockOrderTable(props: StockOrderTableProps) {
     );
 
     dispatch(updateOrderItems(rowInsertParam));
+    updateTempId();
+
     setEdit(false);
     setOpenPopupMessage(false);
+  };
+
+  const updateTempId = () => {
+    const updatedRows = props.rowData.product_data.map((temp: any) => {
+      if (temp.id === "") {
+        return {
+          ...temp,
+          id: "--",
+        };
+      }
+      return temp;
+    });
+
+    props.setRows({
+      product_data: updatedRows,
+      order_information: props.rowData.order_information,
+    });
   };
 
   const handleDiscardChanges = () => {
