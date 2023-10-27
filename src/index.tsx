@@ -179,6 +179,9 @@ import {
   StockOrderOrders,
   StockOrderView,
 } from "features/stock-ordering/presentation/pages";
+import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
+import { SalesDashboard } from "features/sales/presentation/pages";
+import { SalesProfile } from "features/sales/presentation/pages/profile.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -420,6 +423,19 @@ root.render(
                                     element={<ProfilePage />}
                                   />
                                 </Route>
+                              </Route>
+                            </Route>
+
+                            <Route path="sales">
+                              <Route element={<SalesSidebarWrapper />}>
+                                <Route
+                                  path="dashboard"
+                                  element={<SalesDashboard />}
+                                />
+                                <Route
+                                  path="profile"
+                                  element={<SalesProfile />}
+                                />
                               </Route>
                             </Route>
 

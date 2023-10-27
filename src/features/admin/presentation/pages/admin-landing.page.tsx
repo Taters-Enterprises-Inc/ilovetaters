@@ -52,6 +52,7 @@ export function AdminLandingPage() {
   const [navAvailability, setNavAvailability] = useState<Nav>({
     shop: false,
     sos: false,
+    sales: false,
   });
 
   let nav = [
@@ -64,6 +65,11 @@ export function AdminLandingPage() {
       url: "/admin/stock-order/order",
       label: "stock ordering",
       availability: navAvailability.sos,
+    },
+    {
+      url: "/admin/sales/dashboard",
+      label: "stock ordering",
+      availability: navAvailability.sales,
     },
   ];
 
