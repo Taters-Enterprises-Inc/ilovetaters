@@ -68,7 +68,7 @@ export function AdminLandingPage() {
     },
     {
       url: "/admin/sales/dashboard",
-      label: "stock ordering",
+      label: "Sales",
       availability: navAvailability.sales,
     },
   ];
@@ -85,6 +85,7 @@ export function AdminLandingPage() {
         ...prevState,
         shop: userAdmin?.groups?.length !== 0,
         sos: userAdmin?.sos_groups?.length !== 0,
+        sales: userAdmin?.sales_groups?.length !== 0,
       }));
     }
   }, [getAdminSessionState.data]);
