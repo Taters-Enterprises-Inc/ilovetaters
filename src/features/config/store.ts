@@ -264,6 +264,7 @@ import getDeliverySchedule from "features/stock-ordering/presentation/slices/get
 import updateOrderItems from "features/stock-ordering/presentation/slices/update-order-items.slice";
 import popupScroll from "features/stock-ordering/presentation/slices/popup-scroll.slice";
 import getOverdueTask from "features/stock-ordering/presentation/slices/get-overdue-task.slice";
+import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
 
 export const store = configureStore({
   reducer: {
@@ -531,6 +532,7 @@ export const store = configureStore({
     updateOrderItems,
     popupScroll,
     getOverdueTask,
+    salesSideBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

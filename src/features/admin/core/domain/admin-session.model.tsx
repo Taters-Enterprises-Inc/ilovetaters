@@ -33,6 +33,13 @@ export interface AdminSessionModel {
         short_name: string;
         description: string;
       }>;
+
+      sales_groups: Array<{
+        id: number;
+        group_name: string;
+        description: string;
+      }>;
+
       stores: Array<{
         store_id: number;
         name: string;
