@@ -249,7 +249,7 @@ export function AssessmentOverallPerformance() {
           </h1>
         </div>
       </div>
-      <div className="flex-initial h-[25px] flex items-center border-t border-gray-300">
+      <div className="flex-initial flex items-stretch border-t border-gray-300">
         <div className="flex-1">
           <h1 className="text-[11px] font-semibold mr-2 text-end">
             PMS OVERALL RATING

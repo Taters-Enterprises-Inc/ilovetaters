@@ -10,6 +10,4 @@ export { AssessmentInfo } from "./assessment-info";
 export { AssessmentCoreCompetencyGrade } from "./assessment-core-competency-grade";
 export { AssessmentFunctionalCompetencyAndPunctualityGrade } from "./assessment-functional-competency-and-punctuality-grade";
 export { AssessmentComments } from "./assessment-comments";
-export { SelfAssessmentComformance } from "./self-assessment-conformance";
-export { ManagementAssessmentSelfComformance } from "./management-assessment-conformance";
 export { AssessmentAttendanceAndPunctuality } from "./assessment-attendance-and-punctuality";

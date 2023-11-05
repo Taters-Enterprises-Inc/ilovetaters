@@ -178,6 +178,7 @@ export function AssessmentFunctionalCompetencyAndPunctualityGrade() {
               <div className="flex-initial w-[60px] border-l border-gray-300">
                 <input
                   type="number"
+                  onWheel={(e) => (e.target as HTMLElement).blur()}
                   required
                   className="w-full block text-[12pt] text-center h-full m-0 pl-2 text-green-600"
                   value={value.rating ?? ""}

@@ -9,7 +9,6 @@ import {
   AssessmentCoreCompetencyGrade,
   AssessmentFunctionalCompetencyAndPunctualityGrade,
   AssessmentComments,
-  ManagementAssessmentSelfComformance,
 } from "../components";
 
 export function HrManagementAssessment() {
@@ -37,8 +36,6 @@ export function HrManagementAssessment() {
         <AssessmentFunctionalCompetencyAndPunctualityGrade />
 
         <AssessmentComments />
-
-        <ManagementAssessmentSelfComformance />
       </main>
     </>
   );

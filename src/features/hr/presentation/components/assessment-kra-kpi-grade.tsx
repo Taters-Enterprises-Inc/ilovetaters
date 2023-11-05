@@ -116,6 +116,7 @@ export function AssessmentKraKpiGrade() {
               <input
                 type="number"
                 required
+                onWheel={(e) => (e.target as HTMLElement).blur()}
                 className="w-full block text-[12pt] text-center h-full m-0 pl-2 text-green-600"
                 value={value.rating ?? ""}
                 onChange={(element) => {

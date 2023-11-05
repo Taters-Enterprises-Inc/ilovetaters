@@ -111,6 +111,7 @@ export function AssessmentAttendanceAndPunctuality() {
             <input
               type="number"
               required
+              onWheel={(e) => (e.target as HTMLElement).blur()}
               className="w-full block text-[11px] text-center h-full m-0 pl-2 text-green-600"
               value={
                 getHrFunctionalCompetencyAndPunctualityGradeState.data
@@ -155,6 +156,7 @@ export function AssessmentAttendanceAndPunctuality() {
             <input
               type="number"
               required
+              onWheel={(e) => (e.target as HTMLElement).blur()}
               className="w-full block text-[11px] text-center h-full m-0 pl-2 text-green-600"
               onChange={(element) => {
                 let data = JSON.parse(

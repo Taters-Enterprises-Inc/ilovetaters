@@ -273,6 +273,7 @@ import getHrKraKpiGrade from "features/hr/presentation/slices/get-hr-kra-kpi-gra
 import getHrCoreCompetencyGrade from "features/hr/presentation/slices/get-hr-core-competency-grade.slice";
 import getHrFunctionalCompetencyAndPunctualityGrade from "features/hr/presentation/slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import getHrAttendanceAndPunctualityGrade from "features/hr/presentation/slices/get-hr-attendance-and-punctuality-grade.slice";
+import getHrComments from "features/hr/presentation/slices/get-hr-comments.slice";
 
 export const store = configureStore({
   reducer: {
@@ -549,6 +550,7 @@ export const store = configureStore({
     getHrCoreCompetencyGrade,
     getHrFunctionalCompetencyAndPunctualityGrade,
     getHrAttendanceAndPunctualityGrade,
+    getHrComments,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
