@@ -179,10 +179,12 @@ import {
   StockOrderOrders,
 } from "features/stock-ordering/presentation/pages";
 import {
+  Hr,
   HrLogin,
   HrManagementAssessment,
   HrSelfAssessment,
-} from "features/hr/presentatation/pages";
+} from "features/hr/presentation/pages";
+import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -386,18 +388,6 @@ root.render(
                                 element={<SurveySnackshop />}
                               />
                             </Route>
-                          </Route>
-
-                          <Route path="hr">
-                            <Route index element={<HrLogin />} />
-                            <Route
-                              path="self-assessment"
-                              element={<HrSelfAssessment />}
-                            />
-                            <Route
-                              path="management-assessment"
-                              element={<HrManagementAssessment />}
-                            />
                           </Route>
                         </Route>
                       </Route>
@@ -673,6 +663,21 @@ root.render(
                           <Route element={<AuditFormSideStepper />}>
                             <Route path="audit/form" element={<AuditForm />} />
                           </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="hr" element={<Hr />}>
+                        <Route index element={<HrLogin />} />
+
+                        <Route element={<HrGuard />}>
+                          <Route
+                            path="self-assessment"
+                            element={<HrSelfAssessment />}
+                          />
+                          <Route
+                            path="management-assessment"
+                            element={<HrManagementAssessment />}
+                          />
                         </Route>
                       </Route>
 

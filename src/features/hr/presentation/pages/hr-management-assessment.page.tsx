@@ -7,7 +7,7 @@ import {
   AssessmentInfo,
   AssessmentKraKpiGrade,
   AssessmentCoreCompetencyGrade,
-  AssessmentFunctionalComeptencyAndPunctualityGrade,
+  AssessmentFunctionalCompetencyAndPunctualityGrade,
   AssessmentComments,
   ManagementAssessmentSelfComformance,
 } from "../components";
@@ -34,7 +34,7 @@ export function HrManagementAssessment() {
 
         <AssessmentCoreCompetencyGrade />
 
-        <AssessmentFunctionalComeptencyAndPunctualityGrade />
+        <AssessmentFunctionalCompetencyAndPunctualityGrade />
 
         <AssessmentComments />
 

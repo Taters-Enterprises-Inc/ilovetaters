@@ -264,6 +264,15 @@ import getDeliverySchedule from "features/stock-ordering/presentation/slices/get
 import updateOrderItems from "features/stock-ordering/presentation/slices/update-order-items.slice";
 import popupScroll from "features/stock-ordering/presentation/slices/popup-scroll.slice";
 import getOverdueTask from "features/stock-ordering/presentation/slices/get-overdue-task.slice";
+import getHrSession from "features/hr/presentation/slices/get-hr-session.slice";
+import loginHr from "features/hr/presentation/slices/login-hr.slice";
+import logoutHr from "features/hr/presentation/slices/logout-hr.slice";
+import getHrPerformanceCriteria from "features/hr/presentation/slices/get-hr-performance-criteria.slice";
+import getHrRatingScale from "features/hr/presentation/slices/get-hr-rating-scale.slice";
+import getHrKraKpiGrade from "features/hr/presentation/slices/get-hr-kra-kpi-grade.slice";
+import getHrCoreCompetencyGrade from "features/hr/presentation/slices/get-hr-core-competency-grade.slice";
+import getHrFunctionalCompetencyAndPunctualityGrade from "features/hr/presentation/slices/get-hr-functional-competency-and-punctuality-grade.slice";
+import getHrAttendanceAndPunctualityGrade from "features/hr/presentation/slices/get-hr-attendance-and-punctuality-grade.slice";
 
 export const store = configureStore({
   reducer: {
@@ -531,6 +540,15 @@ export const store = configureStore({
     updateOrderItems,
     popupScroll,
     getOverdueTask,
+    getHrSession,
+    loginHr,
+    logoutHr,
+    getHrPerformanceCriteria,
+    getHrRatingScale,
+    getHrKraKpiGrade,
+    getHrCoreCompetencyGrade,
+    getHrFunctionalCompetencyAndPunctualityGrade,
+    getHrAttendanceAndPunctualityGrade,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

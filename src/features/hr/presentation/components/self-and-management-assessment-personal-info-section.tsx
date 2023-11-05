@@ -23,6 +23,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
               <div className="flex-1">
                 <input
                   type="text"
+                  required
                   className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                 />
               </div>
@@ -31,6 +32,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1">
                   <input
                     type="text"
+                    required
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -40,6 +42,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                   </h1>
                   <input
                     type="text"
+                    required
                     className="w-full flex-1 block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -62,6 +65,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
+                    required
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -77,6 +81,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
+                    required
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -90,6 +95,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
+                    required
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>

@@ -4,6 +4,7 @@ interface AssessmentRatingSectionProps {
   children?: ReactNode;
   title?: string;
   className?: string | undefined;
+  avarage?: number;
 }
 
 export function AssessmentRatingSection(props: AssessmentRatingSectionProps) {
@@ -17,9 +18,9 @@ export function AssessmentRatingSection(props: AssessmentRatingSectionProps) {
                 {props.title}
               </h1>
             </div>
-            <div className="flex-initial w-[60px]">
-              <h1 className="text-[13px] font-semibold text-center py-1 bg-yellow-100 ">
-                4.3
+            <div className="flex-initial w-[60px] bg-yellow-100 ">
+              <h1 className="text-[13px] font-semibold text-center py-1">
+                {props.avarage == 0 ? "" : props.avarage}
               </h1>
             </div>
           </div>
