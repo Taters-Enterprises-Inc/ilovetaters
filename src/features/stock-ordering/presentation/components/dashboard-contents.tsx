@@ -74,7 +74,8 @@ export function DashboardContents() {
             <Divider />
 
             {getOverdueTaskState.status === GetOverdueTaskState.success &&
-            getOverdueTaskState.data ? (
+            getOverdueTaskState.data &&
+            getOverdueTaskState.data.length !== 0 ? (
               <List
                 sx={{
                   width: "100%",

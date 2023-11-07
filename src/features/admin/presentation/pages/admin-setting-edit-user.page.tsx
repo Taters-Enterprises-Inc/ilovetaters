@@ -25,6 +25,8 @@ import {
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
 import { FormGroup } from "@mui/material";
+import { GroupModel } from "features/admin/core/domain/group.model";
+import { UserModel } from "features/admin/core/domain/user.model";
 
 export function AdminSettingEditUser() {
   const dispatch = useAppDispatch();
@@ -46,6 +48,7 @@ export function AdminSettingEditUser() {
     confirmPassword: string;
     groups: Array<number> | null;
     stock_order_group: Array<number> | null;
+    sales_group: Array<number> | null;
   }>({
     firstName: "",
     lastName: "",
@@ -56,6 +59,7 @@ export function AdminSettingEditUser() {
     confirmPassword: "",
     groups: null,
     stock_order_group: null,
+    sales_group: null,
   });
 
   const handleInputChange = (evt: any) => {
@@ -114,6 +118,20 @@ export function AdminSettingEditUser() {
         }
       }
 
+      let sales_groups = null;
+
+      if (getAdminUserState.data.salesGroup) {
+        const currentSalesGroups = getAdminUserState.data.salesGroup;
+
+        for (let i = 0; i < currentSalesGroups.length; i++) {
+          if (sales_groups === null) {
+            sales_groups = [currentSalesGroups[i].id];
+          } else {
+            sales_groups.push(currentSalesGroups[i].id);
+          }
+        }
+      }
+
       setFormState({
         firstName: getAdminUserState.data.first_name,
         lastName: getAdminUserState.data.last_name,
@@ -124,6 +142,7 @@ export function AdminSettingEditUser() {
         confirmPassword: "",
         groups: groups,
         stock_order_group: stock_order_groups,
+        sales_group: sales_groups,
       });
     }
   }, [getAdminUserState]);
@@ -138,6 +157,69 @@ export function AdminSettingEditUser() {
       );
     }
     e.preventDefault();
+  };
+
+  const userGroups = (
+    title: string,
+    groupData:
+      | GroupModel["stock_order"]
+      | GroupModel["shop"]
+      | GroupModel["sales"],
+    adminGroupState:
+      | UserModel["groups"]
+      | UserModel["stockOrderGroup"]
+      | UserModel["salesGroup"],
+    property: string,
+    groupState: any
+  ) => {
+    return (
+      <div className="flex flex-col mt-5">
+        <FormGroup>
+          <span className="text-xl">{title}</span>
+
+          <div className="flex flex-wrap">
+            {groupData.map((group, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
+              >
+                <Checkbox
+                  color="primary"
+                  value={group.id}
+                  defaultChecked={
+                    adminGroupState.length === 0
+                      ? false
+                      : adminGroupState.some((element) => {
+                          if (element.id === group.id) {
+                            return true;
+                          }
+                          return false;
+                        })
+                  }
+                  onChange={(event) => {
+                    let groups = groupState;
+
+                    if (groups === null) {
+                      groups = [group.id];
+                    } else if (groups.some((e: number) => e === group.id)) {
+                      groups = groups.filter((e: number) => e !== group.id);
+                    } else {
+                      groups.push(group.id);
+                    }
+
+                    setFormState({
+                      ...formState,
+                      [property]: groups,
+                    });
+                  }}
+                />
+                <span>{group.name}</span>
+              </div>
+            ))}
+          </div>
+        </FormGroup>
+      </div>
+    );
   };
 
   return (
@@ -212,7 +294,31 @@ export function AdminSettingEditUser() {
                 label="Confirm Password"
               />
 
-              <div className="flex flex-col">
+              {userGroups(
+                "User Groups",
+                getAdminGroupsState.data.shop,
+                getAdminUserState.data.groups,
+                "groups",
+                formState.groups
+              )}
+
+              {userGroups(
+                "Stock Ordering Permissions",
+                getAdminGroupsState.data.stock_order,
+                getAdminUserState.data.stockOrderGroup,
+                "stock_order_group",
+                formState.stock_order_group
+              )}
+
+              {userGroups(
+                "Sales Permission",
+                getAdminGroupsState.data.sales,
+                getAdminUserState.data.salesGroup,
+                "sales_group",
+                formState.sales_group
+              )}
+
+              {/* <div className="flex flex-col">
                 <span className="text-xl">User Groups</span>
 
                 <div className="flex flex-wrap">
@@ -254,22 +360,10 @@ export function AdminSettingEditUser() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
-              <div className="flex flex-col mt-5">
+              {/* <div className="flex flex-col mt-5">
                 <FormGroup>
-                  {/* <FormControlLabel
-                    control={
-                      <Switch
-                        checked={stockOrderingEnabled}
-                        onChange={(event) =>
-                          setStockOrderingEnabled(event.target.checked)
-                        }
-                      />
-                    }
-                    label="Enable Stock Ordering"
-                  /> */}
-
                   <span className="text-xl">Stock Ordering Permissions</span>
 
                   <div className="flex flex-wrap">
@@ -322,7 +416,7 @@ export function AdminSettingEditUser() {
                     )}
                   </div>
                 </FormGroup>
-              </div>
+              </div> */}
 
               <button
                 type="submit"

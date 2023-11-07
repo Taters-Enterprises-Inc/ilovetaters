@@ -44,6 +44,7 @@ export function StockOrderProcessSupplierViewOrder(
         id: productsItem.id,
         productId: productsItem.product_id,
         commitedQuantity: productsItem.commited_qty,
+
         out_of_stock: productsItem.out_of_stock,
       })) ?? [];
 
@@ -167,10 +168,12 @@ export function StockOrderProcessSupplierViewOrder(
                 </Button>
               ) : (
                 <Button
-                  disabled={isQuantityEmpty(
-                    props.rows.product_data,
-                    props.rows.order_information.status_id
-                  )}
+                  disabled={
+                    isQuantityEmpty(
+                      props.rows.product_data,
+                      props.rows.order_information.status_id
+                    ) || CommitedDeliveryDate === null
+                  }
                   fullWidth
                   variant="contained"
                   onClick={(event) => {

@@ -10,4 +10,5 @@ export interface UserModel {
   company: string;
   groups: GroupModel["shop"];
   stockOrderGroup: GroupModel["stock_order"];
+  salesGroup: GroupModel["sales"];
 }
