@@ -264,6 +264,24 @@ import getDeliverySchedule from "features/stock-ordering/presentation/slices/get
 import updateOrderItems from "features/stock-ordering/presentation/slices/update-order-items.slice";
 import popupScroll from "features/stock-ordering/presentation/slices/popup-scroll.slice";
 import getOverdueTask from "features/stock-ordering/presentation/slices/get-overdue-task.slice";
+import getHrSession from "features/hr/presentation/slices/get-hr-session.slice";
+import loginHr from "features/hr/presentation/slices/login-hr.slice";
+import logoutHr from "features/hr/presentation/slices/logout-hr.slice";
+import getHrPerformanceCriteria from "features/hr/presentation/slices/get-hr-performance-criteria.slice";
+import getHrRatingScale from "features/hr/presentation/slices/get-hr-rating-scale.slice";
+import getHrKraKpiGrade from "features/hr/presentation/slices/get-hr-kra-kpi-grade.slice";
+import getHrCoreCompetencyGrade from "features/hr/presentation/slices/get-hr-core-competency-grade.slice";
+import getHrFunctionalCompetencyAndPunctualityGrade from "features/hr/presentation/slices/get-hr-functional-competency-and-punctuality-grade.slice";
+import getHrAttendanceAndPunctualityGrade from "features/hr/presentation/slices/get-hr-attendance-and-punctuality-grade.slice";
+import getHrComments from "features/hr/presentation/slices/get-hr-comments.slice";
+import submitAssessment from "features/hr/presentation/slices/submit-assessment";
+import submitKra from "features/hr/presentation/slices/submit-kra";
+import getHrKras from "features/hr/presentation/slices/get-hr-kras.slice";
+import updateActionItem from "features/hr/presentation/slices/update-action-item";
+import getHrActionItems from "features/hr/presentation/slices/get-hr-action-items.slice";
+import updateKra from "features/hr/presentation/slices/update-kra";
+import getHrDirectReportStaffActionItems from "features/hr/presentation/slices/get-hr-direct-report-staff-action-items.slice";
+import getHrDirectReportStaffKras from "features/hr/presentation/slices/get-hr-direct-report-staff-kras.slice";
 import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
 
 export const store = configureStore({
@@ -532,6 +550,24 @@ export const store = configureStore({
     updateOrderItems,
     popupScroll,
     getOverdueTask,
+    getHrSession,
+    loginHr,
+    logoutHr,
+    getHrPerformanceCriteria,
+    getHrRatingScale,
+    getHrKraKpiGrade,
+    getHrCoreCompetencyGrade,
+    getHrFunctionalCompetencyAndPunctualityGrade,
+    getHrAttendanceAndPunctualityGrade,
+    getHrComments,
+    submitAssessment,
+    submitKra,
+    getHrKras,
+    updateActionItem,
+    getHrActionItems,
+    updateKra,
+    getHrDirectReportStaffActionItems,
+    getHrDirectReportStaffKras,
     salesSideBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),

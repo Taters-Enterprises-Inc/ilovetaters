@@ -1,0 +1,30 @@
+{
+  "message": "",
+  "data": [
+    {
+      "name": "Exceptional\nPerformance",
+      "minimum_score": 4.9,
+      "maximum_score": 5.0
+    },
+    {
+      "name": "Above Expectations",
+      "minimum_score": 4.0,
+      "maximum_score": 4.89
+    },
+    {
+      "name": "Reliable\nPerformance",
+      "minimum_score": 3.0,
+      "maximum_score": 4.99
+    },
+    {
+      "name": "Improvement\nNeeded",
+      "minimum_score": 2.0,
+      "maximum_score": 2.99
+    },
+    {
+      "name": "Unsatisfactory",
+      "minimum_score": 1.0,
+      "maximum_score": 1.99
+    }
+  ]
+}
