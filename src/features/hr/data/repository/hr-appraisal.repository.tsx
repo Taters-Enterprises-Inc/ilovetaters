@@ -3,8 +3,14 @@ import { HrAttendanceAndPunctualityGradeModel } from "features/hr/core/domain/hr
 import { HrCoreCompetencyGradeModel } from "features/hr/core/domain/hr-core-competency-grade.model";
 import { HrFunctionalCompetencyAndPunctualityGradeModel } from "features/hr/core/domain/hr-functional-competency-and-punctuality-grade.model";
 import { HrKraKpiGradeModel } from "features/hr/core/domain/hr-kra-kpi-grade.model";
+import { HrKrasModel } from "features/hr/core/domain/hr-kras.model";
 import { HrPerformanceCriteriaModel } from "features/hr/core/domain/hr-performance-criteria.model";
 import { HrRatingScaleModel } from "features/hr/core/domain/hr-rating-scale.model";
+import {
+  SubmitAssessmentParam,
+  SubmitKraParam,
+  UpdateKraParam,
+} from "features/hr/core/hr.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface GetHrPerformanceCriteriaResponse {
@@ -46,6 +52,76 @@ export interface GetHrAttendanceAndPunctualityGradeResponse {
     message: string;
     data: HrAttendanceAndPunctualityGradeModel;
   };
+}
+export interface SubmitAssessmentResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface SubmitKraResponse {
+  data: {
+    message: string;
+  };
+}
+export interface GetHrKrasResponse {
+  data: {
+    message: string;
+    data: HrKrasModel;
+  };
+}
+
+export interface UpdateKraResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateKraRepository(
+  param: UpdateKraParam
+): Promise<UpdateKraResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/kra-or-kpi`,
+    param,
+    {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetHrKrasRepository(): Promise<GetHrKrasResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/kra-or-kpi`, {
+    withCredentials: true,
+  });
+}
+
+export function SubmitKraRepository(
+  param: SubmitKraParam
+): Promise<SubmitKraResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/kra-or-kpi`,
+    param,
+    {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function SubmitAssessmentRepository(
+  param: SubmitAssessmentParam
+): Promise<SubmitAssessmentResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/submit`, param, {
+    headers: {
+      "Content-type": "application/json",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetHrAttendanceAndPunctualityGradeRepository(): Promise<GetHrAttendanceAndPunctualityGradeResponse> {

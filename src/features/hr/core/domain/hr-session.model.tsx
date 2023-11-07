@@ -15,6 +15,12 @@ export interface HrSessionModel {
       last_name: string;
       designation: string;
       phone_number: string;
+      user_status_id: number;
+      email: string;
+      position: string;
+      employee_number: string;
+      date_hired: string;
+      direct_user_id: number | null;
     };
   };
 }

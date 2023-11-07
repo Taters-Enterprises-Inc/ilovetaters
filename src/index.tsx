@@ -180,6 +180,7 @@ import {
 } from "features/stock-ordering/presentation/pages";
 import {
   Hr,
+  HrDashboard,
   HrLogin,
   HrManagementAssessment,
   HrSelfAssessment,
@@ -670,6 +671,7 @@ root.render(
                         <Route index element={<HrLogin />} />
 
                         <Route element={<HrGuard />}>
+                          <Route path="dashboard" element={<HrDashboard />} />
                           <Route
                             path="self-assessment"
                             element={<HrSelfAssessment />}

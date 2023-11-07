@@ -40,7 +40,7 @@ export function HrLogin() {
     getHrSessionState.data &&
     getHrSessionState.status === GetHrSessionState.success
   ) {
-    return <Navigate to={"/hr/self-assessment"} />;
+    return <Navigate to={"/hr/dashboard"} />;
   }
 
   return (

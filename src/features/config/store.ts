@@ -274,6 +274,14 @@ import getHrCoreCompetencyGrade from "features/hr/presentation/slices/get-hr-cor
 import getHrFunctionalCompetencyAndPunctualityGrade from "features/hr/presentation/slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import getHrAttendanceAndPunctualityGrade from "features/hr/presentation/slices/get-hr-attendance-and-punctuality-grade.slice";
 import getHrComments from "features/hr/presentation/slices/get-hr-comments.slice";
+import submitAssessment from "features/hr/presentation/slices/submit-assessment";
+import submitKra from "features/hr/presentation/slices/submit-kra";
+import getHrKras from "features/hr/presentation/slices/get-hr-kras.slice";
+import updateActionItem from "features/hr/presentation/slices/update-action-item";
+import getHrActionItems from "features/hr/presentation/slices/get-hr-action-items.slice";
+import updateKra from "features/hr/presentation/slices/update-kra";
+import getHrDirectReportStaffActionItems from "features/hr/presentation/slices/get-hr-direct-report-staff-action-items.slice";
+import getHrDirectReportStaffKras from "features/hr/presentation/slices/get-hr-direct-report-staff-kras.slice";
 
 export const store = configureStore({
   reducer: {
@@ -551,6 +559,14 @@ export const store = configureStore({
     getHrFunctionalCompetencyAndPunctualityGrade,
     getHrAttendanceAndPunctualityGrade,
     getHrComments,
+    submitAssessment,
+    submitKra,
+    getHrKras,
+    updateActionItem,
+    getHrActionItems,
+    updateKra,
+    getHrDirectReportStaffActionItems,
+    getHrDirectReportStaffKras,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

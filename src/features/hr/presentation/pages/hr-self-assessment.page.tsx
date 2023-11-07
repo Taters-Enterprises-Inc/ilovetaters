@@ -36,6 +36,7 @@ import {
 } from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import { getHrAttendanceAndPunctualityGrade } from "../slices/get-hr-attendance-and-punctuality-grade.slice";
 import { selectGetHrComments } from "../slices/get-hr-comments.slice";
+import { submitAssessment } from "../slices/submit-assessment";
 
 export function HrSelfAssessment() {
   const dispatch = useAppDispatch();
@@ -69,21 +70,43 @@ export function HrSelfAssessment() {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const submitData = {
-      kra_kpi_grade: getHrKraKpiGradeState.data?.kra_kpi_grade,
-      core_competency_grade:
-        getHrCoreCompetencyGradeState.data?.core_competency_grade,
-      functional_competency_and_punctuality_grade:
-        getHrFunctionalCompetencyAndPunctualityGradeState.data
-          ?.functional_competency_and_punctuality_grade,
-      attendance_and_punctuality:
-        getHrFunctionalCompetencyAndPunctualityGradeState.data
-          ?.attendance_and_punctuality_grade,
-      comments: getHrCommentsState.data?.comments,
-    };
+    const kra_kpi_grade = getHrKraKpiGradeState.data?.kra_kpi_grade;
+    const core_competency_grade =
+      getHrCoreCompetencyGradeState.data?.core_competency_grade;
+    const functional_competency_and_punctuality_grade =
+      getHrFunctionalCompetencyAndPunctualityGradeState.data
+        ?.functional_competency_and_punctuality_grade;
+    const attendance_and_punctuality =
+      getHrFunctionalCompetencyAndPunctualityGradeState.data
+        ?.attendance_and_punctuality_grade;
+    const comments = getHrCommentsState.data?.comments;
 
-    console.log("SUBMIT DATA");
-    console.log(submitData);
+    if (
+      kra_kpi_grade &&
+      core_competency_grade &&
+      functional_competency_and_punctuality_grade &&
+      attendance_and_punctuality &&
+      comments
+    ) {
+      console.log({
+        kra_kpi_grade: kra_kpi_grade,
+        core_competency_grade: core_competency_grade,
+        functional_competency_and_punctuality_grade:
+          functional_competency_and_punctuality_grade,
+        attendance_and_punctuality: attendance_and_punctuality,
+        comments: comments,
+      });
+      dispatch(
+        submitAssessment({
+          kra_kpi_grade: kra_kpi_grade,
+          core_competency_grade: core_competency_grade,
+          functional_competency_and_punctuality_grade:
+            functional_competency_and_punctuality_grade,
+          attendance_and_punctuality: attendance_and_punctuality,
+          comments: comments,
+        })
+      );
+    }
   };
 
   return (
