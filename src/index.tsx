@@ -180,7 +180,7 @@ import {
   StockOrderView,
 } from "features/stock-ordering/presentation/pages";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
-import { SalesDashboard } from "features/sales/presentation/pages";
+import { SalesDashboard, SalesTask } from "features/sales/presentation/pages";
 import { SalesProfile } from "features/sales/presentation/pages/profile.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -436,6 +436,7 @@ root.render(
                                   path="profile"
                                   element={<SalesProfile />}
                                 />
+                                <Route path="task" element={<SalesTask />} />
                               </Route>
                             </Route>
 

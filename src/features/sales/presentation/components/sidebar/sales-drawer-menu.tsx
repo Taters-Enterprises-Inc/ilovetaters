@@ -10,7 +10,7 @@ import {
   resetLogoutAdmin,
   selectLogoutAdmin,
 } from "features/admin/presentation/slices/logout-admin.slice";
-import { BsFillPersonFill } from "react-icons/bs";
+import { BsFillPersonFill, BsListTask } from "react-icons/bs";
 import { selectSalesSideBar } from "../../slices/sales-sidebar.slice";
 
 export function SalesDrawerMenu() {
@@ -24,6 +24,11 @@ export function SalesDrawerMenu() {
       text: "Dashboard",
       path: "dashboard",
       icon: <MdDashboardCustomize size={20} />,
+    },
+    {
+      text: "Task",
+      path: "task",
+      icon: <BsListTask size={20} />,
     },
     {
       text: "Profile",

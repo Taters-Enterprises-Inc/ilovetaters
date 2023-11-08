@@ -1333,3 +1333,14 @@ export const STOCK_ORDERING_BUTTON_STYLE = {
   color: "white",
   backgroundColor: "#CC5801",
 };
+
+export const SALES_TAB_NAVIGATION_MANAGER = [
+  { label: "Pending" },
+  { label: "Approved" },
+  { label: "Not Approved" },
+];
+
+export const SALES_TAB_NAVIGATION_TC = [
+  { label: "Pending" },
+  { label: "Checked" },
+];
