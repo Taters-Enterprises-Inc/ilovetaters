@@ -1,0 +1,30 @@
+{
+  "message": "",
+  "data": [
+    {
+      "name": "Excellent (5)",
+      "absences": "No abesences for the period",
+      "tardiness": "No tardiness"
+    },
+    {
+      "name": "Very Satisfactory (4)",
+      "absences": "1 day per period",
+      "tardiness": "1 - 2 instances of tardiness per period"
+    },
+    {
+      "name": "Satisfactory (3)",
+      "absences": "2 days per period",
+      "tardiness": "3 - 5 instances of tardiness per period"
+    },
+    {
+      "name": "Fair (2)",
+      "absences": "3 days per period",
+      "tardiness": "6 - 12 instances of tardiness per period"
+    },
+    {
+      "name": "Poor (1)",
+      "absences": "More than 3 days per period",
+      "tardiness": "More than 12 instances of tardiness per period"
+    }
+  ]
+}

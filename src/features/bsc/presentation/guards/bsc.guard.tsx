@@ -33,8 +33,8 @@ export function BscGuard() {
   }
 
   if (
-    getBscSessionState.status === GetBscSessionState.fail &&
-    getBscSessionState.data === null
+    getBscSessionState.status == GetBscSessionState.fail &&
+    getBscSessionState.data == null
   ) {
     return <Navigate to={"/bsc"} />;
   }

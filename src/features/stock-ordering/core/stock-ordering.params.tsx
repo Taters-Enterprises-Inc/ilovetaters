@@ -55,7 +55,7 @@ export interface updateStatus {
 
 export interface newOrdersParam {
   id: string;
-  commitedDelivery: string;
+  commitedDelivery: string | null;
   remarks: string;
   product_data: {
     id: string;

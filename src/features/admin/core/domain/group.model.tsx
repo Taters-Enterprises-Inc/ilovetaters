@@ -10,4 +10,9 @@ export interface GroupModel {
     name: string;
     description: string;
   }>;
+  sales: Array<{
+    id: number;
+    name: string;
+    description: string;
+  }>;
 }

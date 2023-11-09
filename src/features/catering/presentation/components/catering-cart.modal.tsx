@@ -199,7 +199,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
                     }}
                     className="w-full py-2 text-lg text-white border rounded-lg border-secondary bg-button"
                   >
-                    Process Orders
+                    Checkout
                   </button>
                 </div>
               </>

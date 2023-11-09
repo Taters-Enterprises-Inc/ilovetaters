@@ -502,7 +502,7 @@ export function CartListItem(props: CartListItemProps) {
                   }}
                   className="w-full py-2 text-lg text-white border rounded-lg bg-button border-secondary"
                 >
-                  Process Orders
+                  Checkout
                 </button>
               </div>
             </div>

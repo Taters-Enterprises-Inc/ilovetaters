@@ -177,8 +177,18 @@ import {
   ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
-  StockOrderView,
 } from "features/stock-ordering/presentation/pages";
+import {
+  Hr,
+  HrDashboard,
+  HrLogin,
+  HrManagementAssessment,
+  HrSelfAssessment,
+} from "features/hr/presentation/pages";
+import { HrGuard } from "features/hr/presentation/guards/hr.guard";
+import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
+import { SalesDashboard } from "features/sales/presentation/pages";
+import { SalesProfile } from "features/sales/presentation/pages/profile.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -411,15 +421,25 @@ root.render(
                                     path="order"
                                     element={<StockOrderOrders />}
                                   />
-                                  <Route
-                                    path="order/view"
-                                    element={<StockOrderView />}
-                                  />
+
                                   <Route
                                     path="profile"
                                     element={<ProfilePage />}
                                   />
                                 </Route>
+                              </Route>
+                            </Route>
+
+                            <Route path="sales">
+                              <Route element={<SalesSidebarWrapper />}>
+                                <Route
+                                  path="dashboard"
+                                  element={<SalesDashboard />}
+                                />
+                                <Route
+                                  path="profile"
+                                  element={<SalesProfile />}
+                                />
                               </Route>
                             </Route>
 
@@ -660,6 +680,22 @@ root.render(
                           <Route element={<AuditFormSideStepper />}>
                             <Route path="audit/form" element={<AuditForm />} />
                           </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="hr" element={<Hr />}>
+                        <Route index element={<HrLogin />} />
+
+                        <Route element={<HrGuard />}>
+                          <Route path="dashboard" element={<HrDashboard />} />
+                          <Route
+                            path="self-assessment"
+                            element={<HrSelfAssessment />}
+                          />
+                          <Route
+                            path="management-assessment"
+                            element={<HrManagementAssessment />}
+                          />
                         </Route>
                       </Route>
 

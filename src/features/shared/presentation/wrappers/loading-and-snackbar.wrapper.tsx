@@ -286,8 +286,8 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import {
-  AddToCartCateringProductsState,
-  selectAddToCartCateringProducts,
+  AddToCartCateringProductState,
+  selectAddToCartCateringProduct,
 } from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 
 import {
@@ -428,6 +428,23 @@ import {
   selectUpdateOrderItems,
   updateOrderItemsState,
 } from "features/stock-ordering/presentation/slices/update-order-items.slice";
+import {
+  selectSubmitKra,
+  SubmitKraState,
+} from "features/hr/presentation/slices/submit-kra";
+import {
+  selectUpdateKra,
+  UpdateKraState,
+} from "features/hr/presentation/slices/update-kra";
+import {
+  selectUpdateActionItem,
+  UpdateActionItemState,
+} from "features/hr/presentation/slices/update-action-item";
+
+Swal.mixin({
+  background: "#22201A",
+  color: "white",
+});
 
 const SweetAlert = withReactContent(Swal);
 
@@ -591,8 +608,8 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );
-  const addToCartCateringProductsState = useAppSelector(
-    selectAddToCartCateringProducts
+  const addToCartCateringProductState = useAppSelector(
+    selectAddToCartCateringProduct
   );
 
   const updateAdminCateringOrderItemRemarksState = useAppSelector(
@@ -674,6 +691,69 @@ export function LoadingAndSnackbarWrapper() {
   const stockCancelOrder = useAppSelector(selectUpdateOrderCancelled);
 
   const stockUpdateOrderItems = useAppSelector(selectUpdateOrderItems);
+
+  const submitKraState = useAppSelector(selectSubmitKra);
+
+  const updateKraState = useAppSelector(selectUpdateKra);
+
+  const updateActionItemState = useAppSelector(selectUpdateActionItem);
+
+  useEffect(() => {
+    switch (updateActionItemState.status) {
+      case UpdateActionItemState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateActionItemState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateActionItemState.success:
+        showAlert(setSuccessAlert, updateActionItemState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateActionItemState.fail:
+        showAlert(setFailsAlert, updateActionItemState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateActionItemState]);
+
+  useEffect(() => {
+    switch (updateKraState.status) {
+      case UpdateKraState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateKraState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateKraState.success:
+        showAlert(setSuccessAlert, updateKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateKraState.fail:
+        showAlert(setFailsAlert, updateKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateKraState]);
+
+  useEffect(() => {
+    switch (submitKraState.status) {
+      case SubmitKraState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SubmitKraState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitKraState.success:
+        showAlert(setSuccessAlert, submitKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitKraState.fail:
+        showAlert(setFailsAlert, submitKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [submitKraState]);
 
   useEffect(() => {
     switch (stockUpdateOrderItems.status) {
@@ -1331,31 +1411,35 @@ export function LoadingAndSnackbarWrapper() {
   }, [getSnacksDeliveredDealAvailableStoresState]);
 
   useEffect(() => {
-    switch (addToCartCateringProductsState.status) {
-      case AddToCartCateringProductsState.inProgress:
+    switch (addToCartCateringProductState.status) {
+      case AddToCartCateringProductState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case AddToCartCateringProductsState.initial:
+      case AddToCartCateringProductState.initial:
         setOpenBackdropLoading(false);
         break;
-      case AddToCartCateringProductsState.success:
-        SweetAlert.fire(
-          "Package Created!",
-          addToCartCateringProductsState.message,
-          "success"
-        );
+      case AddToCartCateringProductState.success:
+        SweetAlert.fire({
+          title: "Package Created!",
+          text: addToCartCateringProductState.message,
+          icon: "success",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
-      case AddToCartCateringProductsState.fail:
-        SweetAlert.fire(
-          "Oops...",
-          addToCartCateringProductsState.message,
-          "error"
-        );
+      case AddToCartCateringProductState.fail:
+        SweetAlert.fire({
+          title: "Oops...",
+          text: addToCartCateringProductState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
     }
-  }, [addToCartCateringProductsState]);
+  }, [addToCartCateringProductState]);
 
   useEffect(() => {
     switch (updateAdminCateringOrderItemRemarksState.status) {
@@ -2256,15 +2340,23 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case SignUpMobileUserState.success:
-        SweetAlert.fire(
-          "Account Registered!",
-          signUpMobileUserState.message,
-          "success"
-        );
+        SweetAlert.fire({
+          title: "Account Registered!",
+          text: signUpMobileUserState.message,
+          icon: "success",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
       case SignUpMobileUserState.fail:
-        SweetAlert.fire("Oops...", signUpMobileUserState.message, "error");
+        SweetAlert.fire({
+          title: "Oops...",
+          text: signUpMobileUserState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
     }

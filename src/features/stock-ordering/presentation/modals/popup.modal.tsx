@@ -1,36 +1,32 @@
 import { Button } from "@mui/material";
-import { updateCancelledStatus } from "features/stock-ordering/core/stock-ordering.params";
-import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { AiFillWarning } from "react-icons/ai";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { useEffect } from "react";
+import {
+  selectpopupScroll,
+  togglePopupScroll,
+} from "../slices/popup-scroll.slice";
 
 interface CompleteModalProps {
   open: boolean;
-  onClose: () => void;
   children?: React.ReactNode;
   title: string;
-  message: string;
-  remarks?: string;
-  id?: string;
-  cancelOrder?: boolean;
+  message: string | React.ReactElement;
+  icon?: React.ReactElement;
   customButton?: boolean;
-  orderCancelled?: (isCancelled: boolean) => void;
+  handleYesButton?: () => void;
+  handleNoButton?: () => void;
+  okayButton?: boolean;
+  handleOkayButton?: () => void;
 }
 
 export function PopupModal(props: CompleteModalProps) {
   const dispatch = useAppDispatch();
 
-  const handleCancelOrder = async () => {
-    const cancelParameter: updateCancelledStatus = {
-      id: props.id ?? "",
-      remarks: props.remarks ?? "",
-    };
-    dispatch(updateOrderCancelled(cancelParameter));
-    document.body.classList.remove("overflow-hidden");
-
-    props.orderCancelled?.(true);
-  };
+  useEffect(() => {
+    dispatch(togglePopupScroll());
+  }, [props.open]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -41,46 +37,62 @@ export function PopupModal(props: CompleteModalProps) {
 
   return (
     <>
-      {/* <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-        <div className="w-[50%] lg:w-[400px] my-32 rounded-[10px]"> */}
-      <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto">
-        <div className="w-[50%] lg:w-[400px] my-32 border-2 border-black rounded-md">
-          <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
+      <div className="fixed inset-0 -top-5 z-40 flex items-start justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+        <div className="w-[50%] lg:w-[400px] my-32 rounded-[10px]">
+          <div className="bg-secondary flex items-center justify-between p-4">
             <span className="text-sm text-white font-semibold">
               {props.title}
             </span>
           </div>
           <div className="flex flex-col bg-paper p-3 rounded-b-md space-y-8">
             <div className="flex space-x-3">
-              <AiFillWarning className="text-2xl text-tertiary" />
+              {props.icon ? (
+                props.icon
+              ) : (
+                <AiFillWarning className="text-5xl text-tertiary" />
+              )}
               <span>{props.message}</span>
             </div>
 
-            <div className="space-y-4">{props.children}</div>
-
+            {props.children && (
+              <div className="space-y-4">{props.children}</div>
+            )}
             {!props.customButton && (
-              <div className="flex space-x-3">
-                {props.cancelOrder && (
+              <>
+                {props.okayButton ? (
                   <Button
                     fullWidth
                     size="small"
-                    onClick={handleCancelOrder}
+                    onClick={props.handleOkayButton}
                     variant="contained"
                     sx={STOCK_ORDERING_BUTTON_STYLE}
                   >
-                    Yes
+                    Okay
                   </Button>
+                ) : (
+                  <div className="flex space-x-3">
+                    <Button
+                      fullWidth
+                      size="small"
+                      onClick={props.handleYesButton}
+                      variant="contained"
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                    >
+                      Yes
+                    </Button>
+
+                    <Button
+                      fullWidth
+                      size="small"
+                      variant="contained"
+                      onClick={props.handleNoButton}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                    >
+                      No
+                    </Button>
+                  </div>
                 )}
-                <Button
-                  fullWidth
-                  size="small"
-                  variant="contained"
-                  onClick={() => props.onClose()}
-                  sx={STOCK_ORDERING_BUTTON_STYLE}
-                >
-                  {props.cancelOrder ? "No" : "Ok"}
-                </Button>
-              </div>
+              </>
             )}
           </div>
         </div>
