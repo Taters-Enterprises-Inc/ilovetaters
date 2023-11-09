@@ -93,7 +93,9 @@ export function ViewDirectReportStaffActionItemsModal(
                                   <td className="py-2 px-4">{value.status}</td>
                                   <td>
                                     <FaEye
-                                      className="text-lg cursor-pointer"
+                                      className={`text-lg cursor-pointer ${
+                                        value.status_id == 1 ? "hidden" : ""
+                                      }`}
                                       onClick={() => {
                                         setOpenApproveKraModal({
                                           modal: true,

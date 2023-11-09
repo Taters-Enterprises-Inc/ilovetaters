@@ -12,6 +12,10 @@ import {
 } from "../slices/update-action-item";
 import { selectUpdateKra, updateKra } from "../slices/update-kra";
 import { getHrActionItems } from "../slices/get-hr-action-items.slice";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface CreateKraModalProps {
   modal: boolean;
@@ -65,15 +69,36 @@ export function CreateKraModal(props: CreateKraModalProps) {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (props.action_item_id && props.item_id) {
-      dispatch(
-        updateActionItem({
-          item_id: props.item_id,
-          action_item_id: props.action_item_id,
-          status: 2,
-        })
-      );
-    }
+    dispatch(
+      openMessageModal({
+        message: `Are you sure you want to submit ?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              if (props.action_item_id && props.item_id) {
+                dispatch(
+                  updateActionItem({
+                    item_id: props.item_id,
+                    action_item_id: props.action_item_id,
+                    status: 2,
+                  })
+                );
+              }
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
 
   return (
