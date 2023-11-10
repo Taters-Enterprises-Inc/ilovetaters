@@ -60,8 +60,8 @@ export interface newOrdersParam {
   product_data: {
     id: string;
     productId: string;
-    commitedQuantity: string;
-    out_of_stock: boolean;
+    commitedQuantity: string | null;
+    out_of_stock: boolean | null;
   }[];
 }
 
@@ -106,7 +106,7 @@ export interface updatReviewParam {
   product_data: {
     id: string;
     productId: string;
-    commitedQuantity: string;
+    commitedQuantity: string | null;
   }[];
 }
 
@@ -129,6 +129,6 @@ export interface updateOrderItemsParam {
   productId: string;
   productName: string;
   uom: string;
-  orderQty: string;
+  orderQty: string | null;
   order_information_id: string;
 }

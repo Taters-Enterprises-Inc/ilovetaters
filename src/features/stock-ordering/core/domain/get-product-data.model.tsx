@@ -52,11 +52,11 @@ export interface GetProductDataModel {
     product_name: string;
     uom: string;
     category_id: string;
-    order_qty: string;
-    commited_qty: string;
-    delivered_qty: string;
-    total_cost: string;
+    order_qty: string | null;
+    commited_qty: string | null;
+    delivered_qty: string | null;
+    total_cost: string | null;
     order_information_id: string;
-    out_of_stock: boolean;
+    out_of_stock: boolean | null;
   }>;
 }

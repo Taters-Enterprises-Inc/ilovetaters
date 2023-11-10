@@ -7,7 +7,7 @@ interface StockOrderHandleQuantityProps {
   rows: any[];
   setRows: (row: any[]) => void;
   rowsIndex: number;
-  currentValue: string;
+  currentValue: string | null;
   propertyKey: string;
   precedingPropertyKey?: string;
 }
