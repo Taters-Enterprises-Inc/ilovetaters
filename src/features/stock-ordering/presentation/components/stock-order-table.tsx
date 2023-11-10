@@ -108,12 +108,12 @@ export function StockOrderTable(props: StockOrderTableProps) {
       product_name: "",
       uom: "",
       category_id: "",
-      order_qty: "0",
-      commited_qty: "",
-      delivered_qty: "",
-      total_cost: "0",
+      order_qty: null,
+      commited_qty: null,
+      delivered_qty: null,
+      total_cost: null,
       order_information_id: "",
-      out_of_stock: false,
+      out_of_stock: null,
     };
 
     const updatedRows = [...props.rowData.product_data, defaultRow];
@@ -261,7 +261,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
 
   const outOfStockButton = (
     id: string,
-    isOutofStock: boolean,
+    isOutofStock: boolean | null,
     index: number
   ) => {
     return (
