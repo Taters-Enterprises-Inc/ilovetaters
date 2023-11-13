@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { MdDashboardCustomize } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
+import { SiPlatformdotsh } from "react-icons/si";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
@@ -24,6 +25,11 @@ export function SalesDrawerMenu() {
       text: "Dashboard",
       path: "dashboard",
       icon: <MdDashboardCustomize size={20} />,
+    },
+    {
+      text: "Form",
+      path: "form",
+      icon: <SiPlatformdotsh size={20} />,
     },
     {
       text: "Profile",
