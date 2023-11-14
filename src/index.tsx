@@ -182,6 +182,7 @@ import {
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
 import { SalesDashboard, SalesTask } from "features/sales/presentation/pages";
 import { SalesProfile } from "features/sales/presentation/pages/profile.page";
+import { SalesForm } from "features/sales/presentation/pages/form.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -431,6 +432,10 @@ root.render(
                                 <Route
                                   path="dashboard"
                                   element={<SalesDashboard />}
+                                />
+                                <Route
+                                  path="form"
+                                  element={<SalesForm />}
                                 />
                                 <Route
                                   path="profile"
