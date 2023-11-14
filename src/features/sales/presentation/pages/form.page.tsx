@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { SalesHead } from "../components";
-import { SalesFormContent } from "../components/form-contents";
+import { SalesFormContent, SalesHead } from "../components";
 
 export function SalesForm() {
   return (
@@ -16,10 +15,16 @@ export function SalesForm() {
         }}
       />
 
-        <div className="p-8">
-            <SalesFormContent />
+      <div className="p-8">
+        <div className="flex flex-col space-y-5">
+          <div>
+            <span className="text-secondary text-4xl font-['Bebas_Neue'] flex-1">
+              Form
+            </span>
+          </div>
+          <SalesFormContent />
         </div>
-      
+      </div>
     </>
   );
 }
