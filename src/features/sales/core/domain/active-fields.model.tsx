@@ -1,18 +1,22 @@
 export interface SalesActiveFieldsModel {
-  form_data: [
+  field_data: [
     {
       section: string;
-      fields: [
-        {
+      field: Array<{
+        sub_section: string;
+        field_data: Array<{
           id: string;
           field_name: string;
           description: string;
-          section: number;
-          status: string;
+          section: string;
+          status: boolean;
           is_dropdown: boolean;
+          width: number;
+          payment_sub_section: string;
           section_name: string;
-        }
-      ];
+          sub_section_name: string;
+        }>;
+      }>;
     }
   ];
 }
