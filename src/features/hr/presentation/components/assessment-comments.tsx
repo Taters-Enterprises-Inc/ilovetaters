@@ -4,6 +4,7 @@ import {
   selectGetHrComments,
   updateGetHrCommentsState,
 } from "../slices/get-hr-comments.slice";
+import { useEffect } from "react";
 
 export function AssessmentComments() {
   const dispatch = useAppDispatch();
@@ -29,18 +30,17 @@ export function AssessmentComments() {
         <div className="flex border-b border-gray-30">
           <div className="flex-1 p-2 flex justify-center items-center">
             <h1 className="text-[10px] font-semibold uppercase ">
-              Key Strengths <span className="text-red-500">*</span>
+              Key Strengths
             </h1>
           </div>
           <div className="flex-1 p-2 flex justify-center items-center border-l border-gray-300">
             <h1 className="text-[10px] font-semibold uppercase">
-              Areas for Development <span className="text-red-500">*</span>
+              Areas for Development
             </h1>
           </div>
           <div className="flex-initial w-[250px] p-2 flex justify-center items-center border-l border-gray-300">
             <h1 className="text-[10px] font-semibold uppercase">
-              Major Development Plans for next year{" "}
-              <span className="text-red-500">*</span>
+              Major Development Plans for next year
             </h1>
           </div>
         </div>
@@ -48,9 +48,8 @@ export function AssessmentComments() {
         <div className="flex border-b border-gray-30 min-h-[50px]">
           <div className="flex-1">
             <textarea
-              required
               className="w-full h-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
-              value={getHrCommentsState.data?.comments.key_strengths ?? ""}
+              value={getHrCommentsState.data?.comments?.key_strengths ?? ""}
               onChange={(element) => {
                 let data = JSON.parse(
                   JSON.stringify(getHrCommentsState.data ?? {})
@@ -73,10 +72,9 @@ export function AssessmentComments() {
           </div>
           <div className="flex-1 border-l border-gray-300">
             <textarea
-              required
               className="w-full h-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
               value={
-                getHrCommentsState.data?.comments.areas_for_development ?? ""
+                getHrCommentsState.data?.comments?.areas_for_development ?? ""
               }
               onChange={(element) => {
                 let data = JSON.parse(
@@ -100,11 +98,10 @@ export function AssessmentComments() {
           </div>
           <div className="flex-initial w-[250px] border-l border-gray-300">
             <textarea
-              required
               className="w-full h-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
               value={
                 getHrCommentsState.data?.comments
-                  .major_development_plans_for_next_year ?? ""
+                  ?.major_development_plans_for_next_year ?? ""
               }
               onChange={(element) => {
                 let data = JSON.parse(
@@ -130,17 +127,16 @@ export function AssessmentComments() {
 
         <div className=" border-b border-gray-300 px-2">
           <h1 className="text-[11px] font-semibold uppercase">
-            B. Comments on your Overall Performance and Development Plan{" "}
-            <span className="text-red-500">*</span>
+            B. Comments on your Overall Performance and Development Plan
           </h1>
         </div>
         <div className="flex border-b border-gray-300  min-h-[80px]">
           <textarea
-            required
             className="w-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
             value={
               getHrCommentsState.data?.comments
-                .comments_on_your_overall_performance_and_development_plan ?? ""
+                ?.comments_on_your_overall_performance_and_development_plan ??
+              ""
             }
             onChange={(element) => {
               let data = JSON.parse(

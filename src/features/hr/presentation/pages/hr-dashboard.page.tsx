@@ -49,7 +49,6 @@ export function HrDashboard() {
     action_item_status_id: null,
   });
 
-  const getKraState = useAppSelector(selectGetHrKras);
   const getHrActionItemsState = useAppSelector(selectGetHrActionItems);
   const logoutHrState = useAppSelector(selectLogoutHr);
   const getHrSessionState = useAppSelector(selectGetHrSession);
@@ -153,6 +152,11 @@ export function HrDashboard() {
                                 action_item_status_id: value.status_id,
                                 modal: true,
                               });
+                            } else if (
+                              value.item_id == 3 &&
+                              value.status_id != undefined
+                            ) {
+                              navigate("/hr/self-assessment");
                             }
                           }}
                           className="text-lg cursor-pointer"

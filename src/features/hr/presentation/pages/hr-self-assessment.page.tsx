@@ -19,7 +19,10 @@ import {
   resetLogoutHr,
   selectLogoutHr,
 } from "../slices/logout-hr.slice";
-import { getHrSession } from "../slices/get-hr-session.slice";
+import {
+  getHrSession,
+  selectGetHrSession,
+} from "../slices/get-hr-session.slice";
 import {
   getHrKraKpiGrade,
   selectGetHrKraKpiGrade,
@@ -35,12 +38,27 @@ import {
   selectGetHrFunctionalCompetencyAndPunctualityGrade,
 } from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import { getHrAttendanceAndPunctualityGrade } from "../slices/get-hr-attendance-and-punctuality-grade.slice";
-import { selectGetHrComments } from "../slices/get-hr-comments.slice";
-import { submitAssessment } from "../slices/submit-assessment";
+import {
+  getHrComments,
+  selectGetHrComments,
+} from "../slices/get-hr-comments.slice";
+import {
+  SubmitAssessmentState,
+  resetSubmitAssessment,
+  selectSubmitAssessment,
+  submitAssessment,
+} from "../slices/submit-assessment";
+import { useNavigate } from "react-router-dom";
+import { getHrActionItems } from "../slices/get-hr-action-items.slice";
+import {
+  getHrAppraisalResponse,
+  selectGetHrAppraisalResponse,
+} from "../slices/get-hr-appraisal-response.slice";
 
 export function HrSelfAssessment() {
   const dispatch = useAppDispatch();
   const logoutHrState = useAppSelector(selectLogoutHr);
+  const navigate = useNavigate();
   const getHrKraKpiGradeState = useAppSelector(selectGetHrKraKpiGrade);
   const getHrCoreCompetencyGradeState = useAppSelector(
     selectGetHrCoreCompetencyGrade
@@ -50,6 +68,12 @@ export function HrSelfAssessment() {
   );
   const getHrCommentsState = useAppSelector(selectGetHrComments);
 
+  const getHrSessionState = useAppSelector(selectGetHrSession);
+  const submitAssessmentState = useAppSelector(selectSubmitAssessment);
+  const getHrAppraisalResponseState = useAppSelector(
+    selectGetHrAppraisalResponse
+  );
+
   useEffect(() => {
     dispatch(getHrPerformanceCriteria());
     dispatch(getHrRatingScale());
@@ -57,7 +81,17 @@ export function HrSelfAssessment() {
     dispatch(getHrCoreCompetencyGrade());
     dispatch(getHrFunctionalCompetencyAndPunctualityGrade());
     dispatch(getHrAttendanceAndPunctualityGrade());
+    dispatch(getHrComments());
+    dispatch(getHrAppraisalResponse());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (submitAssessmentState.status === SubmitAssessmentState.success) {
+      dispatch(getHrActionItems());
+      dispatch(resetSubmitAssessment());
+      navigate("/hr/dashboard");
+    }
+  }, [submitAssessmentState]);
 
   useEffect(() => {
     if (logoutHrState.status === LogoutHrState.success) {
@@ -85,17 +119,8 @@ export function HrSelfAssessment() {
       kra_kpi_grade &&
       core_competency_grade &&
       functional_competency_and_punctuality_grade &&
-      attendance_and_punctuality &&
-      comments
+      attendance_and_punctuality
     ) {
-      console.log({
-        kra_kpi_grade: kra_kpi_grade,
-        core_competency_grade: core_competency_grade,
-        functional_competency_and_punctuality_grade:
-          functional_competency_and_punctuality_grade,
-        attendance_and_punctuality: attendance_and_punctuality,
-        comments: comments,
-      });
       dispatch(
         submitAssessment({
           kra_kpi_grade: kra_kpi_grade,
@@ -115,16 +140,43 @@ export function HrSelfAssessment() {
         <title>Taters | Self Assessment</title>
       </Helmet>
 
-      <main className="min-h-screen bg-[#FFDCDC75] p-4 pb-[200px]">
-        <button
-          onClick={() => {
-            dispatch(logoutHr());
-          }}
-        >
-          Logout
-        </button>
+      <main className="min-h-screen text-[#242424] flex flex-col  border-b-[#F2F2F2]">
+        <div className="border-b h-[50px] px-[24px] flex items-center flex justify-between flex-initial">
+          <img
+            onClick={() => {
+              navigate("/hr/dashboard");
+            }}
+            src="https://www.ilovetaters.com/api/assets/images/shared/logo/taters-logo.png"
+            alt="Taters Logo"
+            className="w-[80px] cursor-pointer"
+          />
+          <div className="flex items-center space-x-8">
+            <div className="flex flex-col justify-center items-center">
+              <img
+                alt=""
+                className="rounded-[50%] w-[25px] h-[25px] bg-[#F2F2F2] border border-gray "
+                src="https://miro.medium.com/v2/resize:fill:32:32/1*dmbNkD5D-u45r44go_cf0g.png"
+                loading="lazy"
+                role="presentation"
+              />
+              <span className="text-[11px] text-[#6B6B6B] font-[400] hover:text-black cursor-pointer ">
+                {getHrSessionState.data?.hr.user_details.first_name}
+              </span>
+            </div>
+
+            <span
+              onClick={() => {
+                dispatch(logoutHr());
+              }}
+              className="text-[11px] font-[400] hover:text-black cursor-pointer bg-red-700 px-4 pt-[1px] pb-[2px] rounded-full text-white"
+            >
+              Logout
+            </span>
+          </div>
+        </div>
+
         <form
-          className="flex flex-col items-center space-y-3"
+          className="flex flex-col items-center space-y-3 py-8"
           onSubmit={handleSubmit}
         >
           <AssessmentInfo title="Employee Self Assessment Form" />
@@ -137,14 +189,16 @@ export function HrSelfAssessment() {
           <AssessmentFunctionalCompetencyAndPunctualityGrade />
           <AssessmentAttendanceAndPunctuality />
           <AssessmentComments />
-          <button
-            type="submit"
-            className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
-          >
-            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-              Submit
-            </span>
-          </button>
+          {getHrAppraisalResponseState.data?.appraisal_response ? null : (
+            <button
+              type="submit"
+              className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
+            >
+              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                Submit
+              </span>
+            </button>
+          )}
         </form>
       </main>
     </>

@@ -283,6 +283,7 @@ import updateKra from "features/hr/presentation/slices/update-kra";
 import getHrDirectReportStaffActionItems from "features/hr/presentation/slices/get-hr-direct-report-staff-action-items.slice";
 import getHrDirectReportStaffKras from "features/hr/presentation/slices/get-hr-direct-report-staff-kras.slice";
 import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
+import getHrAppraisalResponse from "features/hr/presentation/slices/get-hr-appraisal-response.slice";
 
 export const store = configureStore({
   reducer: {
@@ -569,6 +570,7 @@ export const store = configureStore({
     getHrDirectReportStaffActionItems,
     getHrDirectReportStaffKras,
     salesSideBar,
+    getHrAppraisalResponse,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

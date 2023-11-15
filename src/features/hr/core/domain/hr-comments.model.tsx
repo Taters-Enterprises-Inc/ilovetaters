@@ -1,5 +1,5 @@
 export interface HrCommentsModel {
-  comments: {
+  comments?: {
     key_strengths: string;
     areas_for_development: string;
     major_development_plans_for_next_year: string;

@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { AssessmentRatingSection } from "./assessment-rating-section";
 import { useEffect } from "react";
 import {
+  GetHrKraKpiGradeState,
   selectGetHrKraKpiGrade,
   updateGetHrKraKpiGradeState,
 } from "../slices/get-hr-kra-kpi-grade.slice";
@@ -50,8 +51,7 @@ export function AssessmentKraKpiGrade() {
           </div>
           <div className="flex-initial w-[230px] border-l border-gray-300 px-2 flex items-center justify-center">
             <h1 className="text-[11px] font-semibold ">
-              Result Achieved / Not Achieved{" "}
-              <span className="text-red-500">*</span>
+              Result Achieved / Not Achieved
             </h1>
           </div>
           <div className="flex-initial w-[60px] border-l border-gray-300 px-2 flex items-center justify-center">
@@ -67,7 +67,7 @@ export function AssessmentKraKpiGrade() {
           <div className="flex border-b border-gray-300 min-h-[80px]">
             <div className="flex-initial w-[290px]">
               <textarea
-                required
+                readOnly
                 className="w-full h-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
                 value={
                   value.key_result_areas_or_key_performance_indiciators ?? ""
@@ -95,7 +95,6 @@ export function AssessmentKraKpiGrade() {
             </div>
             <div className="flex-initial w-[230px] border-l border-gray-300">
               <textarea
-                required
                 className="w-full h-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
                 value={value.result_achieved_or_not_achieved ?? ""}
                 onChange={(element) => {

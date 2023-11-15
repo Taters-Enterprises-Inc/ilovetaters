@@ -48,7 +48,11 @@ export const submitAssessment = createAsyncThunk(
 export const submitAssessmentSlice = createSlice({
   name: "submitAssessment",
   initialState,
-  reducers: {},
+  reducers: {
+    resetSubmitAssessment: (state) => {
+      state.status = SubmitAssessmentState.initial;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(submitAssessment.pending, (state) => {
@@ -71,5 +75,6 @@ export const submitAssessmentSlice = createSlice({
 
 export const selectSubmitAssessment = (state: RootState) =>
   state.submitAssessment;
+export const { resetSubmitAssessment } = submitAssessmentSlice.actions;
 
 export default submitAssessmentSlice.reducer;

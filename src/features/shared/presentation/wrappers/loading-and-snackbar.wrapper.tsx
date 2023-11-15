@@ -440,6 +440,10 @@ import {
   selectUpdateActionItem,
   UpdateActionItemState,
 } from "features/hr/presentation/slices/update-action-item";
+import {
+  selectSubmitAssessment,
+  SubmitAssessmentState,
+} from "features/hr/presentation/slices/submit-assessment";
 
 Swal.mixin({
   background: "#22201A",
@@ -697,6 +701,26 @@ export function LoadingAndSnackbarWrapper() {
   const updateKraState = useAppSelector(selectUpdateKra);
 
   const updateActionItemState = useAppSelector(selectUpdateActionItem);
+  const submitAssessmentState = useAppSelector(selectSubmitAssessment);
+
+  useEffect(() => {
+    switch (submitAssessmentState.status) {
+      case SubmitAssessmentState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SubmitAssessmentState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitAssessmentState.success:
+        showAlert(setSuccessAlert, submitAssessmentState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitAssessmentState.fail:
+        showAlert(setFailsAlert, submitAssessmentState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [submitAssessmentState]);
 
   useEffect(() => {
     switch (updateActionItemState.status) {

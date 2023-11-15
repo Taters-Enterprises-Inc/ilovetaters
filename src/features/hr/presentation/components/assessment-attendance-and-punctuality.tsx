@@ -158,6 +158,10 @@ export function AssessmentAttendanceAndPunctuality() {
               required
               onWheel={(e) => (e.target as HTMLElement).blur()}
               className="w-full block text-[11px] text-center h-full m-0 pl-2 text-green-600"
+              value={
+                getHrFunctionalCompetencyAndPunctualityGradeState.data
+                  ?.attendance_and_punctuality_grade?.tardiness ?? ""
+              }
               onChange={(element) => {
                 let data = JSON.parse(
                   JSON.stringify(

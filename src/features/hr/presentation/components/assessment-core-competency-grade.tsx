@@ -55,8 +55,7 @@ export function AssessmentCoreCompetencyGrade() {
           </div>
           <div className="flex-1 border-l border-gray-300 px-2 flex items-center justify-center">
             <h1 className="text-[11px] font-semibold ">
-              Critical Incidents / Comments{" "}
-              <span className="text-red-500">*</span>
+              Critical Incidents / Comments
             </h1>
           </div>
         </div>
@@ -95,7 +94,6 @@ export function AssessmentCoreCompetencyGrade() {
               </div>
               <div className="flex-1 border-l border-gray-300">
                 <textarea
-                  required
                   className="w-full h-full text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
                   value={value.critical_incidents_or_comments ?? ""}
                   onChange={(element) => {

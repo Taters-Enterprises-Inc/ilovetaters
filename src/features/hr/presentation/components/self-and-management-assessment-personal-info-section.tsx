@@ -3,6 +3,7 @@ import { AssessmentSection } from "./assessment-section";
 import { selectGetHrKraKpiGrade } from "../slices/get-hr-kra-kpi-grade.slice";
 import { selectGetHrCoreCompetencyGrade } from "../slices/get-hr-core-competency-grade.slice";
 import { selectGetHrFunctionalCompetencyAndPunctualityGrade } from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
+import { selectGetHrSession } from "../slices/get-hr-session.slice";
 
 export function SelfAndManagementAssessmentPersonalInfoSection() {
   const getHrKraKpiGradeState = useAppSelector(selectGetHrKraKpiGrade);
@@ -12,6 +13,8 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
   const getHrFunctionalCompetencyAndPunctualityGradeState = useAppSelector(
     selectGetHrFunctionalCompetencyAndPunctualityGrade
   );
+
+  const getHrSessionState = useAppSelector(selectGetHrSession);
 
   const getActualRatingAndTotalScore = (
     array: Array<any> | undefined,
@@ -175,8 +178,13 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
               <div className="flex-1">
                 <input
                   type="text"
-                  required
+                  readOnly
                   className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
+                  value={
+                    getHrSessionState.data?.hr.user_details.first_name +
+                    " " +
+                    getHrSessionState.data?.hr.user_details.last_name
+                  }
                 />
               </div>
 
@@ -184,8 +192,9 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1">
                   <input
                     type="text"
-                    required
+                    readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
+                    value={getHrSessionState.data?.hr.user_details.position}
                   />
                 </div>
                 <div className="flex flex-initial w-[149px] border-l border-gray-200 flex items-center">
@@ -194,7 +203,10 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                   </h1>
                   <input
                     type="text"
-                    required
+                    readOnly
+                    value={
+                      getHrSessionState.data?.hr.user_details.employee_number
+                    }
                     className="w-full flex-1 block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -211,13 +223,13 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
               <div className="flex-1 border-t border-gray-200 flex">
                 <div className="flex-1 flex items-center">
                   <h1 className="text-[10px] ml-2 font-semibold">
-                    For Regularization <span className="text-red-500">*</span>
+                    For Regularization
                   </h1>
                 </div>
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
-                    required
+                    readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -233,7 +245,8 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
-                    required
+                    readOnly
+                    value={getHrSessionState.data?.hr.user_details.date_hired}
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -247,7 +260,8 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
-                    required
+                    value={getHrSessionState.data?.hr.user_details.designation}
+                    readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -258,13 +272,19 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
         <div className="flex flex-initial h-[60px] border-t border-gray-300">
           <div className="flex-1 flex flex-col">
             <h1 className="text-[10px] ml-2 font-semibold">Other</h1>
-            <textarea className="w-full block text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600" />
+            <textarea
+              readOnly
+              className="w-full block text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
+            />
           </div>
           <div className="flex flex-col flex-initial w-[250px] border-l border-gray-300">
             <h1 className="text-[10px] ml-2 font-semibold">
               SECTION (if any) :
             </h1>
-            <textarea className="w-full block text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600" />
+            <textarea
+              readOnly
+              className="w-full block text-[10px] flex-1 m-0 pt-2 pl-2 text-green-600"
+            />
           </div>
         </div>
       </div>

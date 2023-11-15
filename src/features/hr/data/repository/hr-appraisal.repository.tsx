@@ -1,5 +1,7 @@
 import axios from "axios";
+import { HrAppraisalResponseModel } from "features/hr/core/domain/hr-appraisal-response.model";
 import { HrAttendanceAndPunctualityGradeModel } from "features/hr/core/domain/hr-attendance-and-punctuality-grade.model";
+import { HrCommentsModel } from "features/hr/core/domain/hr-comments.model";
 import { HrCoreCompetencyGradeModel } from "features/hr/core/domain/hr-core-competency-grade.model";
 import { HrFunctionalCompetencyAndPunctualityGradeModel } from "features/hr/core/domain/hr-functional-competency-and-punctuality-grade.model";
 import { HrKraKpiGradeModel } from "features/hr/core/domain/hr-kra-kpi-grade.model";
@@ -75,6 +77,31 @@ export interface UpdateKraResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetHrCommentsResponse {
+  data: {
+    message: string;
+    data: HrCommentsModel;
+  };
+}
+
+export interface GetHrAppraisalResponseResponse {
+  data: {
+    message: string;
+    data: HrAppraisalResponseModel;
+  };
+}
+
+export function GetHrAppraisalResponseRepository(): Promise<GetHrAppraisalResponseResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/response`, {
+    withCredentials: true,
+  });
+}
+export function GetHrCommentsRepository(): Promise<GetHrCommentsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/comments`, {
+    withCredentials: true,
+  });
 }
 
 export function UpdateKraRepository(
