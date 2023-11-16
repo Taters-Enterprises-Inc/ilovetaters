@@ -11,37 +11,27 @@ import {
   selectGetSalesActiveFields,
 } from "../slices/get-active-fields.slice";
 import {
+  MaterialDateInput,
   MaterialInput,
+  MaterialInputAddress,
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
-
-const GeneralInformation = () => {
-  return (
-    <>
-      <div className="flex flex-col bg-secondary rounded-t-lg text-white text-4xl font-['Bebas_Neue'] flex-1 p-4">
-        General Information
-      </div>
-      <div className="flex flex-col bg-white rounded-b-lg border border-secondary flex-1 p-4">
-        {/* 
-        -
-        -
-        -
-        -
-              General Info Here 
-        -
-        -
-        -
-        -
-        */}
-      </div>
-    </>
-  );
-};
 
 export function SalesFormContent() {
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getSalesActiveFieldsState = useAppSelector(selectGetSalesActiveFields);
+
+  // stepper
+  const [activeStep, setActiveStep] = useState(0);
+
+  const [completed, setCompleted] = useState<{
+    [k: number]: boolean;
+  }>({});
+
+  const [formState, setFormState] = useState<{
+    [sectionName: string]: { [name: string]: { value: string | Date | null } };
+  }>();
 
   useEffect(() => {
     if (
@@ -52,59 +42,123 @@ export function SalesFormContent() {
     }
   }, [getSalesActiveFieldsState.data]);
 
-  // stepper
-  const [activeStep, setActiveStep] = useState(0);
-
-  const [completed, setCompleted] = useState<{
-    [k: number]: boolean;
-  }>({});
-
   const fieldData = () => {
-    if (getSalesActiveFieldsState.data?.field_data[activeStep]?.field) {
-      console.log(
-        getSalesActiveFieldsState.data?.field_data[activeStep]?.field[1]
-      );
-    }
-
     const getFormField =
       getSalesActiveFieldsState.data?.field_data[activeStep]?.field;
+
+    const formStateFieldValue = (sectionName: string, fieldName: string) => {
+      return formState?.[sectionName]?.[fieldName]?.value || "";
+    };
+
+    const setDynamicOption = (name: string) => {
+      switch (name) {
+        case "shift":
+          return ["AM", "PM"];
+
+        case "store":
+          return getSalesActiveFieldsState.data?.list_of_stores.map(
+            (store) => store.name
+          );
+
+        case "discount":
+          return getSalesActiveFieldsState.data?.discount_type.map(
+            (discount) => discount.name
+          );
+
+        case "gcOriginatingStore":
+          return getSalesActiveFieldsState.data?.list_of_stores.map(
+            (store) => store.name
+          );
+      }
+
+      return null;
+    };
 
     return (
       <>
         {getFormField?.map((field) => (
           <>
-            {field.field_data.length !== 0 && (
-              <span className="w-full text-base md:text-lg text-black text-bold mt-4">
+            {field.field_data.length !== 0 ? (
+              <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
                 {field.sub_section}
               </span>
-            )}
+            ) : null}
 
             {field.field_data.flatMap((field) => (
-              <div className={`w-[100%] md:px-10 py-2`} key={field.id}>
-                <span className="text-black text-xs md:text-base font-normal normal-case">
+              <div
+                className={`w-[100%] md:px-10 py-3 space-y-3`}
+                key={field.id}
+              >
+                <span className=" text-black text-xs md:text-base font-normal normal-case">
                   {field.field_name}
                 </span>
+
                 <div className="w-full ">
-                  {field.is_dropdown ? (
-                    <MaterialInputAutoComplete
-                      colorTheme={"black"}
-                      options={[]}
-                      label={""}
-                      size="small"
-                      isOptionEqualToValue={function (
-                        option: any,
-                        value: any
-                      ): boolean {
-                        throw new Error("Function not implemented.");
-                      }}
-                    />
+                  {field.is_dropdown || field.is_date_field ? (
+                    <>
+                      {field.is_dropdown ? (
+                        <MaterialInputAutoComplete
+                          size="small"
+                          colorTheme={"black"}
+                          required={field.is_required}
+                          options={setDynamicOption(field.name) ?? []}
+                          label={field.field_name}
+                          isOptionEqualToValue={(option, value) =>
+                            option === value
+                          }
+                          value={formStateFieldValue(
+                            field.section_name,
+                            field.name
+                          ).toString()}
+                          onChange={(event, selectedValue) =>
+                            handleOnChange(
+                              field.section_name,
+                              field.name,
+                              selectedValue
+                            )
+                          }
+                        />
+                      ) : null}
+
+                      {field.is_date_field ? (
+                        <MaterialDateInput
+                          required={field.is_required}
+                          label={field.field_name}
+                          colorTheme={"black"}
+                          size="small"
+                          value={formStateFieldValue(
+                            field.section_name,
+                            field.name
+                          ).toString()}
+                          onChange={(selectedDate: Date | null) =>
+                            handleOnChange(
+                              field.section_name,
+                              field.name,
+                              selectedDate
+                            )
+                          }
+                        />
+                      ) : null}
+                    </>
                   ) : (
                     <MaterialInput
-                      colorTheme={"black"}
-                      onChange={() => {}}
-                      size="small"
                       fullWidth
-                      name={""}
+                      type={field.name === "emailAddress" ? "email" : "text"}
+                      size="small"
+                      name={field.name}
+                      colorTheme={"black"}
+                      required={field.is_required}
+                      value={formStateFieldValue(
+                        field.section_name,
+                        field.name
+                      ).toString()}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleOnChange(
+                          field.section_name,
+                          event.target.name,
+                          event.target.value
+                        )
+                      }
                     />
                   )}
                 </div>
@@ -116,7 +170,24 @@ export function SalesFormContent() {
     );
   };
 
-  const handleSubmit = () => {};
+  const handleOnChange = (
+    sectionName: string,
+    fieldName: string,
+    val: string | Date | null
+  ) => {
+    setFormState((prevData) => ({
+      ...prevData,
+      [sectionName]: {
+        ...(prevData && prevData[sectionName]),
+        [fieldName]: { value: val },
+      },
+    }));
+  };
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    console.log(formState);
+  };
 
   return (
     <>

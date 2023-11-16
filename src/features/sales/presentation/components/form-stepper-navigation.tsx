@@ -56,6 +56,7 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
 
       <Box>
         <Button
+          type="submit"
           style={{ minWidth: 100 }}
           onClick={handleNext}
           sx={{ mr: 1 }}
@@ -65,6 +66,7 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
         </Button>
 
         <Button
+          type="submit"
           style={{ minWidth: 100 }}
           sx={{ mr: 1 }}
           disabled={!isLastStep()}

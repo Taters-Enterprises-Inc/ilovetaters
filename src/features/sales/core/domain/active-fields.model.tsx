@@ -1,4 +1,11 @@
 export interface SalesActiveFieldsModel {
+  list_of_stores: Array<{
+    name: string;
+  }>;
+  discount_type: Array<{
+    name: string;
+  }>;
+
   field_data: [
     {
       section: string;
@@ -15,6 +22,9 @@ export interface SalesActiveFieldsModel {
           payment_sub_section: string;
           section_name: string;
           sub_section_name: string;
+          name: string;
+          is_required: boolean;
+          is_date_field: boolean;
         }>;
       }>;
     }
