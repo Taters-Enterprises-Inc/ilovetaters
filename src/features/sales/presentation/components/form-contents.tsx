@@ -17,6 +17,7 @@ import {
 } from "features/shared/presentation/components";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { salesSubmitForm } from "../slices/sales-submit-form.slice";
+import dayjs from "dayjs";
 
 export function SalesFormContent() {
   const dispatch = useAppDispatch();
@@ -99,9 +100,9 @@ export function SalesFormContent() {
                         <MaterialInputAutoComplete
                           size="small"
                           colorTheme={"black"}
+                          placeholder={field.field_name}
                           required={field.is_required}
                           options={setDynamicOption(field.name) ?? []}
-                          label={field.field_name}
                           isOptionEqualToValue={(option, value) =>
                             option === value
                           }
@@ -121,14 +122,16 @@ export function SalesFormContent() {
 
                       {field.is_date_field ? (
                         <MaterialDateInput
+                          disableFuture
                           required={field.is_required}
-                          label={field.field_name}
                           colorTheme={"black"}
                           size="small"
+                          // shouldDisableDate={(date) => isFutureDate(date)}
                           value={formStateFieldValue(
                             field.section_name,
                             field.name
                           ).toString()}
+                          placeholder={field.field_name}
                           onChange={(selectedDate: Date | null) =>
                             handleOnChange(
                               field.section_name,
@@ -151,6 +154,7 @@ export function SalesFormContent() {
                         field.section_name,
                         field.name
                       ).toString()}
+                      placeholder={field.field_name}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         handleOnChange(
                           field.section_name,
