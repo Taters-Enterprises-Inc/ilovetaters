@@ -264,6 +264,7 @@ import getDeliverySchedule from "features/stock-ordering/presentation/slices/get
 import updateOrderItems from "features/stock-ordering/presentation/slices/update-order-items.slice";
 import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
 import getSalesActiveFields from "features/sales/presentation/slices/get-active-fields.slice";
+import salesSubmitForm from "features/sales/presentation/slices/sales-submit-form.slice";
 
 export const store = configureStore({
   reducer: {
@@ -531,6 +532,7 @@ export const store = configureStore({
     updateOrderItems,
     salesSideBar,
     getSalesActiveFields,
+    salesSubmitForm,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

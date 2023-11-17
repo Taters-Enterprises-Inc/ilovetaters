@@ -428,6 +428,10 @@ import {
   selectUpdateOrderItems,
   updateOrderItemsState,
 } from "features/stock-ordering/presentation/slices/update-order-items.slice";
+import {
+  GetSalesActiveFieldsState,
+  selectGetSalesActiveFields,
+} from "features/sales/presentation/slices/get-active-fields.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -674,6 +678,25 @@ export function LoadingAndSnackbarWrapper() {
   const stockCancelOrder = useAppSelector(selectUpdateOrderCancelled);
 
   const stockUpdateOrderItems = useAppSelector(selectUpdateOrderItems);
+
+  const salesGetFieldAvailability = useAppSelector(selectGetSalesActiveFields);
+
+  useEffect(() => {
+    switch (salesGetFieldAvailability.status) {
+      case GetSalesActiveFieldsState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesActiveFieldsState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesActiveFieldsState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSalesActiveFieldsState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [salesGetFieldAvailability]);
 
   useEffect(() => {
     switch (stockUpdateOrderItems.status) {

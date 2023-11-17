@@ -13,9 +13,10 @@ import {
 import {
   MaterialDateInput,
   MaterialInput,
-  MaterialInputAddress,
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
+import { SubmitFormParam } from "features/sales/core/sales.param";
+import { salesSubmitForm } from "../slices/sales-submit-form.slice";
 
 export function SalesFormContent() {
   const dispatch = useAppDispatch();
@@ -29,9 +30,7 @@ export function SalesFormContent() {
     [k: number]: boolean;
   }>({});
 
-  const [formState, setFormState] = useState<{
-    [sectionName: string]: { [name: string]: { value: string | Date | null } };
-  }>();
+  const [formState, setFormState] = useState<SubmitFormParam>();
 
   useEffect(() => {
     if (
@@ -186,7 +185,10 @@ export function SalesFormContent() {
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(formState);
+
+    if (formState !== undefined) {
+      dispatch(salesSubmitForm(formState));
+    }
   };
 
   return (
