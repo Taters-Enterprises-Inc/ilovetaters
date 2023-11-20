@@ -74,19 +74,27 @@ export function SalesFormContent() {
       return null;
     };
 
+    const fieldSubSection = (field: any) => {
+      if (field.field_data.length !== 0 && field.sub_section) {
+        return (
+          <span className="w-full text-base md:text-lg text-black font-semibold font-['Roboto'] my-4">
+            {field.sub_section}
+          </span>
+        );
+      } else {
+        return <></>;
+      }
+    };
+
     return (
       <>
         {getFormField?.map((field) => (
           <>
-            {field.field_data.length !== 0 ? (
-              <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
-                {field.sub_section}
-              </span>
-            ) : null}
+            {fieldSubSection(field)}
 
             {field.field_data.flatMap((field) => (
               <div
-                className={`w-[100%] md:px-10 py-3 space-y-3`}
+                className={`w-[100%] font-['Roboto'] md:px-10 py-3 space-y-3`}
                 key={field.id}
               >
                 <div>
@@ -98,7 +106,7 @@ export function SalesFormContent() {
                   ) : null}
                 </div>
 
-                <div className="w-full ">
+                <div className="w-full hover:bg-zinc-100">
                   {field.is_dropdown || field.is_date_field ? (
                     <>
                       {field.is_dropdown ? (
@@ -248,7 +256,7 @@ export function SalesFormContent() {
                 {getSalesActiveFieldsState.data?.field_data[activeStep].section}
               </div>
               <div className="flex flex-col bg-white rounded-b-lg border border-secondary flex-1 p-4">
-                <div className="flex flex-wrap lg:px-20 lg:pt-5">
+                <div className="flex flex-wrap lg:px-20 lg:pb-3">
                   {fieldData()}
                 </div>
               </div>
