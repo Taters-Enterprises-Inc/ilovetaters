@@ -11,6 +11,7 @@ interface FormStepperNavigationProps {
       [key: number]: boolean;
     }
   ) => void;
+  handleSubmit: (e: any, isSaved: boolean) => void;
 }
 
 export function FormStepperNavigation(props: FormStepperNavigationProps) {
@@ -58,6 +59,16 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
       </Button>
 
       <Box>
+        <Button
+          type="submit"
+          style={{ minWidth: 100 }}
+          sx={{ mr: 1 }}
+          onClick={(e) => props.handleSubmit(e, true)}
+          disabled={isLastStep()}
+        >
+          Save
+        </Button>
+
         <Button
           style={{ minWidth: 100 }}
           onClick={handleNext}

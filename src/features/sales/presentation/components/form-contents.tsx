@@ -31,7 +31,7 @@ export function SalesFormContent() {
     [k: number]: boolean;
   }>({});
 
-  const [formState, setFormState] = useState<SubmitFormParam>();
+  const [formState, setFormState] = useState<SubmitFormParam["formState"]>();
 
   useEffect(() => {
     if (
@@ -74,27 +74,19 @@ export function SalesFormContent() {
       return null;
     };
 
-    const fieldSubSection = (field: any) => {
-      if (field.field_data.length !== 0 && field.sub_section) {
-        return (
-          <span className="w-full text-base md:text-lg text-black font-semibold font-['Roboto'] my-4">
-            {field.sub_section}
-          </span>
-        );
-      } else {
-        return <></>;
-      }
-    };
-
     return (
       <>
         {getFormField?.map((field) => (
           <>
-            {fieldSubSection(field)}
+            {field.field_data.length !== 0 ? (
+              <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
+                {field.sub_section}
+              </span>
+            ) : null}
 
             {field.field_data.flatMap((field) => (
               <div
-                className={`w-[100%] font-['Roboto'] md:px-10 py-3 space-y-3`}
+                className={`w-[100%] md:px-10 py-3 space-y-3`}
                 key={field.id}
               >
                 <div>
@@ -106,7 +98,7 @@ export function SalesFormContent() {
                   ) : null}
                 </div>
 
-                <div className="w-full hover:bg-zinc-100">
+                <div className="w-full ">
                   {field.is_dropdown || field.is_date_field ? (
                     <>
                       {field.is_dropdown ? (
@@ -224,11 +216,14 @@ export function SalesFormContent() {
     return emptyRequiredFields;
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (
+    e: { preventDefault: () => void },
+    isSaved: boolean
+  ) => {
     e.preventDefault();
 
     if (formState !== undefined) {
-      dispatch(salesSubmitForm(formState));
+      dispatch(salesSubmitForm({ formState, saveStatus: isSaved }));
     }
   };
 
@@ -251,12 +246,12 @@ export function SalesFormContent() {
               </Stepper>
             </div>
 
-            <form className="lg:px-44" onSubmit={handleSubmit}>
+            <form className="lg:px-44" onSubmit={(e) => handleSubmit(e, false)}>
               <div className="flex flex-col bg-secondary rounded-t-md text-white text-4xl font-['Bebas_Neue'] flex-1 p-4">
                 {getSalesActiveFieldsState.data?.field_data[activeStep].section}
               </div>
               <div className="flex flex-col bg-white rounded-b-lg border border-secondary flex-1 p-4">
-                <div className="flex flex-wrap lg:px-20 lg:pb-3">
+                <div className="flex flex-wrap lg:px-20 lg:pt-5">
                   {fieldData()}
                 </div>
               </div>
@@ -269,6 +264,7 @@ export function SalesFormContent() {
                 requiredCheck={getEmptyRequiredFields()}
                 setActiveStep={(step) => setActiveStep(step)}
                 setCompleted={(complete) => setCompleted(complete)}
+                handleSubmit={handleSubmit}
               />
             </form>
           </div>

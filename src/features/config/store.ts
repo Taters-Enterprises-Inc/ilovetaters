@@ -265,6 +265,9 @@ import updateOrderItems from "features/stock-ordering/presentation/slices/update
 import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
 import getSalesActiveFields from "features/sales/presentation/slices/get-active-fields.slice";
 import salesSubmitForm from "features/sales/presentation/slices/sales-submit-form.slice";
+import getSalesTCPendingTask from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
+import getSalesManagerPendingTask from "features/sales/presentation/slices/get-sales-manager-pending.slice";
+import getSalesCashierSavedForm from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
 
 export const store = configureStore({
   reducer: {
@@ -533,6 +536,9 @@ export const store = configureStore({
     salesSideBar,
     getSalesActiveFields,
     salesSubmitForm,
+    getSalesTCPendingTask,
+    getSalesManagerPendingTask,
+    getSalesCashierSavedForm,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

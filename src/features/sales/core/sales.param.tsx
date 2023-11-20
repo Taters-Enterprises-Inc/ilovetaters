@@ -1,3 +1,6 @@
 export interface SubmitFormParam {
-  [sectionName: string]: { [name: string]: { value: string | Date | null } };
+  formState: {
+    [sectionName: string]: { [name: string]: { value: string | Date | null } };
+  };
+  saveStatus: boolean;
 }
