@@ -5,6 +5,7 @@ interface FormStepperNavigationProps {
   activeStep: number;
   setActiveStep: (step: number) => void;
   totalSteps: number;
+  requiredCheck: string[];
   setCompleted: (
     prevCompletedUpdater: (prevCompleted: { [key: number]: boolean }) => {
       [key: number]: boolean;
@@ -18,13 +19,15 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
   };
 
   const handleNext = () => {
-    const newStep = props.activeStep + 1;
-    props.setActiveStep(newStep);
+    if (props.requiredCheck.length === 0) {
+      const newStep = props.activeStep + 1;
+      props.setActiveStep(newStep);
 
-    props.setCompleted((prevCompleted) => ({
-      ...prevCompleted,
-      [newStep - 1]: true,
-    }));
+      props.setCompleted((prevCompleted) => ({
+        ...prevCompleted,
+        [newStep - 1]: true,
+      }));
+    }
   };
 
   const handleBack = () => {
@@ -56,7 +59,6 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
 
       <Box>
         <Button
-          type="submit"
           style={{ minWidth: 100 }}
           onClick={handleNext}
           sx={{ mr: 1 }}

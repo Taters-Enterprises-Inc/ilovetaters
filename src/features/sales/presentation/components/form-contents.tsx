@@ -89,9 +89,14 @@ export function SalesFormContent() {
                 className={`w-[100%] md:px-10 py-3 space-y-3`}
                 key={field.id}
               >
-                <span className=" text-black text-xs md:text-base font-normal normal-case">
-                  {field.field_name}
-                </span>
+                <div>
+                  <span className=" text-black text-xs md:text-base font-normal normal-case">
+                    {field.field_name}
+                  </span>
+                  {field.is_required ? (
+                    <span className="text-red-800 mx-1">*</span>
+                  ) : null}
+                </div>
 
                 <div className="w-full ">
                   {field.is_dropdown || field.is_date_field ? (
@@ -149,7 +154,7 @@ export function SalesFormContent() {
                       size="small"
                       name={field.name}
                       colorTheme={"black"}
-                      required={field.is_required}
+                      is_required={field.is_required}
                       value={formStateFieldValue(
                         field.section_name,
                         field.name
@@ -185,6 +190,30 @@ export function SalesFormContent() {
         [fieldName]: { value: val },
       },
     }));
+  };
+
+  const getEmptyRequiredFields = () => {
+    const currentStepFields =
+      getSalesActiveFieldsState.data?.field_data[activeStep]?.field;
+    const emptyRequiredFields: string[] = [];
+
+    if (currentStepFields) {
+      currentStepFields.forEach((subSection) => {
+        subSection.field_data.forEach((field) => {
+          const fieldValue =
+            formState?.[field.section_name]?.[field.name]?.value;
+          const isFieldEmpty =
+            field.is_required &&
+            (!fieldValue || fieldValue.toString().trim() === "");
+
+          if (isFieldEmpty) {
+            emptyRequiredFields.push(field.field_name);
+          }
+        });
+      });
+    }
+
+    return emptyRequiredFields;
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
@@ -229,6 +258,7 @@ export function SalesFormContent() {
                 totalSteps={
                   getSalesActiveFieldsState.data?.field_data.length ?? 6
                 }
+                requiredCheck={getEmptyRequiredFields()}
                 setActiveStep={(step) => setActiveStep(step)}
                 setCompleted={(complete) => setCompleted(complete)}
               />
