@@ -1,7 +1,7 @@
 import {
   SalesHead,
-  SalesTaskContentManager,
-  SalesTaskContentTC,
+  SalesTaskListManager,
+  SalesTaskListTC,
 } from "../components";
 import { useAppSelector } from "features/config/hooks";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
@@ -37,9 +37,9 @@ export function SalesTask() {
             Task
           </span>
         </div>
-        {isTC && <SalesTaskContentTC />}
+        {isTC && <SalesTaskListTC />}
         {isTC && isManager && <Divider />}
-        {isManager && <SalesTaskContentManager />}
+        {isManager && <SalesTaskListManager />}
       </div>
     </>
   );
