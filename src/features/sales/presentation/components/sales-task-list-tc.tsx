@@ -1,29 +1,46 @@
 import {
-  Divider,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Box,
-  Button,
   Typography,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
 } from "@mui/material";
-import React from "react";
-import { MdPending } from "react-icons/md";
-import { GoPencil } from "react-icons/go";
+import React, { useEffect } from "react";
 import { TbProgressAlert } from "react-icons/tb";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  GetSalesTCPendingTaskState,
+  getSalesTCPendingTask,
+  selectGetSalesTCPendingTask,
+} from "../slices/get-sales-tc-pending-task.slice";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export function SalesTaskListTC() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const getSalesTcPendingTaskState = useAppSelector(
+    selectGetSalesTCPendingTask
+  );
+
+  useEffect(() => {
+    if (
+      getSalesTcPendingTaskState.status !==
+        GetSalesTCPendingTaskState.success &&
+      !getSalesTcPendingTaskState.data
+    ) {
+      dispatch(getSalesTCPendingTask());
+    }
+  }, [getSalesTcPendingTaskState.data]);
+
+  const handleOnClick = (id: string) => {
+    const path = "task-form/" + id;
+    navigate(path);
+  };
 
   return (
     <div className="w-full">
@@ -168,6 +185,53 @@ export function SalesTaskListTC() {
                 </ListItem>
               </List>
             </div>
+          </div>
+                {getSalesTcPendingTaskState.data?.task.map((task) => (
+                  <TableRow
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      "&:hover": { backgroundColor: "#f5f5f5" },
+                    }}
+                    onClick={() => handleOnClick(task.id)}
+                    className="w-full"
+                  >
+                    <TableCell component="th" scope="row" width={40}>
+                      <TbProgressAlert size={25} />
+                    </TableCell>
+                    <TableCell width={100} sx={{ fontSize: 14 }}>
+                      # {task.id}
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontWeight: 600, fontSize: 14 }}
+                      width={400}
+                    >
+                      {task.store}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: 14 }} width={150}>
+                      {task.entry_date}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: 14 }} width={80}>
+                      {task.shift}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: 14 }} width={150}>
+                      {task.cashier_name}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography fontSize={14}>
+                        <Box
+                          sx={{ fontWeight: 600 }}
+                          className="border-2 border-none"
+                        >
+                          <span className="bg-amber-300 px-2 py-0.5 rounded text-amber-600">
+                            {task.grade}
+                          </span>
+                        </Box>
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>

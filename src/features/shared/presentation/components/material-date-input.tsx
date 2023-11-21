@@ -65,6 +65,7 @@ export interface MaterialDateInputProps {
   maxDate?: any;
   placeholder?: string;
   disableFuture?: boolean;
+  disabled?: boolean;
 }
 
 export function MaterialDateInput(props: MaterialDateInputProps) {
@@ -86,6 +87,7 @@ export function MaterialDateInput(props: MaterialDateInputProps) {
         open={openBirthDateCalendar}
         onOpen={() => setOpenBirthDateCalendar(true)}
         onClose={() => setOpenBirthDateCalendar(false)}
+        disabled={props.disabled}
         renderInput={(params) => (
           <MaterialInput
             colorTheme={props.colorTheme}

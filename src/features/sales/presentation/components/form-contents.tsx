@@ -2,9 +2,9 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { StepLabel, TextField } from "@mui/material";
+import { StepLabel } from "@mui/material";
 import { FormStepperNavigation } from ".";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GetSalesActiveFieldsState,
   getSalesActiveFields,
@@ -17,7 +17,7 @@ import {
 } from "features/shared/presentation/components";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { salesSubmitForm } from "../slices/sales-submit-form.slice";
-import dayjs from "dayjs";
+import { setDynamicOption } from "./sales-utils";
 
 export function SalesFormContent() {
   const dispatch = useAppDispatch();
@@ -48,30 +48,6 @@ export function SalesFormContent() {
 
     const formStateFieldValue = (sectionName: string, fieldName: string) => {
       return formState?.[sectionName]?.[fieldName]?.value || "";
-    };
-
-    const setDynamicOption = (name: string) => {
-      switch (name) {
-        case "shift":
-          return ["AM", "PM"];
-
-        case "store":
-          return getSalesActiveFieldsState.data?.list_of_stores.map(
-            (store) => store.name
-          );
-
-        case "discount":
-          return getSalesActiveFieldsState.data?.discount_type.map(
-            (discount) => discount.name
-          );
-
-        case "gcOriginatingStore":
-          return getSalesActiveFieldsState.data?.list_of_stores.map(
-            (store) => store.name
-          );
-      }
-
-      return null;
     };
 
     return (
@@ -107,7 +83,12 @@ export function SalesFormContent() {
                           colorTheme={"black"}
                           placeholder={field.field_name}
                           required={field.is_required}
-                          options={setDynamicOption(field.name) ?? []}
+                          options={
+                            setDynamicOption(
+                              getSalesActiveFieldsState.data,
+                              field.name
+                            ) ?? []
+                          }
                           isOptionEqualToValue={(option, value) =>
                             option === value
                           }
@@ -131,7 +112,6 @@ export function SalesFormContent() {
                           required={field.is_required}
                           colorTheme={"black"}
                           size="small"
-                          // shouldDisableDate={(date) => isFutureDate(date)}
                           value={formStateFieldValue(
                             field.section_name,
                             field.name

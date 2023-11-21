@@ -5,5 +5,6 @@ export interface SalesManagerPendingTaskModel {
     entry_date: string;
     shift: string;
     cashier_name: string;
+    grade: string;
   }>;
 }

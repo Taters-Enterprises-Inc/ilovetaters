@@ -1,7 +1,7 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { SalesActiveFieldsModel } from "../core/domain/active-fields.model";
-import { SubmitFormParam } from "../core/sales.param";
+import { CheckParam, SubmitFormParam } from "../core/sales.param";
 import { SalesTCPendingTaskModel } from "../core/domain/tc-pending-task.model";
 import { SalesManagerPendingTaskModel } from "../core/domain/manager-pending-task.model";
 import { SalesCashierSavedFormModel } from "../core/domain/cashier-saved-form.model";
@@ -40,6 +40,12 @@ export interface GetSalesCashierSavedFormResponse {
   };
 }
 
+export interface salesSubmitVerdictResponse {
+  data: {
+    message: string;
+  };
+}
+
 export function GetSalesActiveFieldsRepository(): Promise<GetSalesActiveFieldsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/fields`, {
     withCredentials: true,
@@ -61,13 +67,21 @@ export function GetSalesTCPendingTaskRepository(): Promise<GetSalesTCPendingTask
 }
 
 export function GetSalesManagerPendingTaskRepository(): Promise<GetSalesManagerPendingTaskResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/tc-task`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/manager-task`, {
     withCredentials: true,
   });
 }
 
 export function GetSalesCashierSavedFormRepository(): Promise<GetSalesCashierSavedFormResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/saved-forms`, {
+    withCredentials: true,
+  });
+}
+
+export function salesSubmitVerdictRepository(
+  param: CheckParam
+): Promise<salesSubmitVerdictResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/sales/tc-task`, param, {
     withCredentials: true,
   });
 }
