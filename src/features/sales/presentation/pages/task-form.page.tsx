@@ -1,29 +1,10 @@
-import {
-  SalesHead,
-  SalesTaskListCashier,
-  SalesTaskListManager,
-  SalesTaskListTC,
-} from "../components";
+import { SalesHead } from "../components";
 import { useAppSelector } from "features/config/hooks";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { Divider } from "@mui/material";
+import SalesTaskContent from "../components/sales-task-content";
 
-export function SalesTask() {
+export function SalesTaskForm() {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-
-  const isCashier =
-    getAdminSessionState.data?.admin.user_details.sales_groups.some(
-      (group) => group.id === 1
-    );
-
-  const isTC = getAdminSessionState.data?.admin.user_details.sales_groups.some(
-    (group) => group.id === 2
-  );
-
-  const isManager =
-    getAdminSessionState.data?.admin.user_details.sales_groups.some(
-      (group) => group.id === 3
-    );
 
   return (
     <>
@@ -40,12 +21,11 @@ export function SalesTask() {
       <div className="p-8 space-y-10">
         <div>
           <span className="text-secondary text-4xl font-['Bebas_Neue'] flex-1">
-            Task
+            Task Form
           </span>
+
+          <SalesTaskContent />
         </div>
-        {isTC && <SalesTaskListTC />}
-        {isTC && isManager && <Divider />}
-        {isManager && <SalesTaskListManager />}
       </div>
     </>
   );

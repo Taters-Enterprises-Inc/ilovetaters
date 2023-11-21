@@ -28,7 +28,7 @@ export function SalesDrawerMenu() {
     },
     {
       text: "Form",
-      path: "form",
+      path: "form-list",
       icon: <SiPlatformdotsh size={20} />,
     },
     {

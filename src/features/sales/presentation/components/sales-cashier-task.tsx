@@ -1,5 +1,5 @@
 import {
-  Box,
+  Button,
   Divider,
   List,
   ListItem,
@@ -7,39 +7,37 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect, useState } from "react";
 import { TbProgressAlert } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { getSalesTCPendingTask } from "../slices/get-sales-tc-pending-task.slice";
 import {
-  GetSalesManagerPendingTaskState,
-  getSalesManagerPendingTask,
-  selectGetSalesManagerPendingTask,
-} from "../slices/get-sales-manager-pending.slice";
+  GetSalesCashierSavedFormState,
+  getSalesCashierSavedForm,
+  selectGetSalesCashierSavedForm,
+} from "../slices/get-sales-cashier-saved-form.slice";
 
-export function SalesTaskListManager() {
+export function SalesTaskListCashier() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const getSalesManagerPendingTaskState = useAppSelector(
-    selectGetSalesManagerPendingTask
+  const getSalesCashierSavedFormState = useAppSelector(
+    selectGetSalesCashierSavedForm
   );
 
   useEffect(() => {
     if (
-      getSalesManagerPendingTaskState.status !==
-        GetSalesManagerPendingTaskState.success &&
-      !getSalesManagerPendingTaskState.data
+      getSalesCashierSavedFormState.status !==
+        GetSalesCashierSavedFormState.success &&
+      !getSalesCashierSavedFormState.data
     ) {
-      dispatch(getSalesManagerPendingTask());
+      dispatch(getSalesCashierSavedForm());
     }
-  }, [getSalesManagerPendingTaskState.data]);
+  }, [getSalesCashierSavedFormState.data]);
 
   const handleOnClick = (id: string) => {
     const path = "task-form/" + id;
@@ -49,11 +47,20 @@ export function SalesTaskListManager() {
   return (
     <div className="w-full">
       <div className="flex flex-col space-y-5">
+        <div className="flex justify-end">
+          <Button
+            onClick={() => navigate("/admin/sales/form")}
+            size="small"
+            variant="contained"
+          >
+            Create new form
+          </Button>
+        </div>
         <div className="flex flex-col border border-gray-200 rounded-md shadow-sm bg-white p-5 space-y-3 w-full md:w-3/3">
           <div className="hidden md:block">
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableBody>
-                {getSalesManagerPendingTaskState.data?.task.map((task) => (
+                {getSalesCashierSavedFormState.data?.saved_forms.map((task) => (
                   <TableRow
                     sx={{
                       "&:last-child td, &:last-child th": { border: 0 },
@@ -80,21 +87,6 @@ export function SalesTaskListManager() {
                     <TableCell sx={{ fontSize: 14 }} width={80}>
                       {task.shift}
                     </TableCell>
-                    <TableCell sx={{ fontSize: 14 }} width={150}>
-                      {task.cashier_name}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography fontSize={14}>
-                        <Box
-                          sx={{ fontWeight: 600 }}
-                          className="border-2 border-none"
-                        >
-                          <span className="bg-amber-300 px-2 py-0.5 rounded text-amber-600">
-                            {task.grade}
-                          </span>
-                        </Box>
-                      </Typography>
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -105,34 +97,30 @@ export function SalesTaskListManager() {
             <div className="flex flex-col border border-gray-200 rounded-md shadow-sm bg-white w-full">
               <div className="flex flex-col my-2 p-2 font-['Roboto']">
                 <List>
-                  {getSalesManagerPendingTaskState.data?.task.map((task) => (
-                    <>
-                      <ListItem>
-                        <div className="w-full">
-                          <div className="flex justify-between">
-                            <span className="text-left bg-neutral-200 px-2 py-0.5 rounded">
-                              {task.id}
-                            </span>
-                            <span className="text-end bg-amber-300 px-2 py-0.5 rounded text-amber-600">
-                              {task.grade}
-                            </span>
+                  {getSalesCashierSavedFormState.data?.saved_forms.map(
+                    (task) => (
+                      <>
+                        <ListItem>
+                          <div className="w-full">
+                            <div className="flex justify-between">
+                              <span className="text-left bg-neutral-200 px-2 py-0.5 rounded">
+                                {task.id}
+                              </span>
+                            </div>
+                            <div className="pt-2 font-semibold">
+                              <span>{task.store}</span>
+                            </div>
+                            <div className="py-px">
+                              <span>
+                                {task.entry_date} - {task.shift}
+                              </span>
+                            </div>
                           </div>
-                          <div className="pt-2 font-semibold">
-                            <span>{task.store}</span>
-                          </div>
-                          <div className="py-px">
-                            <span>
-                              {task.entry_date} - {task.shift}
-                            </span>
-                          </div>
-                          <div className="py-px">
-                            <span>{task.cashier_name}</span>
-                          </div>
-                        </div>
-                      </ListItem>
-                      <Divider sx={{ marginY: 1 }} />
-                    </>
-                  ))}
+                        </ListItem>
+                        <Divider sx={{ marginY: 1 }} />
+                      </>
+                    )
+                  )}
                 </List>
               </div>
             </div>
