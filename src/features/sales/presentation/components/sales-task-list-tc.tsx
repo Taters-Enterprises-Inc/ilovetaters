@@ -28,8 +28,8 @@ export function SalesTaskListTC() {
   return (
     <div className="w-full">
       <div className="flex flex-col space-y-5">
-        <div className="flex flex-col border border-gray-200 rounded-md shadow-sm bg-white p-5 space-y-3 w-full md:w-3/3">
-          <div className="hidden md:block">
+        <div className="hidden md:block">
+          <div className="flex flex-col border border-gray-200 rounded-md shadow-sm bg-white p-5 space-y-3 w-full md:w-3/3">
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableBody>
                 <TableRow
@@ -45,23 +45,23 @@ export function SalesTaskListTC() {
                   <TableCell component="th" scope="row" width={40}>
                     <TbProgressAlert size={25} />
                   </TableCell>
-                  <TableCell width={20} sx={{ fontSize: 18 }}>
+                  <TableCell width={100} sx={{ fontSize: 14 }}>
                     #09123456789
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 600, fontSize: 18 }} width={400}>
+                  <TableCell sx={{ fontWeight: 600, fontSize: 14 }} width={400}>
                     Taters Waltermart Makati
                   </TableCell>
-                  <TableCell sx={{ fontSize: 18 }} width={150}>
+                  <TableCell sx={{ fontSize: 14 }} width={150}>
                     2023-11-17
                   </TableCell>
-                  <TableCell sx={{ fontSize: 18 }} width={80}>
+                  <TableCell sx={{ fontSize: 14 }} width={80}>
                     AM
                   </TableCell>
-                  <TableCell sx={{ fontSize: 18 }} width={150}>
+                  <TableCell sx={{ fontSize: 14 }} width={150}>
                     Test Name
                   </TableCell>
                   <TableCell align="right">
-                    <Typography fontSize={18}>
+                    <Typography fontSize={14}>
                       <Box
                         sx={{ fontWeight: 600 }}
                         className="border-2 border-none"
@@ -86,23 +86,23 @@ export function SalesTaskListTC() {
                   <TableCell component="th" scope="row" width={40}>
                     <TbProgressAlert size={25} />
                   </TableCell>
-                  <TableCell width={20} sx={{ fontSize: 18 }}>
+                  <TableCell width={100} sx={{ fontSize: 14 }}>
                     #0912345
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 600, fontSize: 18 }} width={400}>
+                  <TableCell sx={{ fontWeight: 600, fontSize: 14 }} width={400}>
                     Taters Trinoma
                   </TableCell>
-                  <TableCell sx={{ fontSize: 18 }} width={150}>
+                  <TableCell sx={{ fontSize: 14 }} width={150}>
                     2023-11-17
                   </TableCell>
-                  <TableCell sx={{ fontSize: 18 }} width={80}>
+                  <TableCell sx={{ fontSize: 14 }} width={80}>
                     AM
                   </TableCell>
-                  <TableCell sx={{ fontSize: 18 }} width={150}>
+                  <TableCell sx={{ fontSize: 14 }} width={150}>
                     Test Name
                   </TableCell>
                   <TableCell align="right">
-                    <Typography fontSize={18}>
+                    <Typography fontSize={14}>
                       <Box
                         sx={{ fontWeight: 600 }}
                         className="border-2 border-none"
@@ -117,73 +117,58 @@ export function SalesTaskListTC() {
               </TableBody>
             </Table>
           </div>
+        </div>
 
-          {/* <List
-            sx={{
-              width: "100%",
-              bgcolor: "background.paper",
-            }}
-          >
-            <>
-              <ListItem className="flex space-x-5 hover:bg-neutral-100">
-                <ListItemAvatar>
-                  <TbProgressAlert size={40} />
-                </ListItemAvatar>
-
-                <ListItemText
-                  primary={
-                    <div>
-                      <Box fontWeight="fontWeightBold" fontSize={"16px"}>
-                        Taters Waltermart Makati
-                      </Box>
-                      <hr className="my-2 self-center" />
+        <div className="block md:hidden">
+          <div className="flex flex-col border border-gray-200 rounded-md shadow-sm bg-white w-full">
+            <div className="flex flex-col my-2 p-2 font-['Roboto']">
+              <List>
+                <ListItem>
+                  <div className="w-full">
+                    <div className="flex justify-between">
+                      <span className="text-left bg-neutral-200 px-2 py-0.5 rounded">
+                        123456
+                      </span>
+                      <span className="text-end bg-amber-300 px-2 py-0.5 rounded text-amber-600">
+                        Pending
+                      </span>
                     </div>
-                  }
-                  secondary={
-                    <>
-                      <div className="flex flex-row text-black w-1/2">
-                        <Box fontSize={"14px"}>
-                          <span className="font-semibold">Date: </span>
-                          2023-11-17
-                        </Box>
-                      </div>
-                      <div className="flex flex-row text-black w-1/2">
-                        <Box fontSize={"14px"}>
-                          <span className="font-semibold">Shift: </span>
-                          AM
-                        </Box>
-                      </div>
-                      <Box className="" fontSize={"14px"}>
-                        <span className="font-semibold">Cashier Name: </span>
-                        Test Name
-                      </Box>
-                    </>
-                  }
-                />
-                <Box className="flex flex-col">
-                  <Typography className="text-center pb-6" fontSize={14}>
-                    <Box
-                      sx={{ fontWeight: 600 }}
-                      className="border-2 rounded-full bg-amber-500  py-0.5"
-                    >
-                      PENDING
-                    </Box>
-                  </Typography>
-
-                  <Button
-                    variant="contained"
-                    startIcon={<GoPencil />}
-                    onClick={() => handleOpen()}
-                    className="flex flex-row"
-                  >
-                    <Box sx={{ display: { xs: "none", md: "block" } }}>
-                      Update
-                    </Box>
-                  </Button>
-                </Box>
-              </ListItem>
-            </>
-          </List> */}
+                    <div className="pt-2 font-semibold">
+                      <span>Taters Waltermart Makati</span>
+                    </div>
+                    <div className="py-px">
+                      <span>2023-11-17 - AM</span>
+                    </div>
+                    <div className="py-px">
+                      <span>Test Name</span>
+                    </div>
+                  </div>
+                </ListItem>
+                <Divider sx={{ marginY: 1 }} />
+                <ListItem>
+                  <div className="w-full">
+                    <div className="flex justify-between">
+                      <span className="text-left bg-neutral-200 px-2 py-0.5 rounded">
+                        123456
+                      </span>
+                      <span className="text-end bg-amber-300 px-2 py-0.5 rounded text-amber-600">
+                        Pending
+                      </span>
+                    </div>
+                    <div className="pt-2 font-semibold">
+                      <span>Taters Trinoma</span>
+                    </div>
+                    <div className="py-px">
+                      <span>2023-11-17 - AM</span>
+                    </div>
+                    <div className="py-px">
+                      <span>Test Name</span>
+                    </div>
+                  </div>
+                </ListItem>
+              </List>
+            </div>
+          </div>
         </div>
       </div>
     </div>
