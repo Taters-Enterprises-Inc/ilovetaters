@@ -18,9 +18,11 @@ import {
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { salesSubmitForm } from "../slices/sales-submit-form.slice";
 import { setDynamicOption } from "./sales-utils";
+import { useNavigate } from "react-router-dom";
 
 export function SalesFormContent() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getSalesActiveFieldsState = useAppSelector(selectGetSalesActiveFields);
 
@@ -204,12 +206,13 @@ export function SalesFormContent() {
 
     if (formState !== undefined) {
       dispatch(salesSubmitForm({ formState, saveStatus: isSaved }));
+      navigate("/admin/sales/form-list");
     }
   };
 
   return (
     <>
-      {getAdminSessionState.data?.admin ? (
+      {getAdminSessionState.data?.admin && getSalesActiveFieldsState.data ? (
         <div className="flex flex-wrap">
           <div className="flex flex-col border border-gray-200 rounded-md shadow-sm bg-white p-5 w-full md:w-3/3">
             <div className="mb-8 mt-2 w-full">

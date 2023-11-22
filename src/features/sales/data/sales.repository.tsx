@@ -5,6 +5,7 @@ import { CheckParam, SubmitFormParam } from "../core/sales.param";
 import { SalesTCPendingTaskModel } from "../core/domain/tc-pending-task.model";
 import { SalesManagerPendingTaskModel } from "../core/domain/manager-pending-task.model";
 import { SalesCashierSavedFormModel } from "../core/domain/cashier-saved-form.model";
+import { SalesFormDataModel } from "../core/domain/sales-form-data.model";
 
 export interface GetSalesActiveFieldsResponse {
   data: {
@@ -46,6 +47,13 @@ export interface salesSubmitVerdictResponse {
   };
 }
 
+export interface GetSalesFormDataResponse {
+  data: {
+    message: string;
+    data: Array<SalesFormDataModel>;
+  };
+}
+
 export function GetSalesActiveFieldsRepository(): Promise<GetSalesActiveFieldsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/fields`, {
     withCredentials: true,
@@ -82,6 +90,14 @@ export function salesSubmitVerdictRepository(
   param: CheckParam
 ): Promise<salesSubmitVerdictResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/sales/tc-task`, param, {
+    withCredentials: true,
+  });
+}
+
+export function GetSalesFormDataRepository(
+  param: string
+): Promise<GetSalesFormDataResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/form-data${param}`, {
     withCredentials: true,
   });
 }

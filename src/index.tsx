@@ -183,6 +183,7 @@ import { SalesSidebarWrapper } from "features/sales/presentation/components/side
 import {
   SalesDashboard,
   SalesFormList,
+  SalesSavedForm,
   SalesTask,
   SalesTaskForm,
 } from "features/sales/presentation/pages";
@@ -444,6 +445,10 @@ root.render(
                                   path="form-list"
                                   element={<SalesFormList />}
                                 />
+                                <Route
+                                  path="form-list/saved-form"
+                                  element={<SalesSavedForm />}
+                                />
 
                                 <Route
                                   path="profile"
@@ -451,7 +456,7 @@ root.render(
                                 />
                                 <Route path="task" element={<SalesTask />} />
                                 <Route
-                                  path="task/task-form/:id"
+                                  path="task/task-form"
                                   element={<SalesTaskForm />}
                                 />
                               </Route>

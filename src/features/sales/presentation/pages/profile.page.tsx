@@ -11,7 +11,7 @@ export function SalesProfile() {
             url: "/admin/sales/profile",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Dashboard", url: "/admin/sales/profile" }],
+          pageTitles: [{ name: "Profile", url: "/admin/sales/profile" }],
         }}
       />
     </>

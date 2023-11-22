@@ -3,20 +3,20 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  TextField,
-  Typography,
 } from "@mui/material";
 import { PiCheckSquareOffsetBold } from "react-icons/pi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { sample } from "lodash";
 import {
   MaterialDateInput,
   MaterialInput,
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
-import { ChangeEvent, useEffect, useState } from "react";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useEffect, useState } from "react";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import {
   GetSalesActiveFieldsState,
   getSalesActiveFields,
@@ -25,46 +25,45 @@ import {
 import { CheckParam, SubmitFormParam } from "features/sales/core/sales.param";
 import { initialFormState, setDynamicOption } from "./sales-utils";
 import { salesSubmitVerdict } from "../slices/sales-submit-verdict.slice";
-import { Navigate, useNavigate } from "react-router-dom";
-
-const sampleData = {
-  data: [
-    {
-      fieldValues: [
-        { value: "2023-11-17" },
-        { value: "Taters Waltermart Makati" },
-        { value: "test@email.com" },
-        { value: "AM" },
-        { value: "Test Name" },
-        { value: "1855" },
-        { value: "1855" },
-        { value: "2023-11-17" },
-        { value: "1855" },
-        { value: "200" },
-      ],
-    },
-  ],
-};
+import { useNavigate } from "react-router-dom";
+import {
+  GetSalesFormDataState,
+  getSalesFormData,
+  selectGetSalesFormData,
+} from "../slices/get-sales-form-content.slice";
+import { createQueryParams } from "features/config/helpers";
 
 export default function SalesTaskContent() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getSalesActiveFieldsState = useAppSelector(selectGetSalesActiveFields);
+  const getSalesFormDataState = useAppSelector(selectGetSalesFormData);
 
   const [edit, setEdit] = useState(true);
   const [formState, setFormState] = useState<SubmitFormParam["formState"]>();
 
-  const formId = "1";
+  const query = useQuery();
+
+  const formId = query.get("id");
+  const userType = query.get("type");
 
   useEffect(() => {
+    const queryParams = createQueryParams({ id: formId, type: userType });
+
     if (
-      getSalesActiveFieldsState.status !== GetSalesActiveFieldsState.success &&
-      !getSalesActiveFieldsState.data
+      (getSalesActiveFieldsState.status !== GetSalesActiveFieldsState.success &&
+        !getSalesActiveFieldsState.data) ||
+      (getSalesFormDataState.status !== GetSalesFormDataState.success &&
+        !getSalesFormDataState.data)
     ) {
       dispatch(getSalesActiveFields());
+      dispatch(getSalesFormData(queryParams));
     } else if (getSalesActiveFieldsState.data) {
       setFormState(
-        initialFormState(getSalesActiveFieldsState.data, sampleData)
+        initialFormState(
+          getSalesActiveFieldsState.data,
+          getSalesFormDataState.data
+        )
       );
     }
   }, [getSalesActiveFieldsState.data]);
@@ -92,7 +91,9 @@ export default function SalesTaskContent() {
           return fields.field_data.some((field, fieldIndex) => {
             if (
               formState?.[field_data.section]?.[field.name]?.value !==
-              sampleData?.data[sectionIndex]?.fieldValues[fieldIndex]?.value
+              getSalesFormDataState.data?.[sectionIndex]?.fieldData?.[
+                field.name
+              ]
             ) {
               result = true;
 
@@ -114,7 +115,7 @@ export default function SalesTaskContent() {
     const tcCheckParam: CheckParam = {
       formState: formState ?? {},
       grade: incorrectForm() ? "2" : "1",
-      id: formId,
+      id: "4",
     };
 
     if (formState !== undefined) {

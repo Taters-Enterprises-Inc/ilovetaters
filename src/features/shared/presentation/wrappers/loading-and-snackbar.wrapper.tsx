@@ -432,6 +432,18 @@ import {
   GetSalesActiveFieldsState,
   selectGetSalesActiveFields,
 } from "features/sales/presentation/slices/get-active-fields.slice";
+import {
+  GetSalesTCPendingTaskState,
+  selectGetSalesTCPendingTask,
+} from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
+import {
+  GetSalesManagerPendingTaskState,
+  selectGetSalesManagerPendingTask,
+} from "features/sales/presentation/slices/get-sales-manager-pending.slice";
+import {
+  GetSalesCashierSavedFormState,
+  selectGetSalesCashierSavedForm,
+} from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -680,6 +692,67 @@ export function LoadingAndSnackbarWrapper() {
   const stockUpdateOrderItems = useAppSelector(selectUpdateOrderItems);
 
   const salesGetFieldAvailability = useAppSelector(selectGetSalesActiveFields);
+
+  const salesGetTCPendingTask = useAppSelector(selectGetSalesTCPendingTask);
+
+  const salesGetManagerPendingTask = useAppSelector(
+    selectGetSalesManagerPendingTask
+  );
+
+  const salesGetCashierSavedForm = useAppSelector(
+    selectGetSalesCashierSavedForm
+  );
+
+  useEffect(() => {
+    switch (salesGetCashierSavedForm.status) {
+      case GetSalesCashierSavedFormState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesCashierSavedFormState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesCashierSavedFormState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSalesCashierSavedFormState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [salesGetFieldAvailability]);
+
+  useEffect(() => {
+    switch (salesGetManagerPendingTask.status) {
+      case GetSalesManagerPendingTaskState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesManagerPendingTaskState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesManagerPendingTaskState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSalesManagerPendingTaskState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [salesGetFieldAvailability]);
+
+  useEffect(() => {
+    switch (salesGetTCPendingTask.status) {
+      case GetSalesTCPendingTaskState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesTCPendingTaskState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSalesTCPendingTaskState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSalesTCPendingTaskState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [salesGetFieldAvailability]);
 
   useEffect(() => {
     switch (salesGetFieldAvailability.status) {

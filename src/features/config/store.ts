@@ -269,6 +269,7 @@ import getSalesTCPendingTask from "features/sales/presentation/slices/get-sales-
 import getSalesManagerPendingTask from "features/sales/presentation/slices/get-sales-manager-pending.slice";
 import getSalesCashierSavedForm from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
 import salesSubmitVerdict from "features/sales/presentation/slices/sales-submit-verdict.slice";
+import getSalesFormData from "features/sales/presentation/slices/get-sales-form-content.slice";
 
 export const store = configureStore({
   reducer: {
@@ -541,6 +542,7 @@ export const store = configureStore({
     getSalesManagerPendingTask,
     getSalesCashierSavedForm,
     salesSubmitVerdict,
+    getSalesFormData,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

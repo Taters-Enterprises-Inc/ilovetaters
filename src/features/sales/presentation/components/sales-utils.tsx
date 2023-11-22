@@ -1,18 +1,19 @@
 import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields.model";
+import { SalesFormDataModel } from "features/sales/core/domain/sales-form-data.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 
 export const test = () => {};
 
 export const initialFormState = (
   salesActiveFieldsState: SalesActiveFieldsModel | undefined,
-  sampleData: any
+  getSalesFormDataState: SalesFormDataModel[] | undefined
 ) => {
   const initialFormState: SubmitFormParam["formState"] = {};
 
   salesActiveFieldsState?.field_data.map(
     (
       field_data: { field: any[]; section: string | number },
-      sectionIndex: string | number
+      sectionIndex: number
     ) => {
       const sectionData: {
         [fieldName: string]: { value: string | Date | null };
@@ -23,8 +24,9 @@ export const initialFormState = (
           (field: { name: string | number }, fieldIndex: string | number) => {
             sectionData[field.name] = {
               value:
-                sampleData.data[sectionIndex]?.fieldValues[fieldIndex]?.value ??
-                undefined,
+                getSalesFormDataState?.[sectionIndex]?.fieldData?.[
+                  field.name
+                ] ?? null,
             };
           }
         );

@@ -11,7 +11,7 @@ export function SalesForm() {
             url: "/admin/sales/form",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Dashboard", url: "/admin/sales/form" }],
+          pageTitles: [{ name: "Form", url: "/admin/sales/form" }],
         }}
       />
 
