@@ -4,7 +4,7 @@ import { selectGetAdminSession } from "features/admin/presentation/slices/get-ad
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StepLabel } from "@mui/material";
 import { FormStepperNavigation } from ".";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   GetSalesActiveFieldsState,
   getSalesActiveFields,
@@ -52,10 +52,23 @@ export function SalesFormContent() {
       return formState?.[sectionName]?.[fieldName]?.value || "";
     };
 
+    const dropdownValue = (sectionName: string, fieldName: string) => {
+      const discountName = getSalesActiveFieldsState.data?.discount_type.find(
+        (discountType) =>
+          discountType.id === formStateFieldValue(sectionName, fieldName)
+      );
+
+      if (fieldName === "discount") {
+        return { name: discountName?.name };
+      } else {
+        return { name: formStateFieldValue(sectionName, fieldName) };
+      }
+    };
+
     return (
       <>
         {getFormField?.map((field) => (
-          <>
+          <React.Fragment key={field.sub_section}>
             {field.field_data.length !== 0 ? (
               <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
                 {field.sub_section}
@@ -92,18 +105,21 @@ export function SalesFormContent() {
                             ) ?? []
                           }
                           getOptionLabel={(option) => option.name}
-                          isOptionEqualToValue={(option, value) =>
-                            option.name === value ?? ""
-                          }
-                          value={formStateFieldValue(
-                            field.section_name,
-                            field.name
-                          )}
+                          isOptionEqualToValue={(option, value) => {
+                            if (field.name === "discount") {
+                              return option.id === value;
+                            } else {
+                              return option.name === value;
+                            }
+                          }}
+                          value={dropdownValue(field.section_name, field.name)}
                           onChange={(event, selectedValue) => {
                             handleOnChange(
                               field.section_name,
                               field.name,
-                              selectedValue
+                              field.name === "discount"
+                                ? selectedValue.id
+                                : selectedValue.name
                             );
                           }}
                         />
@@ -155,12 +171,11 @@ export function SalesFormContent() {
                 </div>
               </div>
             ))}
-          </>
+          </React.Fragment>
         ))}
       </>
     );
   };
-
   const handleOnChange = (
     sectionName: string,
     fieldName: string,
