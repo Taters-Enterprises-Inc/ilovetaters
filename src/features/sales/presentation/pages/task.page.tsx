@@ -11,11 +11,6 @@ import { Divider } from "@mui/material";
 export function SalesTask() {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
-  const isCashier =
-    getAdminSessionState.data?.admin.user_details.sales_groups.some(
-      (group) => group.id === 1
-    );
-
   const isTC = getAdminSessionState.data?.admin.user_details.sales_groups.some(
     (group) => group.id === 2
   );

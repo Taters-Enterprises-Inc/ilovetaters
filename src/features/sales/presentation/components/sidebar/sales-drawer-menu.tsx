@@ -4,7 +4,10 @@ import { TbLogout } from "react-icons/tb";
 import { SiPlatformdotsh } from "react-icons/si";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 import {
   LogoutAdminState,
   logoutAdmin,
@@ -19,27 +22,44 @@ export function SalesDrawerMenu() {
   const getLogoutAdminState = useAppSelector(selectLogoutAdmin);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const cashier =
+    getAdminSessionState.data?.admin.user_details.sales_groups.some(
+      (group) => group.id === 1
+    );
+  const tc = getAdminSessionState.data?.admin.user_details.sales_groups.some(
+    (group) => group.id === 2
+  );
+  const manager =
+    getAdminSessionState.data?.admin.user_details.sales_groups.some(
+      (group) => group.id === 3
+    );
 
   const menuitems = [
     {
       text: "Dashboard",
       path: "dashboard",
       icon: <MdDashboardCustomize size={20} />,
+      enable: true,
     },
     {
       text: "Form",
       path: "form-list",
       icon: <SiPlatformdotsh size={20} />,
+      enable: cashier,
     },
     {
       text: "Task",
       path: "task",
       icon: <BsListTask size={20} />,
+      enable: tc || manager,
     },
     {
       text: "Profile",
       path: "profile",
       icon: <BsFillPersonFill size={20} />,
+      enable: true,
     },
   ];
 
@@ -57,31 +77,36 @@ export function SalesDrawerMenu() {
         <ul>
           <li className="flex flex-col">
             {menuitems.map((item, index) => {
-              const { text, path, icon } = item;
+              const { text, path, icon, enable } = item;
               const key = index;
               return (
-                <NavLink
-                  key={key}
-                  to={path}
-                  className={(navData) =>
-                    navData.isActive
-                      ? "flex bg-white text-secondary"
-                      : "flex text-white"
-                  }
-                >
-                  <span className="flex items-center px-4 ">
-                    <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                      {icon}
-                      <span
-                        className={`whitespace-pre duration-300 ${
-                          !salesSidebar.status && "opacity-0 overflow-hidden"
-                        }`}
-                      >
-                        {text}
+                <>
+                  {enable ? (
+                    <NavLink
+                      key={key}
+                      to={path}
+                      className={(navData) =>
+                        navData.isActive
+                          ? "flex bg-white text-secondary"
+                          : "flex text-white"
+                      }
+                    >
+                      <span className="flex items-center px-4 ">
+                        <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                          {icon}
+                          <span
+                            className={`whitespace-pre duration-300 ${
+                              !salesSidebar.status &&
+                              "opacity-0 overflow-hidden"
+                            }`}
+                          >
+                            {text}
+                          </span>
+                        </span>
                       </span>
-                    </span>
-                  </span>
-                </NavLink>
+                    </NavLink>
+                  ) : null}
+                </>
               );
             })}
           </li>

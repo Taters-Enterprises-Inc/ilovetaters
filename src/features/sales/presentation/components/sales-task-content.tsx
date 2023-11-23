@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import {
   GetSalesFormDataState,
   getSalesFormData,
+  resetGetSalesFormData,
   selectGetSalesFormData,
 } from "../slices/get-sales-form-content.slice";
 import { createQueryParams } from "features/config/helpers";
@@ -50,6 +51,13 @@ export default function SalesTaskContent() {
   useEffect(() => {
     const queryParams = createQueryParams({ id: formId, type: userType });
 
+    dispatch(resetGetSalesFormData());
+    dispatch(getSalesFormData(queryParams));
+  }, [dispatch, formId, userType]);
+
+  useEffect(() => {
+    const queryParams = createQueryParams({ id: formId, type: userType });
+
     if (
       (getSalesActiveFieldsState.status !== GetSalesActiveFieldsState.success &&
         !getSalesActiveFieldsState.data) ||
@@ -66,7 +74,7 @@ export default function SalesTaskContent() {
         )
       );
     }
-  }, [getSalesActiveFieldsState.data]);
+  }, [getSalesActiveFieldsState.data, getSalesFormDataState.data]);
 
   const handleOnChange = (
     sectionName: string,

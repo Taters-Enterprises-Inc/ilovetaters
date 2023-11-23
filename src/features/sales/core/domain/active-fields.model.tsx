@@ -3,6 +3,7 @@ export interface SalesActiveFieldsModel {
     name: string;
   }>;
   discount_type: Array<{
+    id: string;
     name: string;
   }>;
 

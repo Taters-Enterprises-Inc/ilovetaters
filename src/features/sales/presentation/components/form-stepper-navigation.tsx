@@ -39,6 +39,16 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
     props.setActiveStep(props.activeStep - 1);
   };
 
+  const style = {
+    mr: 1,
+    width: {
+      xs: "100%",
+      sm: "100%",
+      md: "auto",
+      lg: "auto",
+    },
+  };
+
   return (
     <Box
       sx={{
@@ -48,21 +58,31 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
         pt: 2,
       }}
     >
-      <Button
-        color="inherit"
-        disabled={props.activeStep === 0}
-        style={{ minWidth: 100 }}
-        onClick={handleBack}
-        sx={{ mr: 1 }}
-      >
-        Back
-      </Button>
+      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+        <Button
+          color="inherit"
+          disabled={props.activeStep === 0}
+          style={{ minWidth: 100 }}
+          onClick={handleBack}
+          sx={style}
+        >
+          Back
+        </Button>
 
-      <Box>
+        <Button
+          style={{ minWidth: 100 }}
+          onClick={handleNext}
+          sx={style}
+          disabled={isLastStep()}
+        >
+          Next
+        </Button>
+      </Box>
+      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         <Button
           type="submit"
           style={{ minWidth: 100 }}
-          sx={{ mr: 1 }}
+          sx={style}
           onClick={(e) => props.handleSubmit(e, true)}
           disabled={isLastStep()}
         >
@@ -70,18 +90,9 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
         </Button>
 
         <Button
-          style={{ minWidth: 100 }}
-          onClick={handleNext}
-          sx={{ mr: 1 }}
-          disabled={isLastStep()}
-        >
-          Next
-        </Button>
-
-        <Button
           type="submit"
           style={{ minWidth: 100 }}
-          sx={{ mr: 1 }}
+          sx={style}
           disabled={!isLastStep()}
         >
           Submit

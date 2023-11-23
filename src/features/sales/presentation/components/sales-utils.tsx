@@ -39,28 +39,21 @@ export const initialFormState = (
   return initialFormState;
 };
 
+const shifts = [{ name: "AM" }, { name: "PM" }];
+
 export const setDynamicOption = (
   getSalesActiveFieldsState: SalesActiveFieldsModel | undefined,
   name: string
 ) => {
   switch (name) {
     case "shift":
-      return ["AM", "PM"];
-
+      return shifts;
     case "store":
-      return getSalesActiveFieldsState?.list_of_stores.map(
-        (store) => store.name
-      );
-
+      return getSalesActiveFieldsState?.list_of_stores;
     case "discount":
-      return getSalesActiveFieldsState?.discount_type.map(
-        (discount) => discount.name
-      );
-
+      return getSalesActiveFieldsState?.discount_type;
     case "gcOriginatingStore":
-      return getSalesActiveFieldsState?.list_of_stores.map(
-        (store) => store.name
-      );
+      return getSalesActiveFieldsState?.list_of_stores;
   }
 
   return null;

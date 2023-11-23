@@ -19,6 +19,7 @@ import {
 } from "../slices/get-sales-tc-pending-task.slice";
 import { Navigate, useNavigate } from "react-router-dom";
 import { createQueryParams } from "features/config/helpers";
+import { resetGetSalesFormData } from "../slices/get-sales-form-content.slice";
 
 export function SalesTaskListTC() {
   const [open, setOpen] = React.useState(false);
@@ -43,6 +44,7 @@ export function SalesTaskListTC() {
 
   const handleOnClick = (id: string) => {
     const queryParams = createQueryParams({ type: "tc", id: id });
+
     navigate({
       pathname: "task-form",
       search: queryParams,

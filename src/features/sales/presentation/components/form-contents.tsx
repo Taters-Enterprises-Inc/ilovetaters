@@ -91,20 +91,21 @@ export function SalesFormContent() {
                               field.name
                             ) ?? []
                           }
+                          getOptionLabel={(option) => option.name}
                           isOptionEqualToValue={(option, value) =>
-                            option === value
+                            option.name === value ?? ""
                           }
                           value={formStateFieldValue(
                             field.section_name,
                             field.name
-                          ).toString()}
-                          onChange={(event, selectedValue) =>
+                          )}
+                          onChange={(event, selectedValue) => {
                             handleOnChange(
                               field.section_name,
                               field.name,
                               selectedValue
-                            )
-                          }
+                            );
+                          }}
                         />
                       ) : null}
 
