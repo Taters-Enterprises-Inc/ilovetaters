@@ -284,6 +284,7 @@ import getHrDirectReportStaffActionItems from "features/hr/presentation/slices/g
 import getHrDirectReportStaffKras from "features/hr/presentation/slices/get-hr-direct-report-staff-kras.slice";
 import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
 import getHrAppraisalResponse from "features/hr/presentation/slices/get-hr-appraisal-response.slice";
+import getHrAppraisalDirectReportStaff from "features/hr/presentation/slices/get-hr-appraisal-direct-report-staff.slice";
 
 export const store = configureStore({
   reducer: {
@@ -571,6 +572,7 @@ export const store = configureStore({
     getHrDirectReportStaffKras,
     salesSideBar,
     getHrAppraisalResponse,
+    getHrAppraisalDirectReportStaff,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
