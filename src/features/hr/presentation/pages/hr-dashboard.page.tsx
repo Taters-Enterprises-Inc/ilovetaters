@@ -37,16 +37,18 @@ export function HrDashboard() {
     action_item_status_id: null,
   });
 
-  const [openApproveKraModal, setOpenApproveKraModal] = useState<{
+  const [openStaffActionItemModal, setOpenStaffActionItemModal] = useState<{
     modal: boolean;
     item_id: number | null;
     action_item_id: number | null;
     action_item_status_id: number | null;
+    fetch_item_id: number | null;
   }>({
     modal: false,
     item_id: null,
     action_item_id: null,
     action_item_status_id: null,
+    fetch_item_id: null,
   });
 
   const getHrActionItemsState = useAppSelector(selectGetHrActionItems);
@@ -143,14 +145,20 @@ export function HrDashboard() {
                                 modal: true,
                               });
                             } else if (
-                              value.item_id == 2 &&
+                              (value.item_id == 2 || value.item_id == 4) &&
                               value.status_id != undefined
                             ) {
-                              setOpenApproveKraModal({
+                              setOpenStaffActionItemModal({
                                 item_id: value.item_id,
                                 action_item_id: value.id,
                                 action_item_status_id: value.status_id,
                                 modal: true,
+                                fetch_item_id:
+                                  value.item_id == 2
+                                    ? 1
+                                    : value.item_id == 4
+                                    ? 3
+                                    : 0,
                               });
                             } else if (
                               value.item_id == 3 &&
@@ -184,13 +192,14 @@ export function HrDashboard() {
         }}
       />
       <ViewDirectReportStaffActionItemsModal
-        modal={openApproveKraModal.modal}
-        item_id={openApproveKraModal.item_id}
-        action_item_id={openApproveKraModal.action_item_id}
-        action_item_status_id={openApproveKraModal.action_item_status_id}
+        modal={openStaffActionItemModal.modal}
+        item_id={openStaffActionItemModal.item_id}
+        action_item_id={openStaffActionItemModal.action_item_id}
+        action_item_status_id={openStaffActionItemModal.action_item_status_id}
+        fetch_item_id={openStaffActionItemModal.fetch_item_id}
         closeModal={() => {
-          setOpenApproveKraModal({
-            ...openApproveKraModal,
+          setOpenStaffActionItemModal({
+            ...openStaffActionItemModal,
             modal: false,
           });
         }}

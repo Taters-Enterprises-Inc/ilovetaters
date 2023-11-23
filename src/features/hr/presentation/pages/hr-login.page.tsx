@@ -7,6 +7,7 @@ import {
   getHrSession,
   selectGetHrSession,
 } from "../slices/get-hr-session.slice";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export function HrLogin() {
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ export function HrLogin() {
 
   const [identity, setIdentity] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [seePassword, setSeePassword] = useState(false);
 
   useEffect(() => {
     if (loginHrState.status === LoginHrState.success) {
@@ -70,19 +72,31 @@ export function HrLogin() {
                 setIdentity(e.target.value);
               }}
             />
-            <div className="w-full flex items-center  border border-gray-800 rounded px-3">
+            <div className="w-full flex items-center  border border-gray-800 rounded ">
               <input
-                type="password"
-                className="w-4/5 h-12"
+                type={seePassword ? "text" : "password"}
+                className="w-4/5 h-12 px-3"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
               />
-              {/* <button className="text-primary hover:text-red-500 rounded-full px-3 ">
-                show
-              </button> */}
+              {seePassword ? (
+                <FaEye
+                  onClick={() => {
+                    setSeePassword(false);
+                  }}
+                  className="text-lg cursor-pointer ml-[25px]"
+                />
+              ) : (
+                <FaEyeSlash
+                  onClick={() => {
+                    setSeePassword(true);
+                  }}
+                  className="text-lg cursor-pointer ml-[25px]"
+                />
+              )}
             </div>
 
             <div className="">

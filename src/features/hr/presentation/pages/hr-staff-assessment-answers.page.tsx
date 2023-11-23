@@ -10,8 +10,13 @@ import {
   AssessmentFunctionalCompetencyAndPunctualityGrade,
   AssessmentComments,
   AssessmentAttendanceAndPunctuality,
+  StaffAssessmentAnswersPersonalInfoSection,
 } from "../components";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { useEffect } from "react";
 import {
   LogoutHrState,
@@ -33,74 +38,49 @@ import {
 } from "../slices/get-hr-core-competency-grade.slice";
 import { getHrRatingScale } from "../slices/get-hr-rating-scale.slice";
 import { getHrPerformanceCriteria } from "../slices/get-hr-performance-criteria.slice";
-import {
-  getHrFunctionalCompetencyAndPunctualityGrade,
-  selectGetHrFunctionalCompetencyAndPunctualityGrade,
-} from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
+import { getHrFunctionalCompetencyAndPunctualityGrade } from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import { getHrAttendanceAndPunctualityGrade } from "../slices/get-hr-attendance-and-punctuality-grade.slice";
-import {
-  getHrComments,
-  selectGetHrComments,
-} from "../slices/get-hr-comments.slice";
+import { getHrComments } from "../slices/get-hr-comments.slice";
 import {
   SubmitAssessmentState,
   resetSubmitAssessment,
   selectSubmitAssessment,
-  submitAssessment,
 } from "../slices/submit-assessment";
 import { useNavigate } from "react-router-dom";
 import { getHrActionItems } from "../slices/get-hr-action-items.slice";
-import {
-  getHrAppraisalResponse,
-  selectGetHrAppraisalResponse,
-} from "../slices/get-hr-appraisal-response.slice";
+import { getHrAppraisalResponse } from "../slices/get-hr-appraisal-response.slice";
+import { getHrAppraisalDirectReportStaff } from "../slices/get-hr-appraisal-direct-report-staff.slice";
 
-export function HrSelfAssessment() {
+export function HrStaffAssessmentAnswers() {
+  const query = useQuery();
   const dispatch = useAppDispatch();
-  const logoutHrState = useAppSelector(selectLogoutHr);
   const navigate = useNavigate();
-  const getHrKraKpiGradeState = useAppSelector(selectGetHrKraKpiGrade);
-  const getHrCoreCompetencyGradeState = useAppSelector(
-    selectGetHrCoreCompetencyGrade
-  );
-  const getHrFunctionalCompetencyAndPunctualityGradeState = useAppSelector(
-    selectGetHrFunctionalCompetencyAndPunctualityGrade
-  );
-  const getHrCommentsState = useAppSelector(selectGetHrComments);
+
+  const staffId = query.get("staff_id");
+  const staffActionItemId = query.get("staff_action_item_id");
+
+  const logoutHrState = useAppSelector(selectLogoutHr);
 
   const getHrSessionState = useAppSelector(selectGetHrSession);
-  const submitAssessmentState = useAppSelector(selectSubmitAssessment);
-  const getHrAppraisalResponseState = useAppSelector(
-    selectGetHrAppraisalResponse
-  );
 
   useEffect(() => {
-    let userId = getHrSessionState.data?.hr.user_details.id.toString();
-
-    if (userId) {
+    if (staffId) {
       dispatch(getHrPerformanceCriteria());
       dispatch(getHrRatingScale());
-      dispatch(getHrKraKpiGrade({ user_id: userId, type: "self" }));
-      dispatch(getHrCoreCompetencyGrade({ user_id: userId, type: "self" }));
+      dispatch(getHrKraKpiGrade({ user_id: staffId, type: "self" }));
+      dispatch(getHrCoreCompetencyGrade({ user_id: staffId, type: "self" }));
       dispatch(
         getHrFunctionalCompetencyAndPunctualityGrade({
-          user_id: userId,
+          user_id: staffId,
           type: "self",
         })
       );
       dispatch(getHrAttendanceAndPunctualityGrade());
-      dispatch(getHrComments({ user_id: userId, type: "self" }));
-      dispatch(getHrAppraisalResponse({ user_id: userId, type: "self" }));
+      dispatch(getHrComments({ user_id: staffId, type: "self" }));
+      dispatch(getHrAppraisalResponse({ user_id: staffId, type: "self" }));
+      dispatch(getHrAppraisalDirectReportStaff(staffId));
     }
   }, [dispatch]);
-
-  useEffect(() => {
-    if (submitAssessmentState.status === SubmitAssessmentState.success) {
-      dispatch(getHrActionItems());
-      dispatch(resetSubmitAssessment());
-      navigate("/hr/dashboard");
-    }
-  }, [submitAssessmentState]);
 
   useEffect(() => {
     if (logoutHrState.status === LogoutHrState.success) {
@@ -110,43 +90,10 @@ export function HrSelfAssessment() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoutHrState]);
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    const kra_kpi_grade = getHrKraKpiGradeState.data?.kra_kpi_grade;
-    const core_competency_grade =
-      getHrCoreCompetencyGradeState.data?.core_competency_grade;
-    const functional_competency_and_punctuality_grade =
-      getHrFunctionalCompetencyAndPunctualityGradeState.data
-        ?.functional_competency_and_punctuality_grade;
-    const attendance_and_punctuality =
-      getHrFunctionalCompetencyAndPunctualityGradeState.data
-        ?.attendance_and_punctuality_grade;
-    const comments = getHrCommentsState.data?.comments;
-
-    if (
-      kra_kpi_grade &&
-      core_competency_grade &&
-      functional_competency_and_punctuality_grade &&
-      attendance_and_punctuality
-    ) {
-      dispatch(
-        submitAssessment({
-          kra_kpi_grade: kra_kpi_grade,
-          core_competency_grade: core_competency_grade,
-          functional_competency_and_punctuality_grade:
-            functional_competency_and_punctuality_grade,
-          attendance_and_punctuality: attendance_and_punctuality,
-          comments: comments,
-        })
-      );
-    }
-  };
-
   return (
     <>
       <Helmet>
-        <title>Taters | Self Assessment</title>
+        <title>Taters | Staff Assessment Answer</title>
       </Helmet>
 
       <main className="min-h-screen text-[#242424] flex flex-col  border-b-[#F2F2F2]">
@@ -184,12 +131,20 @@ export function HrSelfAssessment() {
           </div>
         </div>
 
-        <form
-          className="flex flex-col items-center space-y-3 py-8"
-          onSubmit={handleSubmit}
-        >
-          <AssessmentInfo title="Employee Self Assessment Form" />
-          <SelfAssessmentPersonalInfoSection />
+        <div className="flex flex-col items-center space-y-3 py-8">
+          <div
+            className="cursor-pointer uppercase  text-blue-600 "
+            onClick={() => {
+              if (staffId)
+                navigate(
+                  `/hr/management-assessment?staff_id=${staffId}&staff_action_item_id=${staffActionItemId}`
+                );
+            }}
+          >
+            {"<<<"} Check Management assessment
+          </div>
+          <AssessmentInfo title="Staff Assessment Answer" />
+          <StaffAssessmentAnswersPersonalInfoSection />
           <AssessmentPerformanceCriteria />
           <AssessmentOverallPerformance />
           <AssessmentRatingScale />
@@ -198,17 +153,7 @@ export function HrSelfAssessment() {
           <AssessmentFunctionalCompetencyAndPunctualityGrade />
           <AssessmentAttendanceAndPunctuality />
           <AssessmentComments />
-          {getHrAppraisalResponseState.data?.appraisal_response ? null : (
-            <button
-              type="submit"
-              className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
-            >
-              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                Submit
-              </span>
-            </button>
-          )}
-        </form>
+        </div>
       </main>
     </>
   );

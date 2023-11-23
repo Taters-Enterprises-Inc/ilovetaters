@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HrAppraisalDirectReportStaffModel } from "features/hr/core/domain/hr-appraisal-direct-report-staff";
 import { HrAppraisalResponseModel } from "features/hr/core/domain/hr-appraisal-response.model";
 import { HrAttendanceAndPunctualityGradeModel } from "features/hr/core/domain/hr-attendance-and-punctuality-grade.model";
 import { HrCommentsModel } from "features/hr/core/domain/hr-comments.model";
@@ -93,15 +94,45 @@ export interface GetHrAppraisalResponseResponse {
   };
 }
 
-export function GetHrAppraisalResponseRepository(): Promise<GetHrAppraisalResponseResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/response`, {
-    withCredentials: true,
-  });
+export interface GetHrAppraisalDirectReportStaffResponse {
+  data: {
+    message: string;
+    data: HrAppraisalDirectReportStaffModel;
+  };
 }
-export function GetHrCommentsRepository(): Promise<GetHrCommentsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/comments`, {
-    withCredentials: true,
-  });
+
+export function GetHrAppraisalDirectReportStaffRepository(
+  staff_id: string
+): Promise<GetHrAppraisalDirectReportStaffResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/hr/direct-report-staff/staff/${staff_id}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetHrAppraisalResponseRepository(
+  userId: string,
+  type: "management" | "self"
+): Promise<GetHrAppraisalResponseResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/response/${type}/${userId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+export function GetHrCommentsRepository(
+  user_id: string,
+  type: "management" | "self"
+): Promise<GetHrCommentsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/comments/${type}/${user_id}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateKraRepository(
@@ -159,28 +190,40 @@ export function GetHrAttendanceAndPunctualityGradeRepository(): Promise<GetHrAtt
     }
   );
 }
-export function GetHrFunctionalCompetencyAndPunctualityGradeRepository(): Promise<GetHrFunctionalCompetencyAndPunctualityGradeResponse> {
+export function GetHrFunctionalCompetencyAndPunctualityGradeRepository(
+  user_id: string,
+  type: "management" | "self"
+): Promise<GetHrFunctionalCompetencyAndPunctualityGradeResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/functional-competency-and-punctuality-grade`,
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/functional-competency-and-punctuality-grade/${type}/${user_id}`,
     {
       withCredentials: true,
     }
   );
 }
 
-export function GetHrCoreCompetencyGradeRepository(): Promise<GetHrCoreCompetencyGradeResponse> {
+export function GetHrCoreCompetencyGradeRepository(
+  user_id: string,
+  type: "management" | "self"
+): Promise<GetHrCoreCompetencyGradeResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/core-competency-grade`,
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/core-competency-grade/${type}/${user_id}`,
     {
       withCredentials: true,
     }
   );
 }
 
-export function GetHrKraKpiGradeRepository(): Promise<GetHrKraKpiGradeResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/kra-kpi-grade`, {
-    withCredentials: true,
-  });
+export function GetHrKraKpiGradeRepository(
+  user_id: string,
+  type: "management" | "self"
+): Promise<GetHrKraKpiGradeResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/hr/appraisal/kra-kpi-grade/${type}/${user_id}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetHrRatingScaleRepository(): Promise<GetHrRatingScaleResponse> {

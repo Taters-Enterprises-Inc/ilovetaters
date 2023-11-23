@@ -64,9 +64,11 @@ export function GetHrDirectReportStaffKrasRepository(
   );
 }
 
-export function GetHrDirectReportStaffActionItemsRepository(): Promise<GetHrDirectReportStaffActionItemsResponse> {
+export function GetHrDirectReportStaffActionItemsRepository(
+  id: number
+): Promise<GetHrDirectReportStaffActionItemsResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/hr/direct-report-staff/action-items`,
+    `${REACT_APP_DOMAIN_URL}api/hr/direct-report-staff/action-items/${id}`,
     {
       withCredentials: true,
     }

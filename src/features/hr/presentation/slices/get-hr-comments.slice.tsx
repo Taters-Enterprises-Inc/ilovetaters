@@ -28,9 +28,15 @@ let initialState: InitialState = {
 
 export const getHrComments = createAsyncThunk(
   "getHrComments",
-  async (_, { rejectWithValue }) => {
+  async (
+    param: { user_id: string; type: "management" | "self" },
+    { rejectWithValue }
+  ) => {
     try {
-      const response: GetHrCommentsResponse = await GetHrCommentsRepository();
+      const response: GetHrCommentsResponse = await GetHrCommentsRepository(
+        param.user_id,
+        param.type
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

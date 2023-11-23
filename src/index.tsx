@@ -184,6 +184,7 @@ import {
   HrLogin,
   HrManagementAssessment,
   HrSelfAssessment,
+  HrStaffAssessmentAnswers,
 } from "features/hr/presentation/pages";
 import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
@@ -695,6 +696,10 @@ root.render(
                           <Route
                             path="management-assessment"
                             element={<HrManagementAssessment />}
+                          />
+                          <Route
+                            path="staff-assessment-answer"
+                            element={<HrStaffAssessmentAnswers />}
                           />
                         </Route>
                       </Route>

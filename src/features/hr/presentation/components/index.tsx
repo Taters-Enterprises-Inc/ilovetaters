@@ -1,5 +1,5 @@
 export { AssessmentSection } from "./assessment-section";
-export { SelfAndManagementAssessmentPersonalInfoSection } from "./self-and-management-assessment-personal-info-section";
+export { SelfAssessmentPersonalInfoSection } from "./self-assessment-personal-info-section";
 export { AssessmentAccordionSection } from "./assessment-accordion-section";
 export { AssessmentPerformanceCriteria } from "./assessment-performance-criteria";
 export { AssessmentOverallPerformance } from "./assessment-overall-performance";
@@ -11,3 +11,5 @@ export { AssessmentCoreCompetencyGrade } from "./assessment-core-competency-grad
 export { AssessmentFunctionalCompetencyAndPunctualityGrade } from "./assessment-functional-competency-and-punctuality-grade";
 export { AssessmentComments } from "./assessment-comments";
 export { AssessmentAttendanceAndPunctuality } from "./assessment-attendance-and-punctuality";
+export { ManagementAssessmentPersonalInfoSection } from "./management-assessment-personal-info-section";
+export { StaffAssessmentAnswersPersonalInfoSection } from "./staff-assessment-answers-personal-info-section";

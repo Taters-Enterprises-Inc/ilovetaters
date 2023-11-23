@@ -7,12 +7,14 @@ import {
 import { FaEye } from "react-icons/fa";
 import { ApproveKraModal } from "./approve-kra.modal";
 import { selectUpdateActionItem } from "../slices/update-action-item";
+import { useNavigate } from "react-router-dom";
 
 interface ViewDirectReportStaffActionItemsModalProps {
   modal: boolean;
   item_id: number | null;
   action_item_id: number | null;
   action_item_status_id: number | null;
+  fetch_item_id: number | null;
   closeModal: () => void;
 }
 
@@ -20,6 +22,7 @@ export function ViewDirectReportStaffActionItemsModal(
   props: ViewDirectReportStaffActionItemsModalProps
 ) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const updateActionItemState = useAppSelector(selectUpdateActionItem);
 
   const [openApproveKraModal, setOpenApproveKraModal] = useState<{
@@ -39,7 +42,9 @@ export function ViewDirectReportStaffActionItemsModal(
   );
 
   useEffect(() => {
-    dispatch(getHrDirectReportStaffActionItems());
+    if (props.fetch_item_id) {
+      dispatch(getHrDirectReportStaffActionItems(props.fetch_item_id));
+    }
   }, [props.modal, updateActionItemState]);
 
   return (
@@ -97,12 +102,24 @@ export function ViewDirectReportStaffActionItemsModal(
                                         value.status_id == 1 ? "hidden" : ""
                                       }`}
                                       onClick={() => {
-                                        setOpenApproveKraModal({
-                                          modal: true,
-                                          action_item_id: value.id,
-                                          item_id: value.item_id,
-                                          status_id: value.status_id,
-                                        });
+                                        if (props.fetch_item_id == 1) {
+                                        }
+
+                                        switch (props.fetch_item_id) {
+                                          case 1:
+                                            setOpenApproveKraModal({
+                                              modal: true,
+                                              action_item_id: value.id,
+                                              item_id: value.item_id,
+                                              status_id: value.status_id,
+                                            });
+                                            break;
+                                          case 3:
+                                            navigate(
+                                              `/hr/management-assessment?staff_id=${value.staff_id}&staff_action_item_id=${value.id}`
+                                            );
+                                            break;
+                                        }
                                       }}
                                     />
                                   </td>

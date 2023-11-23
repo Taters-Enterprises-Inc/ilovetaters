@@ -4,8 +4,9 @@ import { selectGetHrKraKpiGrade } from "../slices/get-hr-kra-kpi-grade.slice";
 import { selectGetHrCoreCompetencyGrade } from "../slices/get-hr-core-competency-grade.slice";
 import { selectGetHrFunctionalCompetencyAndPunctualityGrade } from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import { selectGetHrSession } from "../slices/get-hr-session.slice";
+import { selectGetHrAppraisalDirectReportStaff } from "../slices/get-hr-appraisal-direct-report-staff.slice";
 
-export function SelfAndManagementAssessmentPersonalInfoSection() {
+export function ManagementAssessmentPersonalInfoSection() {
   const getHrKraKpiGradeState = useAppSelector(selectGetHrKraKpiGrade);
   const getHrCoreCompetencyGradeState = useAppSelector(
     selectGetHrCoreCompetencyGrade
@@ -14,7 +15,9 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
     selectGetHrFunctionalCompetencyAndPunctualityGrade
   );
 
-  const getHrSessionState = useAppSelector(selectGetHrSession);
+  const getHrAppraisalDirectReportStaffState = useAppSelector(
+    selectGetHrAppraisalDirectReportStaff
+  );
 
   const getActualRatingAndTotalScore = (
     array: Array<any> | undefined,
@@ -181,9 +184,9 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                   readOnly
                   className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   value={
-                    getHrSessionState.data?.hr.user_details.first_name +
+                    getHrAppraisalDirectReportStaffState.data?.first_name +
                     " " +
-                    getHrSessionState.data?.hr.user_details.last_name
+                    getHrAppraisalDirectReportStaffState.data?.last_name
                   }
                 />
               </div>
@@ -194,7 +197,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                     type="text"
                     readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
-                    value={getHrSessionState.data?.hr.user_details.position}
+                    value={getHrAppraisalDirectReportStaffState.data?.position}
                   />
                 </div>
                 <div className="flex flex-initial w-[149px] border-l border-gray-200 flex items-center">
@@ -205,7 +208,7 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                     type="text"
                     readOnly
                     value={
-                      getHrSessionState.data?.hr.user_details.employee_number
+                      getHrAppraisalDirectReportStaffState.data?.employee_number
                     }
                     className="w-full flex-1 block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
@@ -246,7 +249,9 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                   <input
                     type="text"
                     readOnly
-                    value={getHrSessionState.data?.hr.user_details.date_hired}
+                    value={
+                      getHrAppraisalDirectReportStaffState.data?.date_hired
+                    }
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -260,7 +265,9 @@ export function SelfAndManagementAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
-                    value={getHrSessionState.data?.hr.user_details.designation}
+                    value={
+                      getHrAppraisalDirectReportStaffState.data?.designation
+                    }
                     readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />

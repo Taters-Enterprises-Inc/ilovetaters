@@ -30,7 +30,6 @@ export const submitAssessment = createAsyncThunk(
     try {
       const response: SubmitAssessmentResponse =
         await SubmitAssessmentRepository(param);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

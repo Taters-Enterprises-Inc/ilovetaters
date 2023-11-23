@@ -28,10 +28,16 @@ let initialState: InitialState = {
 
 export const getHrFunctionalCompetencyAndPunctualityGrade = createAsyncThunk(
   "getHrFunctionalCompetencyAndPunctualityGrade",
-  async (param, { rejectWithValue }) => {
+  async (
+    param: { user_id: string; type: "management" | "self" },
+    { rejectWithValue }
+  ) => {
     try {
       const response: GetHrFunctionalCompetencyAndPunctualityGradeResponse =
-        await GetHrFunctionalCompetencyAndPunctualityGradeRepository();
+        await GetHrFunctionalCompetencyAndPunctualityGradeRepository(
+          param.user_id,
+          param.type
+        );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

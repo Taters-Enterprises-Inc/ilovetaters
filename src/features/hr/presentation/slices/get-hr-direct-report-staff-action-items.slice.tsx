@@ -28,10 +28,10 @@ let initialState: InitialState = {
 
 export const getHrDirectReportStaffActionItems = createAsyncThunk(
   "getHrDirectReportStaffActionItems",
-  async (_, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
       const response: GetHrDirectReportStaffActionItemsResponse =
-        await GetHrDirectReportStaffActionItemsRepository();
+        await GetHrDirectReportStaffActionItemsRepository(id);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
