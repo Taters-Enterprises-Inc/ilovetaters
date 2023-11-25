@@ -3,21 +3,16 @@ import Step from "@mui/material/Step";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StepLabel } from "@mui/material";
-import { FormStepperNavigation } from ".";
+import { FormFieldData, FormStepperNavigation } from ".";
 import React, { useEffect, useState } from "react";
 import {
   GetSalesActiveFieldsState,
   getSalesActiveFields,
   selectGetSalesActiveFields,
 } from "../slices/get-active-fields.slice";
-import {
-  MaterialDateInput,
-  MaterialInput,
-  MaterialInputAutoComplete,
-} from "features/shared/presentation/components";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { salesSubmitForm } from "../slices/sales-submit-form.slice";
-import { setDynamicOption } from "./sales-utils";
+import { getEmptyRequiredFields, setDynamicOption } from "./sales-utils";
 import { useNavigate } from "react-router-dom";
 
 export function SalesFormContent() {
@@ -43,176 +38,6 @@ export function SalesFormContent() {
       dispatch(getSalesActiveFields());
     }
   }, [getSalesActiveFieldsState.data]);
-
-  const fieldData = () => {
-    const getFormField =
-      getSalesActiveFieldsState.data?.field_data[activeStep]?.field;
-
-    const formStateFieldValue = (sectionName: string, fieldName: string) => {
-      return formState?.[sectionName]?.[fieldName]?.value || "";
-    };
-
-    const dropdownValue = (sectionName: string, fieldName: string) => {
-      const discountName = getSalesActiveFieldsState.data?.discount_type.find(
-        (discountType) =>
-          discountType.id === formStateFieldValue(sectionName, fieldName)
-      );
-
-      if (fieldName === "discount") {
-        return { name: discountName?.name };
-      } else {
-        return { name: formStateFieldValue(sectionName, fieldName) };
-      }
-    };
-
-    return (
-      <>
-        {getFormField?.map((field) => (
-          <React.Fragment key={field.sub_section}>
-            {field.field_data.length !== 0 ? (
-              <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
-                {field.sub_section}
-              </span>
-            ) : null}
-
-            {field.field_data.flatMap((field) => (
-              <div
-                className={`w-[100%] md:px-10 py-3 space-y-3`}
-                key={field.id}
-              >
-                <div>
-                  <span className=" text-black text-xs md:text-base font-normal normal-case">
-                    {field.field_name}
-                  </span>
-                  {field.is_required ? (
-                    <span className="text-red-800 mx-1">*</span>
-                  ) : null}
-                </div>
-
-                <div className="w-full ">
-                  {field.is_dropdown || field.is_date_field ? (
-                    <>
-                      {field.is_dropdown ? (
-                        <MaterialInputAutoComplete
-                          size="small"
-                          colorTheme={"black"}
-                          placeholder={field.field_name}
-                          required={field.is_required}
-                          options={
-                            setDynamicOption(
-                              getSalesActiveFieldsState.data,
-                              field.name
-                            ) ?? []
-                          }
-                          getOptionLabel={(option) => option.name}
-                          isOptionEqualToValue={(option, value) => {
-                            if (field.name === "discount") {
-                              return option.id === value;
-                            } else {
-                              return option.name === value;
-                            }
-                          }}
-                          value={dropdownValue(field.section_name, field.name)}
-                          onChange={(event, selectedValue) => {
-                            handleOnChange(
-                              field.section_name,
-                              field.name,
-                              field.name === "discount"
-                                ? selectedValue.id
-                                : selectedValue.name
-                            );
-                          }}
-                        />
-                      ) : null}
-
-                      {field.is_date_field ? (
-                        <MaterialDateInput
-                          disableFuture
-                          required={field.is_required}
-                          colorTheme={"black"}
-                          size="small"
-                          value={formStateFieldValue(
-                            field.section_name,
-                            field.name
-                          ).toString()}
-                          placeholder={field.field_name}
-                          onChange={(selectedDate: Date | null) =>
-                            handleOnChange(
-                              field.section_name,
-                              field.name,
-                              selectedDate
-                            )
-                          }
-                        />
-                      ) : null}
-                    </>
-                  ) : (
-                    <MaterialInput
-                      fullWidth
-                      type={field.name === "emailAddress" ? "email" : "text"}
-                      size="small"
-                      name={field.name}
-                      colorTheme={"black"}
-                      is_required={field.is_required}
-                      value={formStateFieldValue(
-                        field.section_name,
-                        field.name
-                      ).toString()}
-                      placeholder={field.field_name}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        handleOnChange(
-                          field.section_name,
-                          event.target.name,
-                          event.target.value
-                        )
-                      }
-                    />
-                  )}
-                </div>
-              </div>
-            ))}
-          </React.Fragment>
-        ))}
-      </>
-    );
-  };
-  const handleOnChange = (
-    sectionName: string,
-    fieldName: string,
-    val: string | Date | null
-  ) => {
-    setFormState((prevData) => ({
-      ...prevData,
-      [sectionName]: {
-        ...(prevData && prevData[sectionName]),
-        [fieldName]: { value: val },
-      },
-    }));
-  };
-
-  const getEmptyRequiredFields = () => {
-    const currentStepFields =
-      getSalesActiveFieldsState.data?.field_data[activeStep]?.field;
-    const emptyRequiredFields: string[] = [];
-
-    if (currentStepFields) {
-      currentStepFields.forEach((subSection) => {
-        subSection.field_data.forEach((field) => {
-          const fieldValue =
-            formState?.[field.section_name]?.[field.name]?.value;
-          const isFieldEmpty =
-            field.is_required &&
-            (!fieldValue || fieldValue.toString().trim() === "");
-
-          if (isFieldEmpty) {
-            emptyRequiredFields.push(field.field_name);
-          }
-        });
-      });
-    }
-
-    return emptyRequiredFields;
-  };
 
   const handleSubmit = (
     e: { preventDefault: () => void },
@@ -251,7 +76,16 @@ export function SalesFormContent() {
               </div>
               <div className="flex flex-col bg-white rounded-b-lg border border-secondary flex-1 p-4">
                 <div className="flex flex-wrap lg:px-20 lg:pt-5">
-                  {fieldData()}
+                  {/* {fieldData()} */}
+
+                  <FormFieldData
+                    salesActiveFieldState={getSalesActiveFieldsState.data}
+                    activeStep={activeStep}
+                    formState={formState || {}}
+                    setFormState={(
+                      data: SubmitFormParam["formState"] | undefined
+                    ) => setFormState(data || {})}
+                  />
                 </div>
               </div>
 
@@ -260,7 +94,11 @@ export function SalesFormContent() {
                 totalSteps={
                   getSalesActiveFieldsState.data?.field_data.length ?? 6
                 }
-                requiredCheck={getEmptyRequiredFields()}
+                requiredCheck={getEmptyRequiredFields(
+                  getSalesActiveFieldsState.data,
+                  activeStep,
+                  formState
+                )}
                 setActiveStep={(step) => setActiveStep(step)}
                 setCompleted={(complete) => setCompleted(complete)}
                 handleSubmit={handleSubmit}

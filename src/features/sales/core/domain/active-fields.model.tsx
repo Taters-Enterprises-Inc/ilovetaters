@@ -25,6 +25,7 @@ export interface SalesActiveFieldsModel {
         name: string;
         is_required: boolean;
         is_date_field: boolean;
+        datatype: string;
       }>;
     }>;
   }>;

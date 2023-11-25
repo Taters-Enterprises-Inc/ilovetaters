@@ -120,7 +120,7 @@ export function SalesTaskListManager() {
                         {getSalesManagerPendingTaskState.data?.task.map(
                           (task) => (
                             <>
-                              <ListItem>
+                              <ListItem onClick={() => handleOnClick(task.id)}>
                                 <div className="w-full">
                                   <div className="flex justify-between">
                                     <span className="text-left bg-neutral-200 px-2 py-0.5 rounded">

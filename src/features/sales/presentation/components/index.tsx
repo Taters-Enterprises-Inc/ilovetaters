@@ -5,3 +5,4 @@ export { SalesTaskListTC } from "./sales-task-list-tc";
 export { SalesFormContent } from "./form-contents";
 export { FormStepperNavigation } from "./form-stepper-navigation";
 export { SalesTaskListCashier } from "./sales-cashier-task";
+export { FormFieldData } from "./form-field-data";

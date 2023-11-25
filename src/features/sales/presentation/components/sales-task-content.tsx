@@ -23,8 +23,11 @@ import {
   selectGetSalesActiveFields,
 } from "../slices/get-active-fields.slice";
 import { CheckParam, SubmitFormParam } from "features/sales/core/sales.param";
-import { initialFormState, setDynamicOption } from "./sales-utils";
-import { salesSubmitVerdict } from "../slices/sales-submit-verdict.slice";
+import {
+  incorrectForm,
+  initialFormState,
+  setDynamicOption,
+} from "./sales-utils";
 import { useNavigate } from "react-router-dom";
 import {
   GetSalesFormDataState,
@@ -33,6 +36,8 @@ import {
   selectGetSalesFormData,
 } from "../slices/get-sales-form-content.slice";
 import { createQueryParams } from "features/config/helpers";
+import { FormFieldData } from ".";
+import { salesSubmitVerdict } from "../slices/sales-submit-verdict.slice";
 
 export default function SalesTaskContent() {
   const dispatch = useAppDispatch();
@@ -76,59 +81,27 @@ export default function SalesTaskContent() {
     }
   }, [getSalesActiveFieldsState.data, getSalesFormDataState.data]);
 
-  const handleOnChange = (
-    sectionName: string,
-    fieldName: string,
-    val: string | Date | null
-  ) => {
-    setFormState((prevData) => ({
-      ...prevData,
-      [sectionName]: {
-        ...(prevData && prevData[sectionName]),
-        [fieldName]: { value: val },
-      },
-    }));
-  };
-
-  const incorrectForm = () => {
-    let result = false;
-
-    getSalesActiveFieldsState.data?.field_data.some(
-      (field_data, sectionIndex) => {
-        return field_data.field.some((fields) => {
-          return fields.field_data.some((field, fieldIndex) => {
-            if (
-              formState?.[field_data.section]?.[field.name]?.value !==
-              getSalesFormDataState.data?.[sectionIndex]?.fieldData?.[
-                field.name
-              ]
-            ) {
-              result = true;
-
-              return true;
-            } else {
-              result = false;
-            }
-          });
-        });
-      }
-    );
-
-    return result;
-  };
-
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    const tcCheckParam: CheckParam = {
+    const checkParam: CheckParam = {
       formState: formState ?? {},
-      grade: incorrectForm() ? "2" : "1",
-      id: "4",
+      grade: incorrectForm(
+        getSalesActiveFieldsState.data,
+        formState ?? {},
+        getSalesFormDataState.data
+      )
+        ? "2"
+        : "1",
+      id: formId,
+      type: userType,
     };
 
     if (formState !== undefined) {
-      dispatch(salesSubmitVerdict(tcCheckParam));
-      navigate("/admin/sales/task");
+      dispatch(salesSubmitVerdict(checkParam));
+      navigate(
+        userType === "cashier" ? "/admin/sales/form-list" : "/admin/sales/task"
+      );
     }
   };
 
@@ -140,7 +113,7 @@ export default function SalesTaskContent() {
         </Button>
       </div>
       <form className="p-5" onSubmit={handleSubmit}>
-        {getSalesActiveFieldsState.data?.field_data.map((field_Data) => (
+        {getSalesActiveFieldsState.data?.field_data.map((field_Data, index) => (
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -154,102 +127,16 @@ export default function SalesTaskContent() {
             >
               <span className="font-semibold">{field_Data.section}</span>
             </AccordionSummary>
-            <AccordionDetails sx={{ paddingY: 3, paddingX: 10 }}>
-              {field_Data.field.map((field) => (
-                <>
-                  {field.field_data.length !== 0 ? (
-                    <span className="px-10 pt-5 font-semibold">
-                      {field.sub_section}
-                    </span>
-                  ) : null}
-
-                  {field.field_data.map((fieldData) => (
-                    <div className="px-20 p-2">
-                      <span>{fieldData.field_name}</span>
-
-                      {fieldData.is_dropdown || fieldData.is_date_field ? (
-                        <>
-                          {fieldData.is_dropdown ? (
-                            <MaterialInputAutoComplete
-                              size="small"
-                              colorTheme={"black"}
-                              placeholder={fieldData.field_name}
-                              required={fieldData.is_required}
-                              options={
-                                setDynamicOption(
-                                  getSalesActiveFieldsState.data,
-                                  fieldData.name
-                                ) ?? []
-                              }
-                              isOptionEqualToValue={(option, value) =>
-                                option === value
-                              }
-                              value={(
-                                formState?.[field_Data.section]?.[
-                                  fieldData.name
-                                ]?.value ?? ""
-                              ).toString()}
-                              disabled={edit}
-                              onChange={(event, selectedValue) =>
-                                handleOnChange(
-                                  fieldData.section_name,
-                                  fieldData.name,
-                                  selectedValue
-                                )
-                              }
-                            />
-                          ) : null}
-
-                          {fieldData.is_date_field ? (
-                            <MaterialDateInput
-                              disableFuture
-                              required={fieldData.is_required}
-                              colorTheme={"black"}
-                              size="small"
-                              disabled={edit}
-                              value={(
-                                formState?.[field_Data.section]?.[
-                                  fieldData.name
-                                ]?.value ?? ""
-                              ).toString()}
-                              placeholder={fieldData.field_name}
-                              onChange={(selectedDate: Date | null) =>
-                                handleOnChange(
-                                  fieldData.section_name,
-                                  fieldData.name,
-                                  selectedDate
-                                )
-                              }
-                            />
-                          ) : null}
-                        </>
-                      ) : (
-                        <MaterialInput
-                          required={fieldData.is_required}
-                          colorTheme={"black"}
-                          name={fieldData.name}
-                          size="small"
-                          disabled={edit}
-                          fullWidth
-                          value={(
-                            formState?.[field_Data.section]?.[fieldData.name]
-                              ?.value ?? ""
-                          ).toString()}
-                          onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                          ) =>
-                            handleOnChange(
-                              field_Data.section,
-                              event.target.name,
-                              event.target.value
-                            )
-                          }
-                        />
-                      )}
-                    </div>
-                  ))}
-                </>
-              ))}
+            <AccordionDetails sx={{ paddingY: 3, paddingX: { md: 15 } }}>
+              <FormFieldData
+                disabled={edit}
+                salesActiveFieldState={getSalesActiveFieldsState.data}
+                activeStep={index}
+                formState={formState || {}}
+                setFormState={(
+                  data: SubmitFormParam["formState"] | undefined
+                ) => setFormState(data || {})}
+              />
             </AccordionDetails>
           </Accordion>
         ))}

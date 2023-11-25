@@ -10,5 +10,6 @@ export interface CheckParam {
     [sectionName: string]: { [name: string]: { value: string | Date | null } };
   };
   grade: string;
-  id: string;
+  id: string | null;
+  type: string | null;
 }

@@ -89,7 +89,7 @@ export function GetSalesCashierSavedFormRepository(): Promise<GetSalesCashierSav
 export function salesSubmitVerdictRepository(
   param: CheckParam
 ): Promise<salesSubmitVerdictResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/sales/tc-task`, param, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/sales/submit_verdict`, param, {
     withCredentials: true,
   });
 }

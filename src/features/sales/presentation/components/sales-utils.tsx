@@ -2,6 +2,12 @@ import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields
 import { SalesFormDataModel } from "features/sales/core/domain/sales-form-data.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 
+interface UpdateFormStateParams {
+  sectionName: string;
+  fieldName: string;
+  val: string | Date | null;
+}
+
 export const test = () => {};
 
 export const initialFormState = (
@@ -41,6 +47,60 @@ export const initialFormState = (
 
 const shifts = [{ name: "AM" }, { name: "PM" }];
 
+export const getEmptyRequiredFields = (
+  salesActiveFieldState: SalesActiveFieldsModel,
+  activeStep: number,
+  formState: SubmitFormParam["formState"] | undefined
+) => {
+  const currentStepFields =
+    salesActiveFieldState?.field_data[activeStep]?.field;
+  const emptyRequiredFields: string[] = [];
+
+  if (currentStepFields) {
+    currentStepFields.forEach((subSection) => {
+      subSection.field_data.forEach((field) => {
+        const fieldValue = formState?.[field.section_name]?.[field.name]?.value;
+        const isFieldEmpty =
+          field.is_required &&
+          (!fieldValue || fieldValue.toString().trim() === "");
+
+        if (isFieldEmpty) {
+          emptyRequiredFields.push(field.field_name);
+        }
+      });
+    });
+  }
+
+  return emptyRequiredFields;
+};
+
+export const incorrectForm = (
+  salesActiveFieldState: SalesActiveFieldsModel | undefined,
+  formState: SubmitFormParam["formState"],
+  salesFormDataState: SalesFormDataModel[] | undefined
+) => {
+  let result = false;
+
+  salesActiveFieldState?.field_data.some((field_data, sectionIndex) => {
+    return field_data.field.some((fields) => {
+      return fields.field_data.some((field) => {
+        if (
+          formState?.[field_data.section]?.[field.name]?.value !==
+          salesFormDataState?.[sectionIndex]?.fieldData?.[field.name]
+        ) {
+          result = true;
+
+          return true;
+        } else {
+          result = false;
+        }
+      });
+    });
+  });
+
+  return result;
+};
+
 export const setDynamicOption = (
   getSalesActiveFieldsState: SalesActiveFieldsModel | undefined,
   name: string
@@ -52,9 +112,29 @@ export const setDynamicOption = (
       return getSalesActiveFieldsState?.list_of_stores;
     case "discount":
       return getSalesActiveFieldsState?.discount_type;
-    case "gcOriginatingStore":
+    case "originating_store":
       return getSalesActiveFieldsState?.list_of_stores;
   }
 
   return null;
+};
+
+export const updateFormState = (
+  prevData: SubmitFormParam["formState"] | undefined,
+  { sectionName, fieldName, val }: UpdateFormStateParams
+): SubmitFormParam["formState"] => {
+  if (!prevData) {
+    return {
+      [sectionName]: {
+        [fieldName]: { value: val },
+      },
+    };
+  }
+  return {
+    ...prevData,
+    [sectionName]: {
+      ...prevData[sectionName],
+      [fieldName]: { value: val },
+    },
+  };
 };
