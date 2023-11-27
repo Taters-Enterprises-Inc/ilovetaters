@@ -16,6 +16,7 @@ import {
 } from "features/admin/presentation/slices/logout-admin.slice";
 import { BsFillPersonFill, BsListTask } from "react-icons/bs";
 import { selectSalesSideBar } from "../../slices/sales-sidebar.slice";
+import { FaHistory } from "react-icons/fa";
 
 export function SalesDrawerMenu() {
   const salesSidebar = useAppSelector(selectSalesSideBar);
@@ -56,10 +57,10 @@ export function SalesDrawerMenu() {
       enable: tc || manager,
     },
     {
-      text: "Profile",
-      path: "profile",
-      icon: <BsFillPersonFill size={20} />,
-      enable: true,
+      text: "History",
+      path: "history",
+      icon: <FaHistory size={20} />,
+      enable: false,
     },
   ];
 

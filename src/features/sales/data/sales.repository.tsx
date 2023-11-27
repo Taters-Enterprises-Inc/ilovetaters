@@ -6,6 +6,7 @@ import { SalesTCPendingTaskModel } from "../core/domain/tc-pending-task.model";
 import { SalesManagerPendingTaskModel } from "../core/domain/manager-pending-task.model";
 import { SalesCashierSavedFormModel } from "../core/domain/cashier-saved-form.model";
 import { SalesFormDataModel } from "../core/domain/sales-form-data.model";
+import { SalesCompletedModel } from "../core/domain/sales-complete.model";
 
 export interface GetSalesActiveFieldsResponse {
   data: {
@@ -54,6 +55,13 @@ export interface GetSalesFormDataResponse {
   };
 }
 
+export interface GetSalesCompletedResponse {
+  data: {
+    message: string;
+    data: SalesCompletedModel;
+  };
+}
+
 export function GetSalesActiveFieldsRepository(): Promise<GetSalesActiveFieldsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/fields`, {
     withCredentials: true,
@@ -98,6 +106,12 @@ export function GetSalesFormDataRepository(
   param: string
 ): Promise<GetSalesFormDataResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/form-data${param}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetSalesCompletedRepository(): Promise<GetSalesCompletedResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/dashboard`, {
     withCredentials: true,
   });
 }

@@ -187,7 +187,7 @@ import {
   SalesTask,
   SalesTaskForm,
 } from "features/sales/presentation/pages";
-import { SalesProfile } from "features/sales/presentation/pages/profile.page";
+import { SalesHistory } from "features/sales/presentation/pages/history.page";
 import { SalesForm } from "features/sales/presentation/pages/form.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -451,8 +451,8 @@ root.render(
                                 />
 
                                 <Route
-                                  path="profile"
-                                  element={<SalesProfile />}
+                                  path="history"
+                                  element={<SalesHistory />}
                                 />
                                 <Route path="task" element={<SalesTask />} />
                                 <Route

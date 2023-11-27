@@ -138,3 +138,13 @@ export const updateFormState = (
     },
   };
 };
+
+export const formatDate = (inputDate: Date | string) => {
+  const formattedDate = new Date(inputDate).toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "Asia/Manila",
+  });
+  return formattedDate.replace(/,/g, "");
+};

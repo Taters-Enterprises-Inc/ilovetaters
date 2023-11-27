@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { SalesHead } from "../components";
 
-export function SalesProfile() {
+export function SalesHistory() {
   return (
     <>
       <SalesHead
         SalesBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/admin/sales/profile",
+            url: "/admin/sales/dashboard",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Profile", url: "/admin/sales/profile" }],
+          pageTitles: [{ name: "History", url: "/admin/sales/history" }],
         }}
       />
     </>
