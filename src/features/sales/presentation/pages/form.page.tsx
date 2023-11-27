@@ -1,27 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import { SalesDashboardContent, SalesHead } from "../components";
+import { SalesFormContent, SalesHead } from "../components";
 
-export function SalesDashboard() {
+export function SalesForm() {
   return (
     <>
       <SalesHead
         SalesBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/admin/sales/dashboard",
+            url: "/admin/sales/form",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Dashboard", url: "/admin/sales/dashboard" }],
+          pageTitles: [{ name: "Form", url: "/admin/sales/form" }],
         }}
       />
+
       <div className="p-8">
         <div className="flex flex-col space-y-5">
           <div>
             <span className="text-secondary text-4xl font-['Bebas_Neue'] flex-1">
-              Dashboard
+              Form
             </span>
           </div>
-          <SalesDashboardContent />
+          <SalesFormContent />
         </div>
       </div>
     </>

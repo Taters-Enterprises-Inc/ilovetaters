@@ -188,8 +188,15 @@ import {
 } from "features/hr/presentation/pages";
 import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
-import { SalesDashboard } from "features/sales/presentation/pages";
-import { SalesProfile } from "features/sales/presentation/pages/profile.page";
+import {
+  SalesDashboard,
+  SalesFormList,
+  SalesSavedForm,
+  SalesTask,
+  SalesTaskForm,
+} from "features/sales/presentation/pages";
+import { SalesHistory } from "features/sales/presentation/pages/history.page";
+import { SalesForm } from "features/sales/presentation/pages/form.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -437,9 +444,25 @@ root.render(
                                   path="dashboard"
                                   element={<SalesDashboard />}
                                 />
+                                <Route path="form" element={<SalesForm />} />
+
                                 <Route
-                                  path="profile"
-                                  element={<SalesProfile />}
+                                  path="form-list"
+                                  element={<SalesFormList />}
+                                />
+                                <Route
+                                  path="form-list/saved-form"
+                                  element={<SalesSavedForm />}
+                                />
+
+                                <Route
+                                  path="history"
+                                  element={<SalesHistory />}
+                                />
+                                <Route path="task" element={<SalesTask />} />
+                                <Route
+                                  path="task/task-form"
+                                  element={<SalesTaskForm />}
                                 />
                               </Route>
                             </Route>

@@ -1346,3 +1346,13 @@ export const STOCK_ORDERING_MODAL_TITLE = [
   { label: "Complete Modal" },
   { label: "Cancelled Orders" },
 ];
+export const SALES_TAB_NAVIGATION_MANAGER = [
+  { label: "Pending" },
+  { label: "Approved" },
+  { label: "Not Approved" },
+];
+
+export const SALES_TAB_NAVIGATION_TC = [
+  { label: "Pending" },
+  { label: "Checked" },
+];

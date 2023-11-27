@@ -285,6 +285,14 @@ import getHrDirectReportStaffKras from "features/hr/presentation/slices/get-hr-d
 import salesSideBar from "features/sales/presentation/slices/sales-sidebar.slice";
 import getHrAppraisalResponse from "features/hr/presentation/slices/get-hr-appraisal-response.slice";
 import getHrAppraisalDirectReportStaff from "features/hr/presentation/slices/get-hr-appraisal-direct-report-staff.slice";
+import getSalesActiveFields from "features/sales/presentation/slices/get-active-fields.slice";
+import salesSubmitForm from "features/sales/presentation/slices/sales-submit-form.slice";
+import getSalesTCPendingTask from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
+import getSalesManagerPendingTask from "features/sales/presentation/slices/get-sales-manager-pending.slice";
+import getSalesCashierSavedForm from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
+import salesSubmitVerdict from "features/sales/presentation/slices/sales-submit-verdict.slice";
+import getSalesFormData from "features/sales/presentation/slices/get-sales-form-content.slice";
+import getSalesCompleted from "features/sales/presentation/slices/get-sales-completed.slice";
 
 export const store = configureStore({
   reducer: {
@@ -573,6 +581,14 @@ export const store = configureStore({
     salesSideBar,
     getHrAppraisalResponse,
     getHrAppraisalDirectReportStaff,
+    getSalesActiveFields,
+    salesSubmitForm,
+    getSalesTCPendingTask,
+    getSalesManagerPendingTask,
+    getSalesCashierSavedForm,
+    salesSubmitVerdict,
+    getSalesFormData,
+    getSalesCompleted,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
