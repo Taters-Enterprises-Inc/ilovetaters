@@ -74,33 +74,6 @@ export const getEmptyRequiredFields = (
   return emptyRequiredFields;
 };
 
-export const incorrectForm = (
-  salesActiveFieldState: SalesActiveFieldsModel | undefined,
-  formState: SubmitFormParam["formState"],
-  salesFormDataState: SalesFormDataModel[] | undefined
-) => {
-  let result = false;
-
-  salesActiveFieldState?.field_data.some((field_data, sectionIndex) => {
-    return field_data.field.some((fields) => {
-      return fields.field_data.some((field) => {
-        if (
-          formState?.[field_data.section]?.[field.name]?.value !==
-          salesFormDataState?.[sectionIndex]?.fieldData?.[field.name]
-        ) {
-          result = true;
-
-          return true;
-        } else {
-          result = false;
-        }
-      });
-    });
-  });
-
-  return result;
-};
-
 export const setDynamicOption = (
   getSalesActiveFieldsState: SalesActiveFieldsModel | undefined,
   name: string

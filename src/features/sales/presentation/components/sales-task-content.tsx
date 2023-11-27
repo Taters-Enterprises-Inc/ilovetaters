@@ -11,7 +11,7 @@ import {
   MaterialInput,
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -23,11 +23,7 @@ import {
   selectGetSalesActiveFields,
 } from "../slices/get-active-fields.slice";
 import { CheckParam, SubmitFormParam } from "features/sales/core/sales.param";
-import {
-  incorrectForm,
-  initialFormState,
-  setDynamicOption,
-} from "./sales-utils";
+import { initialFormState } from "./sales-utils";
 import { useNavigate } from "react-router-dom";
 import {
   GetSalesFormDataState,
@@ -47,7 +43,7 @@ export default function SalesTaskContent() {
 
   const [edit, setEdit] = useState(true);
   const [formState, setFormState] = useState<SubmitFormParam["formState"]>();
-
+  const grade = useRef("0");
   const query = useQuery();
 
   const formId = query.get("id");
@@ -86,13 +82,7 @@ export default function SalesTaskContent() {
 
     const checkParam: CheckParam = {
       formState: formState ?? {},
-      grade: incorrectForm(
-        getSalesActiveFieldsState.data,
-        formState ?? {},
-        getSalesFormDataState.data
-      )
-        ? "2"
-        : "1",
+      grade: grade.current,
       id: formId,
       type: userType,
     };
@@ -141,9 +131,35 @@ export default function SalesTaskContent() {
           </Accordion>
         ))}
         <div className="flex flex-row justify-center p-5 space-x-5">
-          <Button type="submit" variant="contained" className="w-1/6">
-            Submit
-          </Button>
+          {userType === "cashier" ? (
+            <Button
+              type="submit"
+              onClick={() => (grade.current = "0")}
+              variant="contained"
+              className="w-1/6"
+            >
+              submit
+            </Button>
+          ) : (
+            <>
+              <Button
+                type="submit"
+                onClick={() => (grade.current = "2")}
+                variant="contained"
+                className="w-1/6"
+              >
+                Disapprove
+              </Button>
+              <Button
+                type="submit"
+                onClick={() => (grade.current = "1")}
+                variant="contained"
+                className="w-1/6"
+              >
+                Approve
+              </Button>
+            </>
+          )}
         </div>
       </form>
     </div>

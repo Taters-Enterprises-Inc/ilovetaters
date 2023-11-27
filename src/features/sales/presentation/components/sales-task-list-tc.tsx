@@ -33,6 +33,10 @@ export function SalesTaskListTC() {
   );
 
   useEffect(() => {
+    dispatch(getSalesTCPendingTask());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (
       getSalesTcPendingTaskState.status !==
         GetSalesTCPendingTaskState.success &&

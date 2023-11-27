@@ -31,8 +31,6 @@ export function FormFieldData(props: FormFieldDataProps) {
   const email = getAdminSessionState.data?.admin.email;
 
   useEffect(() => {
-    console.log(props.formState);
-
     const cashier =
       getAdminSessionState.data?.admin.user_details.sales_groups.some(
         (group) => group.id === 1
