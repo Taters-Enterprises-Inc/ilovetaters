@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields.model";
 import { SalesFormDataModel } from "features/sales/core/domain/sales-form-data.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
@@ -8,7 +9,22 @@ interface UpdateFormStateParams {
   val: string | Date | null;
 }
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
 export const test = () => {};
+
+export const fieldToHide = [
+  "entry_date",
+  "store",
+  "shift",
+  "cashier_name",
+  "email",
+  "transaction_date",
+];
 
 export const initialFormState = (
   salesActiveFieldsState: SalesActiveFieldsModel | undefined,
@@ -120,4 +136,57 @@ export const formatDate = (inputDate: Date | string) => {
     timeZone: "Asia/Manila",
   });
   return formattedDate.replace(/,/g, "");
+};
+
+export function TabPanel(props: TabPanelProps) {
+  const { children, value, index } = props;
+
+  return (
+    <div className="w-full">
+      {value === index && <div className="p-3 w-full">{children}</div>}
+    </div>
+  );
+}
+
+export const hideField = (
+  fieldName: string,
+  selectedFieldName: string[] | undefined
+) => {
+  return selectedFieldName?.some((field) => field === fieldName);
+};
+
+export const hidePanel = (type: string | null) => {
+  let cashier = false;
+  let tc = false;
+  let manager = false;
+
+  if (type === "cashier") {
+    cashier = false;
+    tc = true;
+    manager = true;
+  } else if (type === "tc") {
+    cashier = false;
+    tc = false;
+    manager = true;
+  }
+
+  return { cashier: cashier, tc: tc, manager: manager };
+};
+
+export const getFormState = (
+  userType: string | null,
+  cashierFormState: SubmitFormParam["formState"] | undefined,
+  tcFormState: SubmitFormParam["formState"] | undefined,
+  managerFormState: SubmitFormParam["formState"] | undefined
+) => {
+  switch (userType) {
+    case "cashier":
+      return cashierFormState ?? {};
+    case "tc":
+      return tcFormState ?? {};
+    case "manager":
+      return managerFormState ?? {};
+    default:
+      return {};
+  }
 };

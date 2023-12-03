@@ -4,7 +4,7 @@ import {
   MaterialInput,
 } from "features/shared/presentation/components";
 import React, { useEffect, useState } from "react";
-import { setDynamicOption, updateFormState } from "./sales-utils";
+import { hideField, setDynamicOption, updateFormState } from "./sales-utils";
 import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
@@ -16,6 +16,9 @@ interface FormFieldDataProps {
   formState: SubmitFormParam["formState"];
   setFormState: (prevData: SubmitFormParam["formState"] | undefined) => void;
   disabled?: boolean;
+  disabledSubSection?: boolean;
+  disableFieldLabel?: boolean;
+  disableFieldName?: string[];
 }
 
 export function FormFieldData(props: FormFieldDataProps) {
@@ -92,115 +95,131 @@ export function FormFieldData(props: FormFieldDataProps) {
   return (
     <>
       {getFormField?.map((field) => (
-        <React.Fragment key={field.sub_section}>
+        <div
+          className={"grid grid-rows-2 gap-4 w-full"}
+          key={field.sub_section}
+        >
           {field.field_data.length !== 0 ? (
-            <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
-              {field.sub_section}
-            </span>
+            <div
+              className={
+                props.activeStep === 1 ? "grid place-items-center" : "hidden "
+              }
+            >
+              <span className="w-full text-base md:text-lg text-black font-semibold mt-4">
+                {!props.disabledSubSection && field.sub_section}
+              </span>
+            </div>
           ) : null}
 
           {field.field_data.flatMap((field) => (
-            <div className={`w-[100%] md:px-10 py-3 space-y-3`} key={field.id}>
+            <div className={`grid w-[100%] py-3 space-y-3`} key={field.id}>
               <div>
                 <span className=" text-black text-xs md:text-base font-normal normal-case">
-                  {field.field_name}
+                  {!props.disableFieldLabel && field.field_name}
                 </span>
                 {field.is_required ? (
-                  <span className="text-red-800 mx-1">*</span>
-                ) : null}
+                  <span className="text-red-800 mx-1">
+                    {!props.disableFieldLabel && "*"}
+                  </span>
+                ) : (
+                  <span className="text-red-800 mx-1"></span>
+                )}
               </div>
 
-              <div className="w-full ">
-                {field.is_dropdown || field.is_date_field ? (
-                  <>
-                    {field.is_dropdown ? (
-                      <MaterialInputAutoComplete
-                        size="small"
-                        disabled={props.disabled}
-                        colorTheme={"black"}
-                        placeholder={field.field_name}
-                        required={field.is_required}
-                        options={
-                          setDynamicOption(
-                            props.salesActiveFieldState,
-                            field.name
-                          ) ?? []
-                        }
-                        getOptionLabel={(option) => option.name ?? ""}
-                        isOptionEqualToValue={(option, value) => {
-                          if (field.name === "discount") {
-                            return option.id === value.id;
-                          } else {
-                            return option.name === value;
+              {!hideField(field.name, props.disableFieldName) ? (
+                <div className="w-full ">
+                  {field.is_dropdown || field.is_date_field ? (
+                    <>
+                      {field.is_dropdown ? (
+                        <MaterialInputAutoComplete
+                          size="small"
+                          disabled={props.disabled}
+                          colorTheme={"black"}
+                          placeholder={field.field_name}
+                          required={field.is_required}
+                          options={
+                            setDynamicOption(
+                              props.salesActiveFieldState,
+                              field.name
+                            ) ?? []
                           }
-                        }}
-                        value={dropdownValue(field.section_name, field.name)}
-                        onChange={(event, selectedValue) => {
-                          if (selectedValue) {
-                            // Add a null check
+                          getOptionLabel={(option) => option.name ?? ""}
+                          isOptionEqualToValue={(option, value) => {
+                            if (field.name === "discount") {
+                              return option.id === value.id;
+                            } else {
+                              return option.name === value;
+                            }
+                          }}
+                          value={dropdownValue(field.section_name, field.name)}
+                          onChange={(event, selectedValue) => {
+                            if (selectedValue) {
+                              handleOnChange(
+                                field.section_name,
+                                field.name,
+                                field.name === "discount"
+                                  ? selectedValue.id
+                                  : selectedValue.name,
+                                field.datatype
+                              );
+                            }
+                          }}
+                        />
+                      ) : null}
+
+                      {field.is_date_field ? (
+                        <MaterialDateInput
+                          disableFuture
+                          disabled={props.disabled}
+                          required={field.is_required}
+                          colorTheme={"black"}
+                          size="small"
+                          value={formStateFieldValue(
+                            field.section_name,
+                            field.name
+                          ).toString()}
+                          placeholder={field.field_name}
+                          onChange={(selectedDate: Date | null) =>
                             handleOnChange(
                               field.section_name,
                               field.name,
-                              field.name === "discount"
-                                ? selectedValue.id
-                                : selectedValue.name,
+                              selectedDate,
                               field.datatype
-                            );
+                            )
                           }
-                        }}
-                      />
-                    ) : null}
-
-                    {field.is_date_field ? (
-                      <MaterialDateInput
-                        disableFuture
-                        disabled={props.disabled}
-                        required={field.is_required}
-                        colorTheme={"black"}
-                        size="small"
-                        value={formStateFieldValue(
-                          field.section_name,
-                          field.name
-                        ).toString()}
-                        placeholder={field.field_name}
-                        onChange={(selectedDate: Date | null) =>
-                          handleOnChange(
-                            field.section_name,
-                            field.name,
-                            selectedDate,
-                            field.datatype
-                          )
-                        }
-                      />
-                    ) : null}
-                  </>
-                ) : (
-                  <MaterialInput
-                    fullWidth
-                    disabled={textFieldDisable(field.name)}
-                    size="small"
-                    name={field.name}
-                    colorTheme={"black"}
-                    is_required={field.is_required}
-                    value={formStateFieldValue(
-                      field.section_name,
-                      field.name
-                    ).toString()}
-                    placeholder={field.field_name}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      handleOnChange(
+                        />
+                      ) : null}
+                    </>
+                  ) : (
+                    <MaterialInput
+                      fullWidth
+                      disabled={textFieldDisable(field.name)}
+                      size="small"
+                      name={field.name}
+                      colorTheme={"black"}
+                      is_required={field.is_required}
+                      value={formStateFieldValue(
                         field.section_name,
-                        event.target.name,
-                        event.target.value,
-                        field.datatype
-                      )
-                    }
-                  />
-                )}
-              </div>
+                        field.name
+                      ).toString()}
+                      placeholder={field.field_name}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleOnChange(
+                          field.section_name,
+                          event.target.name,
+                          event.target.value,
+                          field.datatype
+                        )
+                      }
+                    />
+                  )}
+                </div>
+              ) : (
+                <span className="h-10"></span>
+              )}
             </div>
           ))}
-        </React.Fragment>
+        </div>
       ))}
     </>
   );

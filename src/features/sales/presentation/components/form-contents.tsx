@@ -75,7 +75,7 @@ export function SalesFormContent() {
                 {getSalesActiveFieldsState.data?.field_data[activeStep].section}
               </div>
               <div className="flex flex-col bg-white rounded-b-lg border border-secondary flex-1 p-4">
-                <div className="flex flex-wrap lg:px-20 lg:pt-5">
+                <div className="flex flex-wrap w-full lg:px-20 lg:pt-5">
                   {/* {fieldData()} */}
 
                   <FormFieldData

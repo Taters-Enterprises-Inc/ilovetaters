@@ -3,6 +3,9 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Tab,
+  Tabs,
+  Box,
 } from "@mui/material";
 import { PiCheckSquareOffsetBold } from "react-icons/pi";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -23,7 +26,13 @@ import {
   selectGetSalesActiveFields,
 } from "../slices/get-active-fields.slice";
 import { CheckParam, SubmitFormParam } from "features/sales/core/sales.param";
-import { initialFormState } from "./sales-utils";
+import {
+  TabPanel,
+  fieldToHide,
+  getFormState,
+  hidePanel,
+  initialFormState,
+} from "./sales-utils";
 import { useNavigate } from "react-router-dom";
 import {
   GetSalesFormDataState,
@@ -42,7 +51,15 @@ export default function SalesTaskContent() {
   const getSalesFormDataState = useAppSelector(selectGetSalesFormData);
 
   const [edit, setEdit] = useState(true);
-  const [formState, setFormState] = useState<SubmitFormParam["formState"]>();
+  const [cashierFormState, setCashierFormState] =
+    useState<SubmitFormParam["formState"]>();
+  const [tcFormState, setTcFormState] =
+    useState<SubmitFormParam["formState"]>();
+  const [managerFormState, setManagerFormState] =
+    useState<SubmitFormParam["formState"]>();
+
+  const [tabValue, setTabValue] = useState(0);
+
   const grade = useRef("0");
   const query = useQuery();
 
@@ -68,10 +85,22 @@ export default function SalesTaskContent() {
       dispatch(getSalesActiveFields());
       dispatch(getSalesFormData(queryParams));
     } else if (getSalesActiveFieldsState.data) {
-      setFormState(
+      setCashierFormState(
         initialFormState(
           getSalesActiveFieldsState.data,
-          getSalesFormDataState.data
+          getSalesFormDataState.data?.cashier_data
+        )
+      );
+      setTcFormState(
+        initialFormState(
+          getSalesActiveFieldsState.data,
+          getSalesFormDataState.data?.tc_data
+        )
+      );
+      setManagerFormState(
+        initialFormState(
+          getSalesActiveFieldsState.data,
+          getSalesFormDataState.data?.manager_data
         )
       );
     }
@@ -81,13 +110,22 @@ export default function SalesTaskContent() {
     event.preventDefault();
 
     const checkParam: CheckParam = {
-      formState: formState ?? {},
+      formState: getFormState(
+        userType,
+        cashierFormState,
+        tcFormState,
+        managerFormState
+      ),
       grade: grade.current,
       id: formId,
       type: userType,
     };
 
-    if (formState !== undefined) {
+    if (
+      cashierFormState !== undefined ||
+      tcFormState !== undefined ||
+      managerFormState !== undefined
+    ) {
       dispatch(salesSubmitVerdict(checkParam));
       navigate(
         userType === "cashier" ? "/admin/sales/form-list" : "/admin/sales/task"
@@ -97,38 +135,114 @@ export default function SalesTaskContent() {
 
   return (
     <div className="flex flex-col bg-white rounded-b-lg font-['Roboto'] flex-1 p-4">
-      <div className="flex flex-row-reverse px-5">
-        <Button onClick={() => setEdit(false)} variant="outlined">
-          <PiCheckSquareOffsetBold size={20} />
-        </Button>
-      </div>
+      <form className="p-5" onSubmit={handleSubmit}>
+        <div className="flex grow px-14 py-10">
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={tabValue}
+            onChange={(event, value) => setTabValue(value)}
+            sx={{ borderRight: 1, borderColor: "divider" }}
+          >
+            {getSalesActiveFieldsState.data?.field_data.map((field_data) => (
+              <Tab label={<span>{field_data.section}</span>} />
+            ))}
+          </Tabs>
+
+          <div className="w-full px-10">
+            <span className="text-3xl font-semibold">
+              {getSalesActiveFieldsState.data?.field_data[tabValue].section}
+            </span>
+
+            <div className="flex-1">
+              <div className="flex w-full">
+                <div className={`${userType === "cashier" ? "w-full" : ""}`}>
+                  <TabPanel index={tabValue} value={tabValue}>
+                    <FormFieldData
+                      disabled={userType !== "cashier"}
+                      salesActiveFieldState={getSalesActiveFieldsState.data}
+                      activeStep={tabValue}
+                      formState={cashierFormState || {}}
+                      setFormState={(
+                        data: SubmitFormParam["formState"] | undefined
+                      ) => setCashierFormState(data || {})}
+                    />
+                  </TabPanel>
+                </div>
+                <div className={`${hidePanel(userType).tc ? "hidden" : ""}`}>
+                  <TabPanel index={tabValue} value={tabValue}>
+                    <FormFieldData
+                      disableFieldLabel
+                      disabledSubSection
+                      disableFieldName={fieldToHide}
+                      salesActiveFieldState={getSalesActiveFieldsState.data}
+                      activeStep={tabValue}
+                      formState={tcFormState || {}}
+                      setFormState={(
+                        data: SubmitFormParam["formState"] | undefined
+                      ) => setTcFormState(data || {})}
+                    />
+                  </TabPanel>
+                </div>
+                <div
+                  className={`${hidePanel(userType).manager ? "hidden" : ""}`}
+                >
+                  <TabPanel index={tabValue} value={tabValue}>
+                    <FormFieldData
+                      disableFieldLabel
+                      disabledSubSection
+                      disableFieldName={fieldToHide}
+                      salesActiveFieldState={getSalesActiveFieldsState.data}
+                      activeStep={tabValue}
+                      formState={managerFormState || {}}
+                      setFormState={(
+                        data: SubmitFormParam["formState"] | undefined
+                      ) => setManagerFormState(data || {})}
+                    />
+                  </TabPanel>
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-center p-5 space-x-5">
+                {userType === "cashier" ? (
+                  <Button
+                    type="submit"
+                    onClick={() => (grade.current = "0")}
+                    variant="contained"
+                    className="w-1/6"
+                  >
+                    submit
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      type="submit"
+                      onClick={() => (grade.current = "2")}
+                      variant="contained"
+                      className="w-1/6"
+                    >
+                      Disapprove
+                    </Button>
+                    <Button
+                      type="submit"
+                      onClick={() => (grade.current = "1")}
+                      variant="contained"
+                      className="w-1/6"
+                    >
+                      Approve
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      {/* 
       <form className="p-5" onSubmit={handleSubmit}>
         {getSalesActiveFieldsState.data?.field_data.map((field_Data, index) => (
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              className="hover:bg-neutral-300 hover:text-neutral-950"
-              sx={{
-                backgroundColor: "#f0f1f2",
-                borderRadius: 1,
-              }}
-            >
-              <span className="font-semibold">{field_Data.section}</span>
-            </AccordionSummary>
-            <AccordionDetails sx={{ paddingY: 3, paddingX: { md: 15 } }}>
-              <FormFieldData
-                disabled={edit}
-                salesActiveFieldState={getSalesActiveFieldsState.data}
-                activeStep={index}
-                formState={formState || {}}
-                setFormState={(
-                  data: SubmitFormParam["formState"] | undefined
-                ) => setFormState(data || {})}
-              />
-            </AccordionDetails>
-          </Accordion>
+          
         ))}
         <div className="flex flex-row justify-center p-5 space-x-5">
           {userType === "cashier" ? (
@@ -161,7 +275,7 @@ export default function SalesTaskContent() {
             </>
           )}
         </div>
-      </form>
+      </form> */}
     </div>
   );
 }
