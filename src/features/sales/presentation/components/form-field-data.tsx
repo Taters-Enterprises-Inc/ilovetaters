@@ -4,7 +4,12 @@ import {
   MaterialInput,
 } from "features/shared/presentation/components";
 import React, { useEffect, useState } from "react";
-import { hideField, setDynamicOption, updateFormState } from "./sales-utils";
+import {
+  getEmptyRequiredFields,
+  hideField,
+  setDynamicOption,
+  updateFormState,
+} from "./sales-utils";
 import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
@@ -19,6 +24,8 @@ interface FormFieldDataProps {
   disabledSubSection?: boolean;
   disableFieldLabel?: boolean;
   disableFieldName?: string[];
+  disableFeedback?: boolean;
+  formLabel: string;
 }
 
 export function FormFieldData(props: FormFieldDataProps) {
@@ -76,7 +83,7 @@ export function FormFieldData(props: FormFieldDataProps) {
   ) => {
     if (typeof val === "string") {
       if (dataType === "number") {
-        val = val.replace(/[^0-9]/g, "");
+        val = val.replace(/[^0-9.]/g, "");
       }
     }
     props.setFormState(
@@ -90,6 +97,16 @@ export function FormFieldData(props: FormFieldDataProps) {
     } else {
       return props.disabled;
     }
+  };
+
+  const emptyFeedback = (fieldName: string) => {
+    const feedback = getEmptyRequiredFields(
+      props.salesActiveFieldState,
+      props.activeStep,
+      props.formState
+    ).some((field) => field === fieldName);
+
+    return feedback;
   };
 
   return (
@@ -127,7 +144,7 @@ export function FormFieldData(props: FormFieldDataProps) {
               </div>
 
               {!hideField(field.name, props.disableFieldName) ? (
-                <div className="w-full ">
+                <div className=" w-full  ">
                   {field.is_dropdown || field.is_date_field ? (
                     <>
                       {field.is_dropdown ? (
@@ -137,6 +154,14 @@ export function FormFieldData(props: FormFieldDataProps) {
                           colorTheme={"black"}
                           placeholder={field.field_name}
                           required={field.is_required}
+                          label={
+                            formStateFieldValue(
+                              field.section_name,
+                              field.name
+                            ).toString() === ""
+                              ? ""
+                              : props.formLabel
+                          }
                           options={
                             setDynamicOption(
                               props.salesActiveFieldState,
@@ -174,6 +199,14 @@ export function FormFieldData(props: FormFieldDataProps) {
                           required={field.is_required}
                           colorTheme={"black"}
                           size="small"
+                          label={
+                            formStateFieldValue(
+                              field.section_name,
+                              field.name
+                            ).toString() === ""
+                              ? ""
+                              : props.formLabel
+                          }
                           value={formStateFieldValue(
                             field.section_name,
                             field.name
@@ -198,6 +231,14 @@ export function FormFieldData(props: FormFieldDataProps) {
                       name={field.name}
                       colorTheme={"black"}
                       is_required={field.is_required}
+                      label={
+                        formStateFieldValue(
+                          field.section_name,
+                          field.name
+                        ).toString() === ""
+                          ? ""
+                          : props.formLabel
+                      }
                       value={formStateFieldValue(
                         field.section_name,
                         field.name
@@ -216,6 +257,16 @@ export function FormFieldData(props: FormFieldDataProps) {
                 </div>
               ) : (
                 <span className="h-10"></span>
+              )}
+
+              {!props.disableFeedback && (
+                <>
+                  {emptyFeedback(field.field_name) ? (
+                    <div className="text-red-600">
+                      The field is empty. Please enter a value.
+                    </div>
+                  ) : null}
+                </>
               )}
             </div>
           ))}

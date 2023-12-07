@@ -79,6 +79,7 @@ export function SalesFormContent() {
                   {/* {fieldData()} */}
 
                   <FormFieldData
+                    formLabel="cashier"
                     salesActiveFieldState={getSalesActiveFieldsState.data}
                     activeStep={activeStep}
                     formState={formState || {}}

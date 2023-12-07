@@ -7,3 +7,4 @@ export { FormStepperNavigation } from "./form-stepper-navigation";
 export { SalesTaskListCashier } from "./sales-cashier-task";
 export { FormFieldData } from "./form-field-data";
 export { SalesDashboardContent } from "./sales-dashboard-content";
+export { SalesRealtimeWrapper } from "./sales-realtime-wrapper";

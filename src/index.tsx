@@ -189,6 +189,7 @@ import {
 } from "features/sales/presentation/pages";
 import { SalesHistory } from "features/sales/presentation/pages/history.page";
 import { SalesForm } from "features/sales/presentation/pages/form.page";
+import { SalesRealtimeWrapper } from "features/sales/presentation/components";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -433,32 +434,34 @@ root.render(
                               </Route>
                             </Route>
 
-                            <Route path="sales">
-                              <Route element={<SalesSidebarWrapper />}>
-                                <Route
-                                  path="dashboard"
-                                  element={<SalesDashboard />}
-                                />
-                                <Route path="form" element={<SalesForm />} />
+                            <Route element={<SalesRealtimeWrapper />}>
+                              <Route path="sales">
+                                <Route element={<SalesSidebarWrapper />}>
+                                  <Route
+                                    path="dashboard"
+                                    element={<SalesDashboard />}
+                                  />
+                                  <Route path="form" element={<SalesForm />} />
 
-                                <Route
-                                  path="form-list"
-                                  element={<SalesFormList />}
-                                />
-                                <Route
-                                  path="form-list/saved-form"
-                                  element={<SalesSavedForm />}
-                                />
+                                  <Route
+                                    path="form-list"
+                                    element={<SalesFormList />}
+                                  />
+                                  <Route
+                                    path="form-list/saved-form"
+                                    element={<SalesSavedForm />}
+                                  />
 
-                                <Route
-                                  path="history"
-                                  element={<SalesHistory />}
-                                />
-                                <Route path="task" element={<SalesTask />} />
-                                <Route
-                                  path="task/task-form"
-                                  element={<SalesTaskForm />}
-                                />
+                                  <Route
+                                    path="history"
+                                    element={<SalesHistory />}
+                                  />
+                                  <Route path="task" element={<SalesTask />} />
+                                  <Route
+                                    path="task/task-form"
+                                    element={<SalesTaskForm />}
+                                  />
+                                </Route>
                               </Route>
                             </Route>
 

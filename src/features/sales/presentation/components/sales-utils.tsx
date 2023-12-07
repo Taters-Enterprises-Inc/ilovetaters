@@ -64,7 +64,7 @@ export const initialFormState = (
 const shifts = [{ name: "AM" }, { name: "PM" }];
 
 export const getEmptyRequiredFields = (
-  salesActiveFieldState: SalesActiveFieldsModel,
+  salesActiveFieldState: SalesActiveFieldsModel | undefined,
   activeStep: number,
   formState: SubmitFormParam["formState"] | undefined
 ) => {

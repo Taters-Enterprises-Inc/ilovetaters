@@ -33,10 +33,6 @@ export function SalesTaskListManager() {
   );
 
   useEffect(() => {
-    dispatch(getSalesManagerPendingTask());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (
       getSalesManagerPendingTaskState.status !==
         GetSalesManagerPendingTaskState.success &&

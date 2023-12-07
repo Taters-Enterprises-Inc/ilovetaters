@@ -28,10 +28,6 @@ export function SalesDashboardContent() {
   const getSalesCompletedState = useAppSelector(selectGetSalesCompleted);
 
   useEffect(() => {
-    dispatch(getSalesCompleted());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (
       getSalesCompletedState.status !== GetSalesCompletedState.success &&
       !getSalesCompletedState.data
