@@ -7,6 +7,7 @@ import { SalesManagerPendingTaskModel } from "../core/domain/manager-pending-tas
 import { SalesCashierSavedFormModel } from "../core/domain/cashier-saved-form.model";
 import { SalesFormDataModel } from "../core/domain/sales-form-data.model";
 import { SalesCompletedModel } from "../core/domain/sales-complete.model";
+import { SalesAllFormDataModel } from "../core/domain/sales-all-form-data.model";
 
 export interface GetSalesActiveFieldsResponse {
   data: {
@@ -51,7 +52,7 @@ export interface salesSubmitVerdictResponse {
 export interface GetSalesFormDataResponse {
   data: {
     message: string;
-    data: Array<SalesFormDataModel>;
+    data: SalesAllFormDataModel;
   };
 }
 

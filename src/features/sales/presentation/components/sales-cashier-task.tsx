@@ -30,6 +30,10 @@ export function SalesTaskListCashier() {
     selectGetSalesCashierSavedForm
   );
 
+  // useEffect(() => {
+  //   dispatch(getSalesCashierSavedForm());
+  // }, [dispatch]);
+
   useEffect(() => {
     if (
       getSalesCashierSavedFormState.status !==

@@ -83,13 +83,19 @@ export function SalesTaskListManager() {
                               {task.store}
                             </TableCell>
                             <TableCell sx={{ fontSize: 14 }} width={150}>
+                              {task.cashier_name}
+                            </TableCell>
+                            <TableCell sx={{ fontSize: 14 }} width={150}>
                               {task.entry_date}
                             </TableCell>
                             <TableCell sx={{ fontSize: 14 }} width={80}>
                               {task.shift}
                             </TableCell>
-                            <TableCell sx={{ fontSize: 14 }} width={150}>
-                              {task.cashier_name}
+                            <TableCell sx={{ fontSize: 14 }} width={80}>
+                              {task.tc_first_name + " " + task.tc_last_name}
+                            </TableCell>
+                            <TableCell sx={{ fontSize: 14 }} width={80}>
+                              {task.tc_grade}
                             </TableCell>
                             <TableCell align="right">
                               <Typography fontSize={14}>

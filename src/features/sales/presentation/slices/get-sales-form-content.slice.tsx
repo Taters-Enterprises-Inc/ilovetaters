@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { SalesFormDataModel } from "features/sales/core/domain/sales-form-data.model";
+import { SalesAllFormDataModel } from "features/sales/core/domain/sales-all-form-data.model";
 import {
   GetSalesFormDataRepository,
   GetSalesFormDataResponse,
@@ -17,7 +17,7 @@ export enum GetSalesFormDataState {
 interface InitialState {
   status: GetSalesFormDataState;
   message: string;
-  data: Array<SalesFormDataModel> | undefined;
+  data: SalesAllFormDataModel | undefined;
 }
 
 const initialState: InitialState = {
