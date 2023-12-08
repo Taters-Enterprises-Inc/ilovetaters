@@ -49,6 +49,8 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
     },
   };
 
+  console.log(props.requiredCheck.length !== 0);
+
   return (
     <Box
       sx={{
@@ -73,7 +75,7 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
           style={{ minWidth: 100 }}
           onClick={handleNext}
           sx={style}
-          disabled={isLastStep()}
+          disabled={isLastStep() || props.requiredCheck.length !== 0}
         >
           Next
         </Button>
@@ -84,7 +86,7 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
           style={{ minWidth: 100 }}
           sx={style}
           onClick={(e) => props.handleSubmit(e, true)}
-          disabled={isLastStep()}
+          disabled={isLastStep() || props.requiredCheck.length !== 0}
         >
           Save
         </Button>
