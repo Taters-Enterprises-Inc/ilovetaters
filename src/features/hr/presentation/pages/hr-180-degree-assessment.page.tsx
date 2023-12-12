@@ -3,7 +3,6 @@ import {
   AssessmentOverallPerformance,
   AssessmentPerformanceCriteria,
   AssessmentRatingScale,
-  ManagementAssessmentPersonalInfoSection,
   AssessmentInfo,
   AssessmentKraKpiGrade,
   AssessmentCoreCompetencyGrade,
@@ -16,7 +15,7 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import {
   LogoutHrState,
   logoutHr,
@@ -24,53 +23,46 @@ import {
   selectLogoutHr,
 } from "../slices/logout-hr.slice";
 import {
-  getHrCoreCompetencyGrade,
-  selectGetHrCoreCompetencyGrade,
-} from "../slices/get-hr-core-competency-grade.slice";
-import {
-  getHrFunctionalCompetencyAndPunctualityGrade,
-  selectGetHrFunctionalCompetencyAndPunctualityGrade,
-} from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
-import {
   getHrSession,
   selectGetHrSession,
 } from "../slices/get-hr-session.slice";
 import {
-  getHrComments,
-  selectGetHrComments,
-} from "../slices/get-hr-comments.slice";
-import {
   getHrKraKpiGrade,
   selectGetHrKraKpiGrade,
 } from "../slices/get-hr-kra-kpi-grade.slice";
+import {
+  getHrCoreCompetencyGrade,
+  selectGetHrCoreCompetencyGrade,
+} from "../slices/get-hr-core-competency-grade.slice";
+import { getHrRatingScale } from "../slices/get-hr-rating-scale.slice";
+import { getHrPerformanceCriteria } from "../slices/get-hr-performance-criteria.slice";
+import {
+  getHrFunctionalCompetencyAndPunctualityGrade,
+  selectGetHrFunctionalCompetencyAndPunctualityGrade,
+} from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
+import { getHrAttendanceAndPunctualityGrade } from "../slices/get-hr-attendance-and-punctuality-grade.slice";
+import {
+  getHrComments,
+  selectGetHrComments,
+} from "../slices/get-hr-comments.slice";
 import {
   SubmitAssessmentState,
   resetSubmitAssessment,
   selectSubmitAssessment,
   submitAssessment,
 } from "../slices/submit-assessment";
+import { useNavigate } from "react-router-dom";
+import { getHrActionItems } from "../slices/get-hr-action-items.slice";
 import {
   getHrAppraisalResponse,
   selectGetHrAppraisalResponse,
 } from "../slices/get-hr-appraisal-response.slice";
-import { useEffect } from "react";
-import { getHrPerformanceCriteria } from "../slices/get-hr-performance-criteria.slice";
-import { getHrRatingScale } from "../slices/get-hr-rating-scale.slice";
-import { getHrActionItems } from "../slices/get-hr-action-items.slice";
-import { getHrAttendanceAndPunctualityGrade } from "../slices/get-hr-attendance-and-punctuality-grade.slice";
-import {
-  getHrAppraisalDirectReportStaff,
-  selectGetHrAppraisalDirectReportStaff,
-} from "../slices/get-hr-appraisal-direct-report-staff.slice";
+import { Hr180DegreeAssessmentPersonalInfoSection } from "../components/180-degree-assessment-personal-info-section";
 
-export function HrManagementAssessment() {
-  const query = useQuery();
+export function Hr180DegreeAssessment() {
   const dispatch = useAppDispatch();
   const logoutHrState = useAppSelector(selectLogoutHr);
   const navigate = useNavigate();
-
-  const evaluateeId = query.get("evaluatee_id");
-  const evaluateeActionItemId = query.get("evaluatee_action_item_id");
 
   const getHrKraKpiGradeState = useAppSelector(selectGetHrKraKpiGrade);
   const getHrCoreCompetencyGradeState = useAppSelector(
@@ -86,26 +78,28 @@ export function HrManagementAssessment() {
   const getHrAppraisalResponseState = useAppSelector(
     selectGetHrAppraisalResponse
   );
-  useEffect(() => {
-    dispatch(getHrPerformanceCriteria());
-    dispatch(getHrRatingScale());
-    dispatch(getHrAttendanceAndPunctualityGrade());
 
-    if (evaluateeId) {
-      dispatch(getHrKraKpiGrade({ user_id: evaluateeId, type: "management" }));
-      dispatch(getHrAppraisalDirectReportStaff(evaluateeId));
+  useEffect(() => {
+    let directReportId =
+      getHrSessionState.data?.hr.user_direct_report?.id.toString();
+
+    if (directReportId) {
+      dispatch(getHrPerformanceCriteria());
+      dispatch(getHrRatingScale());
+      dispatch(getHrKraKpiGrade({ user_id: directReportId, type: "180" }));
       dispatch(
-        getHrCoreCompetencyGrade({ user_id: evaluateeId, type: "management" })
+        getHrCoreCompetencyGrade({ user_id: directReportId, type: "180" })
       );
       dispatch(
         getHrFunctionalCompetencyAndPunctualityGrade({
-          user_id: evaluateeId,
-          type: "management",
+          user_id: directReportId,
+          type: "180",
         })
       );
-      dispatch(getHrComments({ user_id: evaluateeId, type: "management" }));
+      dispatch(getHrAttendanceAndPunctualityGrade());
+      dispatch(getHrComments({ user_id: directReportId, type: "180" }));
       dispatch(
-        getHrAppraisalResponse({ user_id: evaluateeId, type: "management" })
+        getHrAppraisalResponse({ user_id: directReportId, type: "180" })
       );
     }
   }, [dispatch]);
@@ -129,6 +123,9 @@ export function HrManagementAssessment() {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
+    let directReportId =
+      getHrSessionState.data?.hr.user_direct_report?.id.toString();
+
     const kra_kpi_grade = getHrKraKpiGradeState.data?.kra_kpi_grade;
     const core_competency_grade =
       getHrCoreCompetencyGradeState.data?.core_competency_grade;
@@ -141,8 +138,7 @@ export function HrManagementAssessment() {
     const comments = getHrCommentsState.data?.comments;
 
     if (
-      evaluateeId &&
-      evaluateeActionItemId &&
+      directReportId &&
       kra_kpi_grade &&
       core_competency_grade &&
       functional_competency_and_punctuality_grade &&
@@ -150,8 +146,8 @@ export function HrManagementAssessment() {
     ) {
       dispatch(
         submitAssessment({
-          evaluatee_id: evaluateeId,
-          evaluatee_action_item_id: evaluateeActionItemId,
+          evaluatee_id: directReportId,
+          is_180_degree_assessment: true,
           kra_kpi_grade: kra_kpi_grade,
           core_competency_grade: core_competency_grade,
           functional_competency_and_punctuality_grade:
@@ -166,7 +162,7 @@ export function HrManagementAssessment() {
   return (
     <>
       <Helmet>
-        <title>Taters | Management Assessment</title>
+        <title>Taters | 180 Degree Assessment</title>
       </Helmet>
 
       <main className="min-h-screen text-[#242424] flex flex-col  border-b-[#F2F2F2]">
@@ -204,54 +200,19 @@ export function HrManagementAssessment() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center py-4">
-          <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-[700px] space-x-2">
-            <li className="me-2">
-              <div
-                className="inline-block px-4 py-3 text-white bg-primary rounded-lg active cursor-pointer"
-                aria-current="page"
-              >
-                Management Assessment
-              </div>
-            </li>
-            <li className="me-2">
-              <div
-                onClick={() => {
-                  if (evaluateeId && evaluateeActionItemId)
-                    navigate(
-                      `/hr/staff-assessment-answer?evaluatee_id=${evaluateeId}&evaluatee_action_item_id=${evaluateeActionItemId}`
-                    );
-                }}
-                className="inline-block px-4 py-3 rounded-lg hover:text-primary cursor-pointer"
-              >
-                Employee Self Assessment
-              </div>
-            </li>
-          </ul>
-        </div>
-
         <form
-          className="flex flex-col items-center space-y-3 pb-8"
+          className="flex flex-col items-center space-y-3 py-8"
           onSubmit={handleSubmit}
         >
-          <AssessmentInfo title="Management Assessment Form" />
-
-          <ManagementAssessmentPersonalInfoSection />
-
+          <AssessmentInfo title="180 Degree Assessment Form" />
+          <Hr180DegreeAssessmentPersonalInfoSection />
           <AssessmentPerformanceCriteria />
-
           <AssessmentOverallPerformance />
-
           <AssessmentRatingScale />
-
           <AssessmentKraKpiGrade />
-
           <AssessmentCoreCompetencyGrade />
-
           <AssessmentFunctionalCompetencyAndPunctualityGrade />
-
           <AssessmentAttendanceAndPunctuality />
-
           <AssessmentComments />
           {getHrAppraisalResponseState.data?.appraisal_response ? null : (
             <button

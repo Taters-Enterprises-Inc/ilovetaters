@@ -102,9 +102,6 @@ export function ViewDirectReportStaffActionItemsModal(
                                         value.status_id == 1 ? "hidden" : ""
                                       }`}
                                       onClick={() => {
-                                        if (props.fetch_item_id == 1) {
-                                        }
-
                                         switch (props.fetch_item_id) {
                                           case 1:
                                             setOpenApproveKraModal({
@@ -116,7 +113,12 @@ export function ViewDirectReportStaffActionItemsModal(
                                             break;
                                           case 3:
                                             navigate(
-                                              `/hr/management-assessment?staff_id=${value.staff_id}&staff_action_item_id=${value.id}`
+                                              `/hr/management-assessment?evaluatee_id=${value.staff_id}&evaluatee_action_item_id=${value.id}`
+                                            );
+                                            break;
+                                          case 5:
+                                            navigate(
+                                              `/hr/180-degree-assessment-answer?evaluatee_id=${value.staff_id}&evaluatee_action_item_id=${value.id}`
                                             );
                                             break;
                                         }

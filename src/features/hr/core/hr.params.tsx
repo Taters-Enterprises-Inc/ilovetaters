@@ -4,8 +4,9 @@ export interface LoginHrParam {
 }
 
 export interface SubmitAssessmentParam {
-  staff_id?: string;
-  staff_action_item_id?: string;
+  evaluatee_id?: string;
+  evaluatee_action_item_id?: string;
+  is_180_degree_assessment?: boolean;
 
   kra_kpi_grade: Array<{
     id: number;

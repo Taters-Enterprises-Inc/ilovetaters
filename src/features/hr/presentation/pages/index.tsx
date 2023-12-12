@@ -4,3 +4,7 @@ export { HrLogin } from "./hr-login.page";
 export { Hr } from "./hr.page";
 export { HrDashboard } from "./hr-dashboard.page";
 export { HrStaffAssessmentAnswers } from "./hr-staff-assessment-answers.page";
+export { HrEmployees } from "./hr-employees.page";
+export { HrUserEmployees } from "./hr-user-employees.page";
+export { Hr180DegreeAssessment } from "./hr-180-degree-assessment.page";
+export { Hr180DegreeAssessmentAnswers } from "./hr-180-degree-assessment-answers.page";

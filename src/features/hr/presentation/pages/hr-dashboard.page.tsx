@@ -90,7 +90,7 @@ export function HrDashboard() {
                 role="presentation"
               />
               <span className="text-[11px] text-[#6B6B6B] font-[400] hover:text-black cursor-pointer ">
-                {getHrSessionState.data?.hr.user_details.first_name}
+                {getHrSessionState.data?.hr.user_personal_details?.first_name}
               </span>
             </div>
 
@@ -113,7 +113,7 @@ export function HrDashboard() {
                   <th className="pl-8 py-2">Module</th>
                   <th className="py-2">Item</th>
                   <th className="py-2">Status</th>
-                  <th className="py-2 text-white">Action</th>
+                  <th className="py-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -145,7 +145,9 @@ export function HrDashboard() {
                                 modal: true,
                               });
                             } else if (
-                              (value.item_id == 2 || value.item_id == 4) &&
+                              (value.item_id == 2 ||
+                                value.item_id == 4 ||
+                                value.item_id == 6) &&
                               value.status_id != undefined
                             ) {
                               setOpenStaffActionItemModal({
@@ -158,6 +160,8 @@ export function HrDashboard() {
                                     ? 1
                                     : value.item_id == 4
                                     ? 3
+                                    : value.item_id == 6
+                                    ? 5
                                     : 0,
                               });
                             } else if (
@@ -165,6 +169,11 @@ export function HrDashboard() {
                               value.status_id != undefined
                             ) {
                               navigate("/hr/self-assessment");
+                            } else if (
+                              value.item_id == 5 &&
+                              value.status_id != undefined
+                            ) {
+                              navigate(`/hr/180-degree-assessment`);
                             }
                           }}
                           className="text-lg cursor-pointer"
