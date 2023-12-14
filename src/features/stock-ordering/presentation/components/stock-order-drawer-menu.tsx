@@ -31,6 +31,7 @@ import {
 } from "features/admin/presentation/slices/logout-admin.slice";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { BsFillPersonFill } from "react-icons/bs";
+import React from "react";
 
 export function StockOrderDrawerMenu() {
   const stockOrderSideBarState = useAppSelector(selectstockOrderSideBar);
@@ -43,16 +44,25 @@ export function StockOrderDrawerMenu() {
       text: "Dashboard",
       path: "dashboard",
       icon: <MdOutlineStorage size={20} />,
+      enable: true,
     },
     {
       text: "Order",
       path: "order",
       icon: <MdStoreMallDirectory size={20} />,
+      enable: true,
+    },
+    {
+      text: "Task",
+      path: "task",
+      icon: <MdStoreMallDirectory size={20} />,
+      enable: false,
     },
     {
       text: "Profile",
       path: "profile",
       icon: <BsFillPersonFill size={20} />,
+      enable: false,
     },
   ];
 
@@ -70,32 +80,35 @@ export function StockOrderDrawerMenu() {
         <ul>
           <li className="flex flex-col">
             {menuitems.map((item, index) => {
-              const { text, path, icon } = item;
+              const { text, path, icon, enable } = item;
               const key = index;
               return (
-                <NavLink
-                  key={key}
-                  to={path}
-                  className={(navData) =>
-                    navData.isActive
-                      ? "flex bg-white text-secondary"
-                      : "flex text-white"
-                  }
-                >
-                  <span className="flex items-center px-4 ">
-                    <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                      {icon}
-                      <span
-                        className={`whitespace-pre duration-300 ${
-                          !stockOrderSideBarState.status &&
-                          "opacity-0 overflow-hidden"
-                        }`}
-                      >
-                        {text}
+                <React.Fragment key={key}>
+                  {enable && (
+                    <NavLink
+                      to={path}
+                      className={(navData) =>
+                        navData.isActive
+                          ? "flex bg-white text-secondary"
+                          : "flex text-white"
+                      }
+                    >
+                      <span className="flex items-center px-4 ">
+                        <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                          {icon}
+                          <span
+                            className={`whitespace-pre duration-300 ${
+                              !stockOrderSideBarState.status &&
+                              "opacity-0 overflow-hidden"
+                            }`}
+                          >
+                            {text}
+                          </span>
+                        </span>
                       </span>
-                    </span>
-                  </span>
-                </NavLink>
+                    </NavLink>
+                  )}
+                </React.Fragment>
               );
             })}
           </li>

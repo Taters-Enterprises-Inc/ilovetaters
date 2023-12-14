@@ -51,7 +51,7 @@ export function StockOrderProcessSupplierConfirmPayment(
             <Button
               fullWidth
               variant="contained"
-              onClick={() => handleValidate("7")}
+              onClick={() => handleValidate("8")}
               sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Return to Tei Finance
@@ -60,7 +60,7 @@ export function StockOrderProcessSupplierConfirmPayment(
             <Button
               fullWidth
               variant="contained"
-              onClick={() => handleValidate("9")}
+              onClick={() => handleValidate("10")}
               sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Validate

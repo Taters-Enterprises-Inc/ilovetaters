@@ -24,6 +24,7 @@ export { StockOrderProcessStoreManagerDeliveryRecieveOrderApproval } from "./sto
 export { StockOrderProcessSupplierUpdateBilling } from "./stock-order-process-supplier-update-billing";
 export { StockOrderProcessFinancePayBilling } from "./stock-order-process-finance-pay-billing";
 export { StockOrderProcessSupplierConfirmPayment } from "./stock-order-process-supplier-confirm-payment";
+export { StockOrderProcessFranchiseePayBill } from "./stock-order-process-franchisee-pay-bill";
 
 //Field
 export { StockOrderRemarks } from "./stock-order-remarks";

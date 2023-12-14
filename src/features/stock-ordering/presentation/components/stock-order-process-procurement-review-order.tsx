@@ -79,7 +79,7 @@ export function StockOrderProcessProcurementReviewOrder(
               fullWidth
               variant="contained"
               type="submit"
-              onClick={() => setStatus("3")}
+              onClick={() => setStatus("4")}
               sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Order Reviewed
@@ -104,7 +104,7 @@ export function StockOrderProcessProcurementReviewOrder(
             <span>
               Are you sure you want to{" "}
               <span className="font-semibold underline underline-offset-1">
-                move the order for deployment
+                move the order for the process?
               </span>
               ?
             </span>

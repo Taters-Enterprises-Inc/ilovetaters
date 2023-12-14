@@ -51,7 +51,7 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
           <Button
             fullWidth
             variant="contained"
-            onClick={() => handleOnclick("4")}
+            onClick={() => handleOnclick("5")}
             sx={{
               color: "white",
               backgroundColor: "#CC5801",
@@ -63,7 +63,7 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
           <Button
             fullWidth
             variant="contained"
-            onClick={() => handleOnclick("6")}
+            onClick={() => handleOnclick("7")}
             sx={{
               color: "white",
               backgroundColor: "#CC5801",

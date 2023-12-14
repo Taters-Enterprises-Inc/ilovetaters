@@ -218,6 +218,7 @@ export function OrderContents() {
             >
               {TAB_NAVIGATION.map((tabs, index) => (
                 <Tab
+                className="hidden"
                   key={index}
                   sx={getAdminSessionState.data?.admin.user_details.sos_groups.map(
                     (group) =>
