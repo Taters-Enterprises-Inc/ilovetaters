@@ -1,5 +1,10 @@
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
+export const categoryType = [
+  { id: 1, name: "frozen" },
+  { id: 2, name: "dry" },
+];
+
 export const isValidFile = (
   file: string | File | undefined,
   isStore: boolean

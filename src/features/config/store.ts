@@ -293,6 +293,12 @@ import getSalesCashierSavedForm from "features/sales/presentation/slices/get-sal
 import salesSubmitVerdict from "features/sales/presentation/slices/sales-submit-verdict.slice";
 import getSalesFormData from "features/sales/presentation/slices/get-sales-form-content.slice";
 import getSalesCompleted from "features/sales/presentation/slices/get-sales-completed.slice";
+import getStockOrderSettingProducts from "features/stock-ordering/presentation/slices/stock-order-get-settings-products.slice";
+import stockOrderCreateProduct from "features/stock-ordering/presentation/slices/stock-order-settings-product-create.slice";
+import getStockOrderSettingProductsEdit from "features/stock-ordering/presentation/slices/stock-order-get-settings-products-edit.slice";
+import getStockOrderAllStores from "features/stock-ordering/presentation/slices/stock-order-get-all-stores.slice";
+import stockOrderEditProduct from "features/stock-ordering/presentation/slices/stock-order-settings-product-edit.slice";
+import stockOrderActiveStatus from "features/stock-ordering/presentation/slices/stock-order-settings-product-active-status.slice";
 
 export const store = configureStore({
   reducer: {
@@ -589,6 +595,12 @@ export const store = configureStore({
     salesSubmitVerdict,
     getSalesFormData,
     getSalesCompleted,
+    getStockOrderSettingProducts,
+    stockOrderCreateProduct,
+    getStockOrderSettingProductsEdit,
+    getStockOrderAllStores,
+    stockOrderEditProduct,
+    stockOrderActiveStatus,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -132,3 +132,12 @@ export interface updateOrderItemsParam {
   orderQty: string | null;
   order_information_id: string;
 }
+
+export interface stockOrderSettingsProductParam {
+  productId: string;
+  productName: string;
+  uom: string;
+  categoryType: number | undefined;
+  cost: number | null;
+  store_id: number[];
+}

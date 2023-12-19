@@ -177,6 +177,9 @@ import {
   ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
+  StockOrderingSettingsCreateProductsPage,
+  StockOrderingSettingsEditProductsPage,
+  StockOrderingSettingsProductsPage,
 } from "features/stock-ordering/presentation/pages";
 import {
   Hr,
@@ -435,6 +438,27 @@ root.render(
                                     path="profile"
                                     element={<ProfilePage />}
                                   />
+
+                                  <Route path="settings">
+                                    <Route
+                                      path="products"
+                                      element={
+                                        <StockOrderingSettingsProductsPage />
+                                      }
+                                    />
+                                    <Route
+                                      path="products/create"
+                                      element={
+                                        <StockOrderingSettingsCreateProductsPage />
+                                      }
+                                    />
+                                    <Route
+                                      path="products/edit/:id"
+                                      element={
+                                        <StockOrderingSettingsEditProductsPage />
+                                      }
+                                    />
+                                  </Route>
                                 </Route>
                               </Route>
                             </Route>

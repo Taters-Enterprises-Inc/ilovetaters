@@ -14,6 +14,7 @@ export { ProfileContent } from "./profile-content";
 export { StockOrderingBadgeWrapper } from "./stock-ordering-badge-wrapper";
 export { InvoiceFilter } from "./invoice-filter";
 export { StockOrderingWatingSkeleton } from "./stock-ordering-no-data-skeleton";
+export { StockOrderSettingsProductEditContent } from "./stock-order-settings-product-edit-content";
 
 //Process
 export { StockOrderProcessSupplierViewOrder } from "./stock-order-process-supplier-view-order";
