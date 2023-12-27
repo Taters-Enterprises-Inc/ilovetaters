@@ -4,8 +4,9 @@ import { Button } from "@mui/material";
 import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stock-ordering.params";
 import { updateDeliveryReceiveApprovalOrders } from "../slices/update-delivery-receive-approval.slice";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { PopupModal } from "../modals";
+import { selectGetProductData } from "../slices/get-product-data.slice";
 
 interface StockOrderProcessStoreManagerDeliveryRecieveOrderApprovalProps {
   orderId: string;
@@ -17,11 +18,15 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
   props: StockOrderProcessStoreManagerDeliveryRecieveOrderApprovalProps
 ) {
   const dispatch = useAppDispatch();
+  const getProductDataState = useAppSelector(selectGetProductData);
 
   const [remarks, setRemarks] = useState("");
   const [status, setStatus] = useState("");
 
   const [openPopupModal, setOpenPopupModal] = useState(false);
+
+  const franchiseType =
+    getProductDataState.data?.order_information.franchise_type_id;
 
   const handleOnclick = (value: string) => {
     setStatus(value);
@@ -63,7 +68,13 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
           <Button
             fullWidth
             variant="contained"
-            onClick={() => handleOnclick("7")}
+            onClick={() => {
+              if (franchiseType !== 1) {
+                handleOnclick("9");
+              } else {
+                handleOnclick("7");
+              }
+            }}
             sx={{
               color: "white",
               backgroundColor: "#CC5801",

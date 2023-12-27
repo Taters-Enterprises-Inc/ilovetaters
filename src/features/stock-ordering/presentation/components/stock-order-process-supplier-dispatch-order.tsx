@@ -23,10 +23,11 @@ import {
   updateCancelledStatus,
 } from "features/stock-ordering/core/stock-ordering.params";
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
 import dayjs from "dayjs";
 import { isValidFile } from "./stock-ordering-utils";
+import { selectGetProductData } from "../slices/get-product-data.slice";
 
 interface StockOrderProcessSupplierDispatchOrderProps {
   orderId: string;
@@ -38,6 +39,7 @@ export function StockOrderProcessSupplierDispatchOrder(
   props: StockOrderProcessSupplierDispatchOrderProps
 ) {
   const dispatch = useAppDispatch();
+  const getProductDataState = useAppSelector(selectGetProductData);
 
   const [remarks, setRemarks] = useState("");
   const [transport, setTransport] = useState("");
@@ -52,6 +54,9 @@ export function StockOrderProcessSupplierDispatchOrder(
   const [openExcelPreview, setOpenExcelPreview] = useState(false);
   const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
     useState(false);
+
+  const franchiseType =
+    getProductDataState.data?.order_information.franchise_type_id;
 
   const handleOnSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -164,24 +169,27 @@ export function StockOrderProcessSupplierDispatchOrder(
 
           <div className="flex flex-col space-y-3">
             <div className="flex flex-col md:flex-row gap-3">
-              <Button
-                fullWidth
-                size="small"
-                sx={STOCK_ORDERING_BUTTON_STYLE}
-                onClick={() => {
-                  setOpenUploadDeliveryRecieptModal(true);
-                }}
-                variant="contained"
-              >
-                Upload Sales Invoice
-              </Button>
+              {franchiseType !== 1 ? null : (
+                <Button
+                  fullWidth
+                  size="small"
+                  sx={STOCK_ORDERING_BUTTON_STYLE}
+                  onClick={() => {
+                    setOpenUploadDeliveryRecieptModal(true);
+                  }}
+                  variant="contained"
+                >
+                  Upload Sales Invoice
+                </Button>
+              )}
 
-              {preview ? (
+              {preview || franchiseType !== 1 ? (
                 <Button
                   fullWidth
                   size="small"
                   type="submit"
                   variant="contained"
+                  disabled={transport === "" || dispatchedDelivery === null}
                   sx={STOCK_ORDERING_BUTTON_STYLE}
                 >
                   Dispatch Order

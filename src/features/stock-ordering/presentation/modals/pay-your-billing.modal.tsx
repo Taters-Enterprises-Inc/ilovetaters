@@ -2,6 +2,8 @@ import { IoMdClose } from "react-icons/io";
 import { Button, Divider, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { UploadFile } from "features/shared/presentation/components";
+import { useAppDispatch } from "features/config/hooks";
+import { togglePopupScroll } from "../slices/popup-scroll.slice";
 
 interface PayBillingModalProps {
   open: boolean;
@@ -13,6 +15,11 @@ interface PayBillingModalProps {
 
 export function PayBillingModal(props: PayBillingModalProps) {
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(togglePopupScroll());
+  }, [props.open]);
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -34,7 +41,7 @@ export function PayBillingModal(props: PayBillingModalProps) {
     <>
       <div
         id="place-order-modal"
-        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+        className="fixed inset-0 -top-5 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
       >
         <div className="w-[97%] lg:w-[25%] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">

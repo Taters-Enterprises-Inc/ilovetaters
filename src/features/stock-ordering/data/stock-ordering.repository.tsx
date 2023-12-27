@@ -19,6 +19,7 @@ import {
   updateBillingOrderParam,
   updateOrderItemsParam,
   stockOrderSettingsProductParam,
+  FranchiseePayBillParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -196,6 +197,12 @@ export interface stockOrderEditProductResponse {
 }
 
 export interface stockOrderActiveStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface updateFranchiseePayBillResponse {
   data: {
     message: string;
   };
@@ -462,6 +469,21 @@ export function stockOrderActiveStatusRepository(param: {
     `${REACT_APP_DOMAIN_URL}api/stock/settings/product-status`,
     param,
     {
+      withCredentials: true,
+    }
+  );
+}
+
+export function updateFranchiseePayBillRepository(
+  param: FranchiseePayBillParam
+): Promise<updateFranchiseePayBillResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/order/franchisee-pay-bill`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       withCredentials: true,
     }
   );

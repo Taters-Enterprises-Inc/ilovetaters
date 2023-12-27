@@ -82,7 +82,16 @@ export function StockOrderProcessActionEnabler(
         />
       );
 
-    case 7:
+    // case 7:
+    //   return (
+    //     <StockOrderProcessSupplierConfirmPayment
+    //       orderId={props.orderId}
+    //       rows={props.row}
+    //       onClose={props.onClose}
+    //     />
+    //   );
+
+    case 8:
       return (
         <StockOrderProcessSupplierConfirmPayment
           orderId={props.orderId}

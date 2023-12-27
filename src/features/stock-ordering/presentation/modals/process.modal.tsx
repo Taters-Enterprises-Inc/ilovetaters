@@ -161,7 +161,7 @@ export function ProcessModal(props: ProcessModalProps) {
                   <>
                     <StockOrderTable
                       isCommitedTextFieldAvailable={props.currentTab === 0}
-                      isDeliveredQtyAvailable={props.currentTab === 3}
+                      isDeliveredQtyAvailable={props.currentTab === 4}
                       enableTableEdit={props.currentTab === 0}
                       isUpdateBilling={props.currentTab === 5}
                       activeTab={props.currentTab}

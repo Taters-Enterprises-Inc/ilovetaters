@@ -2,6 +2,7 @@ export const productDataInitialState = {
   order_information: {
     store_name: "",
     store_id: "",
+    franchise_type_id: null,
     id: "",
     ship_to_address: "",
     status_id: 0,

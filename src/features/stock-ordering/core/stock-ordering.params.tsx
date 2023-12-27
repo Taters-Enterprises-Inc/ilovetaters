@@ -141,3 +141,9 @@ export interface stockOrderSettingsProductParam {
   cost: number | null;
   store_id: number[];
 }
+
+export interface FranchiseePayBillParam {
+  id: string;
+  remarks: string;
+  uploadedBillingReceipt: File | string;
+}
