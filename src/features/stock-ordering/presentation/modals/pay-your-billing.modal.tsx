@@ -9,7 +9,7 @@ interface PayBillingModalProps {
   open: boolean;
   onClose: () => void;
   setUploadedReciept: ((file: File | string) => void) | undefined;
-
+  isExcel?: boolean;
   isButtonAvailable: boolean;
 }
 
@@ -86,7 +86,9 @@ export function PayBillingModal(props: PayBillingModalProps) {
                     }}
                     variant="contained"
                   >
-                    Upload payment screenshot
+                    {props.isExcel
+                      ? "Upload payment"
+                      : "Upload payment screenshot"}
                   </Button>
                 </div>
               ) : null}

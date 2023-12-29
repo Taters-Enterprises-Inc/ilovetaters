@@ -128,6 +128,8 @@ export function StockOrderProcessFinancePayBilling(
     props.onClose();
   };
 
+  console.log(InvoiceData);
+
   return (
     <>
       <div className="space-y-2">
@@ -227,6 +229,7 @@ export function StockOrderProcessFinancePayBilling(
         onClose={() => setOpenPayBillingModal(false)}
         setUploadedReciept={setUploadedReciept}
         isButtonAvailable={true}
+        isExcel
       />
 
       <ExcelPreviewModal

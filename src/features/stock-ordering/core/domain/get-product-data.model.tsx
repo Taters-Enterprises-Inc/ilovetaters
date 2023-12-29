@@ -30,6 +30,7 @@ export interface GetProductDataModel {
     payment_detail_image: string;
     delivery_receipt: string;
     updated_delivery_receipt: string;
+    franchisee_payment_detail_image: string;
 
     //Tracking
     tracking: Array<{

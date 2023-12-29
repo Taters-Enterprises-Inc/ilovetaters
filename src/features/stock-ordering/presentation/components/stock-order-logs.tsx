@@ -1,15 +1,5 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Step,
-  StepContent,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Step, StepLabel, Stepper } from "@mui/material";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { useState } from "react";
 
 interface StockOrderLogsProps {
@@ -34,33 +24,35 @@ interface remarksModel {
 
 export function StockOrderLogs(props: StockOrderLogsProps) {
   const documentFiles = [
-    { id: "delivery_receipt", label: "Delivery Receipt", processId: 4 },
+    { id: "delivery_receipt", label: "Delivery Receipt" },
     {
       id: "updated_delivery_receipt",
       label: "Updated Delivery Receipt",
-      processId: 5,
-    },
-    {
-      id: "sales_invoice",
-      label: "Download sales invoice",
-      processId: 6,
-    },
-    {
-      id: "theoretical_invoice",
-      label: "Generate Theoretical Invoice",
-      processId: 6,
     },
     {
       id: "updated_delivery_goods_receipt",
       label: "Updated goods invoice",
-      processId: 7,
     },
     {
       id: "updated_delivery_region_receipt",
       label: "Updated region invoice",
-      processId: 7,
     },
-    { id: "payment_detail_image", label: "Payment detail image", processId: 8 },
+    { id: "payment_detail_image", label: "Payment detail" },
+    {
+      id: "franchisee_payment_detail_image",
+      label: "Franchisee payment detail",
+    },
+  ];
+
+  const salesInvoiceFiles = [
+    {
+      id: "sales_invoice",
+      label: "Download sales invoice",
+    },
+    {
+      id: "theoretical_invoice",
+      label: "Generate Theoretical Invoice",
+    },
   ];
 
   const [trackingShowMore, setTrackingShowMore] = useState(false);
@@ -132,6 +124,8 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     window.open(link, "_blank");
   };
 
+  console.log(props.order_details);
+
   return (
     <>
       <div className="p-4 space-y-2 overflow-auto max-h-60">
@@ -148,10 +142,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                     <span className="font-bold">Order product type: </span>
                     <span>{props.order_details["category_name"]}</span>
                   </div>
-                  <div>
-                    <span className="font-bold">Region: </span>
-                    <span>{props.order_details["region_name"]}</span>
-                  </div>
+
                   {props.order_details["logistic_type"] && (
                     <div>
                       <span className="font-bold">Logistic Type: </span>
@@ -159,21 +150,41 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                     </div>
                   )}
                 </div>
-                <Divider />
+
                 <div className="space-x-3">
                   <span>Tracking Number: </span>
                   <span>{"#" + props.order_details["id"]}</span>
                 </div>
+                <Divider />
+
+                <div className="flex flex-col text-xs md:text-base space-y-2">
+                  <div className="flex wrap space-x-5">
+                    <span className="font-semibold">
+                      {props.order_details["store_name"] as string}
+                    </span>
+
+                    <div>
+                      <span className="font-bold">Region: </span>
+                      <span>{props.order_details["region_name"]}</span>
+                    </div>
+
+                    <div>
+                      <span className="font-bold">Transport Route: </span>
+                      <span>{props.order_details["transport_route"]}</span>
+                    </div>
+                  </div>
+                  <span>{props.order_details["ship_to_address"]}</span>
+                </div>
               </div>
             </div>
-            <div className="border border-gray-200 shadow rounded-md bg-white p-5 space-y-2">
+            {/* <div className="border border-gray-200 shadow rounded-md bg-white p-5 space-y-2">
               <div className="flex flex-col text-xs md:text-base space-y-2">
                 <span className="font-semibold">
                   {props.order_details["store_name"] as string}
                 </span>
                 <span>{props.order_details["ship_to_address"]}</span>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {props.order_details.remarks.length !== 0 && (
@@ -295,12 +306,14 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                   >
                     {documentFiles.map((row) => (
                       <>
-                        {row.processId <= props.order_details.status_id && (
+                        {props.order_details[row.id] !== null ? (
                           <>
                             <div className="flex justify-between">
                               <span>{row.label}</span>
                               <Button
-                                onClick={() => handleDownload(row.id)}
+                                onClick={() =>
+                                  handleDownload(props.order_details[row.id])
+                                }
                                 size="small"
                               >
                                 Download
@@ -308,9 +321,27 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                             </div>
                             <Divider />
                           </>
-                        )}
+                        ) : null}
                       </>
                     ))}
+                    {props.order_details.status_id >= 7 && (
+                      <>
+                        {salesInvoiceFiles.map((files) => (
+                          <>
+                            <div className="flex justify-between">
+                              <span>{files.label}</span>
+                              <Button
+                                onClick={() => handleDownload(files.id)}
+                                size="small"
+                              >
+                                Download
+                              </Button>
+                            </div>
+                            <Divider />
+                          </>
+                        ))}
+                      </>
+                    )}
                   </div>
                   {props.order_details.status_id > 5 && (
                     <Button

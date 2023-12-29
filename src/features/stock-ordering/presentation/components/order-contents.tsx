@@ -568,7 +568,7 @@ export function OrderContents() {
                       tooltipTitle="Pay Billing"
                       onClick={async () => {
                         setOrderId("");
-                        const queryParams = createQueryParams({ tab: 6 });
+                        const queryParams = createQueryParams({ tab: 7 });
 
                         navigate({
                           pathname: "",
