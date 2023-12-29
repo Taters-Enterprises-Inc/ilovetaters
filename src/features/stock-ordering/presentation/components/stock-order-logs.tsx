@@ -167,24 +167,17 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                       <span className="font-bold">Region: </span>
                       <span>{props.order_details["region_name"]}</span>
                     </div>
-
-                    <div>
-                      <span className="font-bold">Transport Route: </span>
-                      <span>{props.order_details["transport_route"]}</span>
-                    </div>
+                    {props.order_details["transport_route"] !== null && (
+                      <div>
+                        <span className="font-bold">Transport Route: </span>
+                        <span>{props.order_details["transport_route"]}</span>
+                      </div>
+                    )}
                   </div>
                   <span>{props.order_details["ship_to_address"]}</span>
                 </div>
               </div>
             </div>
-            {/* <div className="border border-gray-200 shadow rounded-md bg-white p-5 space-y-2">
-              <div className="flex flex-col text-xs md:text-base space-y-2">
-                <span className="font-semibold">
-                  {props.order_details["store_name"] as string}
-                </span>
-                <span>{props.order_details["ship_to_address"]}</span>
-              </div>
-            </div> */}
           </div>
 
           {props.order_details.remarks.length !== 0 && (
@@ -291,8 +284,9 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
             </div>
           )}
 
-          {props.order_details.status_id >= 4 &&
-            props.order_details.status_id < 10 && (
+          {(props.order_details.status_id >= 5 ||
+            props.order_details["franchisee_payment_detail_image"]) &&
+            props.order_details.status_id <= 10 && (
               <div className="space-y-2">
                 <span className="text-base font-semibold md:text-lg md:font-bold">
                   Invoices and payment files
