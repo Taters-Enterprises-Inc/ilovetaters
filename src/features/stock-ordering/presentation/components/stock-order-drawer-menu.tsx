@@ -22,7 +22,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 import { GrNext } from "react-icons/gr";
 import { selectstockOrderSideBar } from "../slices/stock-order.slice";
 import {
@@ -38,6 +41,7 @@ import React from "react";
 export function StockOrderDrawerMenu() {
   const stockOrderSideBarState = useAppSelector(selectstockOrderSideBar);
   const getLogoutAdminState = useAppSelector(selectLogoutAdmin);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -70,15 +74,6 @@ export function StockOrderDrawerMenu() {
     },
   ];
 
-  const settingsMenuItems = [
-    {
-      text: "Products",
-      path: "settings/products",
-      icon: <MdOutlinePostAdd size={20} />,
-      enable: true,
-    },
-  ];
-
   useEffect(() => {
     if (getLogoutAdminState.status === LogoutAdminState.success) {
       dispatch(getAdminSession());
@@ -86,6 +81,28 @@ export function StockOrderDrawerMenu() {
       navigate("/admin");
     }
   }, [getLogoutAdminState, dispatch, navigate]);
+
+  const enableAddProducts = () => {
+    const persmission =
+      getAdminSessionState.data?.admin.user_details.sos_groups.some(
+        (permissions) =>
+          permissions.id === 1 ||
+          permissions.id === 4 ||
+          permissions.id === 7 ||
+          permissions.id === 9
+      );
+
+    return persmission;
+  };
+
+  const settingsMenuItems = [
+    {
+      text: "Products",
+      path: "settings/products",
+      icon: <MdOutlinePostAdd size={20} />,
+      enable: enableAddProducts(),
+    },
+  ];
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-10 text-sm text-white">
@@ -125,6 +142,7 @@ export function StockOrderDrawerMenu() {
               );
             })}
 
+            {enableAddProducts() &&
             <Accordion
               onChange={(event, isExplanded) => {
                 setSettingsExpanded(isExplanded);
@@ -187,7 +205,7 @@ export function StockOrderDrawerMenu() {
                   );
                 })}
               </AccordionDetails>
-            </Accordion>
+            </Accordion>}
           </li>
 
           <li>
