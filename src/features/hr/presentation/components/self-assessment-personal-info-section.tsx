@@ -181,9 +181,10 @@ export function SelfAssessmentPersonalInfoSection() {
                   readOnly
                   className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   value={
-                    getHrSessionState.data?.hr.user_details.first_name +
+                    getHrSessionState.data?.hr.user_personal_details
+                      ?.first_name +
                     " " +
-                    getHrSessionState.data?.hr.user_details.last_name
+                    getHrSessionState.data?.hr.user_personal_details?.last_name
                   }
                 />
               </div>
@@ -194,7 +195,9 @@ export function SelfAssessmentPersonalInfoSection() {
                     type="text"
                     readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
-                    value={getHrSessionState.data?.hr.user_details.position}
+                    value={
+                      getHrSessionState.data?.hr.user_job_details?.position
+                    }
                   />
                 </div>
                 <div className="flex flex-initial w-[149px] border-l border-gray-200 flex items-center">
@@ -205,7 +208,8 @@ export function SelfAssessmentPersonalInfoSection() {
                     type="text"
                     readOnly
                     value={
-                      getHrSessionState.data?.hr.user_details.employee_number
+                      getHrSessionState.data?.hr.user_job_details
+                        ?.employee_number
                     }
                     className="w-full flex-1 block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
@@ -246,7 +250,9 @@ export function SelfAssessmentPersonalInfoSection() {
                   <input
                     type="text"
                     readOnly
-                    value={getHrSessionState.data?.hr.user_details.date_hired}
+                    value={
+                      getHrSessionState.data?.hr.user_job_details?.hiring_date
+                    }
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
                 </div>
@@ -260,7 +266,9 @@ export function SelfAssessmentPersonalInfoSection() {
                 <div className="flex-1 border-l border-gray-200">
                   <input
                     type="text"
-                    value={getHrSessionState.data?.hr.user_details.designation}
+                    value={
+                      getHrSessionState.data?.hr.user_job_details?.department
+                    }
                     readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />

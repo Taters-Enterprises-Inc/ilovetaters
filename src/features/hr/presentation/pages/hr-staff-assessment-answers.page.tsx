@@ -56,29 +56,31 @@ export function HrStaffAssessmentAnswers() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const staffId = query.get("staff_id");
-  const staffActionItemId = query.get("staff_action_item_id");
+  const evaluateeId = query.get("evaluatee_id");
+  const evaluateeActionItemId = query.get("evaluatee_action_item_id");
 
   const logoutHrState = useAppSelector(selectLogoutHr);
 
   const getHrSessionState = useAppSelector(selectGetHrSession);
 
   useEffect(() => {
-    if (staffId) {
+    if (evaluateeId) {
       dispatch(getHrPerformanceCriteria());
       dispatch(getHrRatingScale());
-      dispatch(getHrKraKpiGrade({ user_id: staffId, type: "self" }));
-      dispatch(getHrCoreCompetencyGrade({ user_id: staffId, type: "self" }));
+      dispatch(getHrKraKpiGrade({ user_id: evaluateeId, type: "self" }));
+      dispatch(
+        getHrCoreCompetencyGrade({ user_id: evaluateeId, type: "self" })
+      );
       dispatch(
         getHrFunctionalCompetencyAndPunctualityGrade({
-          user_id: staffId,
+          user_id: evaluateeId,
           type: "self",
         })
       );
       dispatch(getHrAttendanceAndPunctualityGrade());
-      dispatch(getHrComments({ user_id: staffId, type: "self" }));
-      dispatch(getHrAppraisalResponse({ user_id: staffId, type: "self" }));
-      dispatch(getHrAppraisalDirectReportStaff(staffId));
+      dispatch(getHrComments({ user_id: evaluateeId, type: "self" }));
+      dispatch(getHrAppraisalResponse({ user_id: evaluateeId, type: "self" }));
+      dispatch(getHrAppraisalDirectReportStaff(evaluateeId));
     }
   }, [dispatch]);
 
@@ -116,7 +118,7 @@ export function HrStaffAssessmentAnswers() {
                 role="presentation"
               />
               <span className="text-[11px] text-[#6B6B6B] font-[400] hover:text-black cursor-pointer ">
-                {getHrSessionState.data?.hr.user_details.first_name}
+                {getHrSessionState.data?.hr.user_personal_details?.first_name}
               </span>
             </div>
 
@@ -131,18 +133,30 @@ export function HrStaffAssessmentAnswers() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center space-y-3 py-8">
-          <div
-            className="cursor-pointer uppercase  text-blue-600 "
-            onClick={() => {
-              if (staffId)
-                navigate(
-                  `/hr/management-assessment?staff_id=${staffId}&staff_action_item_id=${staffActionItemId}`
-                );
-            }}
-          >
-            {"<<<"} Check Management assessment
-          </div>
+        <div className="flex flex-col items-center py-4">
+          <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-[700px] space-x-2">
+            <li className="me-2">
+              <div
+                className="inline-block px-4 py-3 rounded-lg hover:text-primary cursor-pointer"
+                onClick={() => {
+                  if (evaluateeId)
+                    navigate(
+                      `/hr/management-assessment?evaluatee_id=${evaluateeId}&evaluatee_action_item_id=${evaluateeActionItemId}`
+                    );
+                }}
+              >
+                Management Assessment
+              </div>
+            </li>
+            <li className="me-2">
+              <div className="inline-block px-4 py-3 text-white bg-primary rounded-lg active cursor-pointer">
+                Employee Self Assessment
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col items-center space-y-3 pb-8">
           <AssessmentInfo title="Staff Assessment Answer" />
           <StaffAssessmentAnswersPersonalInfoSection />
           <AssessmentPerformanceCriteria />

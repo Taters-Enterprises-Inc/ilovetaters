@@ -69,8 +69,8 @@ export function HrManagementAssessment() {
   const logoutHrState = useAppSelector(selectLogoutHr);
   const navigate = useNavigate();
 
-  const staffId = query.get("staff_id");
-  const staffActionItemId = query.get("staff_action_item_id");
+  const evaluateeId = query.get("evaluatee_id");
+  const evaluateeActionItemId = query.get("evaluatee_action_item_id");
 
   const getHrKraKpiGradeState = useAppSelector(selectGetHrKraKpiGrade);
   const getHrCoreCompetencyGradeState = useAppSelector(
@@ -91,21 +91,21 @@ export function HrManagementAssessment() {
     dispatch(getHrRatingScale());
     dispatch(getHrAttendanceAndPunctualityGrade());
 
-    if (staffId) {
-      dispatch(getHrKraKpiGrade({ user_id: staffId, type: "management" }));
-      dispatch(getHrAppraisalDirectReportStaff(staffId));
+    if (evaluateeId) {
+      dispatch(getHrKraKpiGrade({ user_id: evaluateeId, type: "management" }));
+      dispatch(getHrAppraisalDirectReportStaff(evaluateeId));
       dispatch(
-        getHrCoreCompetencyGrade({ user_id: staffId, type: "management" })
+        getHrCoreCompetencyGrade({ user_id: evaluateeId, type: "management" })
       );
       dispatch(
         getHrFunctionalCompetencyAndPunctualityGrade({
-          user_id: staffId,
+          user_id: evaluateeId,
           type: "management",
         })
       );
-      dispatch(getHrComments({ user_id: staffId, type: "management" }));
+      dispatch(getHrComments({ user_id: evaluateeId, type: "management" }));
       dispatch(
-        getHrAppraisalResponse({ user_id: staffId, type: "management" })
+        getHrAppraisalResponse({ user_id: evaluateeId, type: "management" })
       );
     }
   }, [dispatch]);
@@ -141,8 +141,8 @@ export function HrManagementAssessment() {
     const comments = getHrCommentsState.data?.comments;
 
     if (
-      staffId &&
-      staffActionItemId &&
+      evaluateeId &&
+      evaluateeActionItemId &&
       kra_kpi_grade &&
       core_competency_grade &&
       functional_competency_and_punctuality_grade &&
@@ -150,8 +150,8 @@ export function HrManagementAssessment() {
     ) {
       dispatch(
         submitAssessment({
-          staff_id: staffId,
-          staff_action_item_id: staffActionItemId,
+          evaluatee_id: evaluateeId,
+          evaluatee_action_item_id: evaluateeActionItemId,
           kra_kpi_grade: kra_kpi_grade,
           core_competency_grade: core_competency_grade,
           functional_competency_and_punctuality_grade:
@@ -189,7 +189,7 @@ export function HrManagementAssessment() {
                 role="presentation"
               />
               <span className="text-[11px] text-[#6B6B6B] font-[400] hover:text-black cursor-pointer ">
-                {getHrSessionState.data?.hr.user_details.first_name}
+                {getHrSessionState.data?.hr.user_personal_details?.first_name}
               </span>
             </div>
 
@@ -204,24 +204,36 @@ export function HrManagementAssessment() {
           </div>
         </div>
 
+        {/* <div className="flex flex-col items-center py-4">
+          <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-[700px] space-x-2">
+            <li className="me-2">
+              <div
+                className="inline-block px-4 py-3 text-white bg-primary rounded-lg active cursor-pointer"
+                aria-current="page"
+              >
+                Management Assessment
+              </div>
+            </li>
+            <li className="me-2">
+              <div
+                onClick={() => {
+                  if (evaluateeId && evaluateeActionItemId)
+                    navigate(
+                      `/hr/staff-assessment-answer?evaluatee_id=${evaluateeId}&evaluatee_action_item_id=${evaluateeActionItemId}`
+                    );
+                }}
+                className="inline-block px-4 py-3 rounded-lg hover:text-primary cursor-pointer"
+              >
+                Employee Self Assessment
+              </div>
+            </li>
+          </ul>
+        </div> */}
+
         <form
-          className="flex flex-col items-center space-y-3 py-8"
+          className="flex flex-col items-center space-y-3 pb-8 pt-4"
           onSubmit={handleSubmit}
         >
-          {getHrAppraisalResponseState.data?.appraisal_response ? (
-            <div
-              className="cursor-pointer uppercase text-blue-600 "
-              onClick={() => {
-                if (staffId)
-                  navigate(
-                    `/hr/staff-assessment-answer?staff_id=${staffId}&staff_action_item_id=${staffActionItemId}`
-                  );
-              }}
-            >
-              Check Employee assessment answers {">>>"}
-            </div>
-          ) : null}
-
           <AssessmentInfo title="Management Assessment Form" />
 
           <ManagementAssessmentPersonalInfoSection />

@@ -75,7 +75,8 @@ export function HrSelfAssessment() {
   );
 
   useEffect(() => {
-    let userId = getHrSessionState.data?.hr.user_details.id.toString();
+    let userId =
+      getHrSessionState.data?.hr.user_personal_details?.id.toString();
 
     if (userId) {
       dispatch(getHrPerformanceCriteria());
@@ -169,7 +170,7 @@ export function HrSelfAssessment() {
                 role="presentation"
               />
               <span className="text-[11px] text-[#6B6B6B] font-[400] hover:text-black cursor-pointer ">
-                {getHrSessionState.data?.hr.user_details.first_name}
+                {getHrSessionState.data?.hr.user_personal_details?.first_name}
               </span>
             </div>
 

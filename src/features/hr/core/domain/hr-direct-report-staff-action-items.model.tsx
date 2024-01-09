@@ -10,7 +10,7 @@ export interface HrDirectReportStaffActionItemsModel {
     staff_name: string;
     staff_position: string;
     staff_employee_number: string;
-    staff_date_hired: string;
+    staff_hiring_date: string;
     staff_email: string;
   }>;
 }

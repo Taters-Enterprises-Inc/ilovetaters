@@ -29,7 +29,10 @@ let initialState: InitialState = {
 export const getHrCoreCompetencyGrade = createAsyncThunk(
   "getHrCoreCompetencyGrade",
   async (
-    param: { user_id: string; type: "management" | "self" },
+    param: {
+      user_id: string;
+      type: "management" | "self" | "180" | "view-180";
+    },
     { rejectWithValue }
   ) => {
     try {
