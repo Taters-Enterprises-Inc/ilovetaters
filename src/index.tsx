@@ -177,6 +177,9 @@ import {
   ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
+  StockOrderingSettingsCreateProductsPage,
+  StockOrderingSettingsEditProductsPage,
+  StockOrderingSettingsProductsPage,
 } from "features/stock-ordering/presentation/pages";
 import {
   Hr,
@@ -202,6 +205,16 @@ import { HrEmergencyDetails } from "features/hr/presentation/pages/hr-emergency-
 import { HrSalaryDetails } from "features/hr/presentation/pages/hr-salary-details.page";
 import { HrTerminationDetails } from "features/hr/presentation/pages/hr-termination-details.page";
 import { HrOtherDetails } from "features/hr/presentation/pages/hr-other-details.page";
+import {
+  SalesDashboard,
+  SalesFormList,
+  SalesSavedForm,
+  SalesTask,
+  SalesTaskForm,
+} from "features/sales/presentation/pages";
+import { SalesHistory } from "features/sales/presentation/pages/history.page";
+import { SalesForm } from "features/sales/presentation/pages/form.page";
+import { SalesRealtimeWrapper } from "features/sales/presentation/components";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -439,20 +452,59 @@ root.render(
                                     path="profile"
                                     element={<ProfilePage />}
                                   />
+
+                                  <Route path="settings">
+                                    <Route
+                                      path="products"
+                                      element={
+                                        <StockOrderingSettingsProductsPage />
+                                      }
+                                    />
+                                    <Route
+                                      path="products/create"
+                                      element={
+                                        <StockOrderingSettingsCreateProductsPage />
+                                      }
+                                    />
+                                    <Route
+                                      path="products/edit/:id"
+                                      element={
+                                        <StockOrderingSettingsEditProductsPage />
+                                      }
+                                    />
+                                  </Route>
                                 </Route>
                               </Route>
                             </Route>
 
-                            <Route path="sales">
-                              <Route element={<SalesSidebarWrapper />}>
-                                <Route
-                                  path="dashboard"
-                                  element={<SalesDashboard />}
-                                />
-                                <Route
-                                  path="profile"
-                                  element={<SalesProfile />}
-                                />
+                            <Route element={<SalesRealtimeWrapper />}>
+                              <Route path="sales">
+                                <Route element={<SalesSidebarWrapper />}>
+                                  <Route
+                                    path="dashboard"
+                                    element={<SalesDashboard />}
+                                  />
+                                  <Route path="form" element={<SalesForm />} />
+
+                                  <Route
+                                    path="form-list"
+                                    element={<SalesFormList />}
+                                  />
+                                  <Route
+                                    path="form-list/saved-form"
+                                    element={<SalesSavedForm />}
+                                  />
+
+                                  <Route
+                                    path="history"
+                                    element={<SalesHistory />}
+                                  />
+                                  <Route path="task" element={<SalesTask />} />
+                                  <Route
+                                    path="task/task-form"
+                                    element={<SalesTaskForm />}
+                                  />
+                                </Route>
                               </Route>
                             </Route>
 

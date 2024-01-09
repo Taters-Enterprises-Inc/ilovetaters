@@ -52,14 +52,20 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
 
 export interface MaterialDateInputProps {
   value: string | null;
-  label: string;
+  label?: string;
   colorTheme: "white" | "black";
   openTo?: CalendarPickerView;
   required?: boolean;
   views?: readonly CalendarPickerView[];
   shouldDisableYear?: (year: Date) => boolean;
+  shouldDisableDate?: (date: Date) => boolean;
   onChange: (value: Date | null, keyboardInputValue?: string) => void;
   size?: string;
+  minDate?: any;
+  maxDate?: any;
+  placeholder?: string;
+  disableFuture?: boolean;
+  disabled?: boolean;
 }
 
 export function MaterialDateInput(props: MaterialDateInputProps) {
@@ -68,15 +74,20 @@ export function MaterialDateInput(props: MaterialDateInputProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} className="flex-1">
       <DesktopDatePicker
+        disableFuture
         label={props.label}
         openTo={props.openTo}
         views={props.views}
         value={props.value}
         shouldDisableYear={props.shouldDisableYear}
         onChange={props.onChange}
+        minDate={props.minDate}
+        maxDate={props.maxDate}
+        shouldDisableDate={props.shouldDisableDate}
         open={openBirthDateCalendar}
         onOpen={() => setOpenBirthDateCalendar(true)}
         onClose={() => setOpenBirthDateCalendar(false)}
+        disabled={props.disabled}
         renderInput={(params) => (
           <MaterialInput
             colorTheme={props.colorTheme}
@@ -86,6 +97,7 @@ export function MaterialDateInput(props: MaterialDateInputProps) {
             }}
             required={props.required}
             fullWidth
+            placeholder={props.placeholder}
             {...params}
           />
         )}

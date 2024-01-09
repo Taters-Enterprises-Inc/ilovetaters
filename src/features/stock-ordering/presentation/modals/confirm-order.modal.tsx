@@ -24,20 +24,14 @@ import {
 import { PopupModal } from "./popup.modal";
 import { TbUrgent } from "react-icons/tb";
 import { truncateSync } from "fs";
+import {
+  categoryModel,
+  selectedStoreModel,
+} from "features/stock-ordering/core/domain/store-and-category.model";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
   onClose: () => void;
-}
-
-interface selectedStore {
-  store_id: string;
-  name: string;
-}
-
-interface category {
-  category_id: string;
-  category_name: string;
 }
 
 export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
@@ -47,9 +41,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
   const getDeliveryScheduleState = useAppSelector(selectGetDeliverySchedule);
 
-  const [selectedStore, setSelectedStore] = useState<selectedStore>();
+  const [selectedStore, setSelectedStore] = useState<selectedStoreModel>();
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [category, setCategory] = useState<category>();
+  const [category, setCategory] = useState<categoryModel>();
   const [deliveryDate, setDeliveryData] = useState<string | null>("");
   const [remarks, setRemarks] = useState("");
   const [rows, setRows] = useState<OrderTableData[]>([]);

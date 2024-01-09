@@ -35,7 +35,7 @@
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
-.payment-method-active>.icon-tick-bold {
+.payment-method-active > .icon-tick-bold {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -294,7 +294,6 @@ input[type="number"] {
   }
 }
 
-
 /* Sidebar Styling Scrollbar */
 
 .Sidebar {
@@ -318,3 +317,7 @@ input[type="number"] {
 }
 
 /* Sidebar Styling Scrollbar */
+
+.normal-case {
+  text-transform: none;
+}

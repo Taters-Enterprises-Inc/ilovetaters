@@ -23,4 +23,6 @@ export interface GetStockOrdersModel {
   ];
 
   tab: number[];
+  franchise_type: number
+
 }

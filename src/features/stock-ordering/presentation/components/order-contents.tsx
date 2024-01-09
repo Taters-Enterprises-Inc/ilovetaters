@@ -218,6 +218,7 @@ export function OrderContents() {
             >
               {TAB_NAVIGATION.map((tabs, index) => (
                 <Tab
+                  className="hidden"
                   key={index}
                   sx={getAdminSessionState.data?.admin.user_details.sos_groups.map(
                     (group) =>
@@ -251,6 +252,12 @@ export function OrderContents() {
                         </span>
                       </div>
                     </StyledBadge>
+                  }
+                  style={
+                    index === 2 &&
+                    getStockOrdersState.data?.franchise_type !== 2
+                      ? { display: "none" }
+                      : {}
                   }
                 />
               ))}
@@ -561,7 +568,7 @@ export function OrderContents() {
                       tooltipTitle="Pay Billing"
                       onClick={async () => {
                         setOrderId("");
-                        const queryParams = createQueryParams({ tab: 6 });
+                        const queryParams = createQueryParams({ tab: 7 });
 
                         navigate({
                           pathname: "",

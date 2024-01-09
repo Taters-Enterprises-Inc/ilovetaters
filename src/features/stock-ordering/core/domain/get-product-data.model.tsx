@@ -2,6 +2,7 @@ export interface GetProductDataModel {
   order_information: {
     store_name: string;
     store_id: string;
+    franchise_type_id: number | null;
     id: string;
     ship_to_address: string;
     status_id: number;
@@ -29,6 +30,7 @@ export interface GetProductDataModel {
     payment_detail_image: string;
     delivery_receipt: string;
     updated_delivery_receipt: string;
+    franchisee_payment_detail_image: string;
 
     //Tracking
     tracking: Array<{
