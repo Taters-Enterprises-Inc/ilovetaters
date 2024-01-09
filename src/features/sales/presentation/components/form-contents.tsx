@@ -76,8 +76,6 @@ export function SalesFormContent() {
               </div>
               <div className="flex flex-col bg-white rounded-b-lg border border-secondary flex-1 p-4">
                 <div className="flex flex-wrap w-full lg:px-20 lg:pt-5">
-                  {/* {fieldData()} */}
-
                   <FormFieldData
                     formLabel="cashier"
                     salesActiveFieldState={getSalesActiveFieldsState.data}

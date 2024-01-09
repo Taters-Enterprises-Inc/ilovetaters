@@ -1,6 +1,7 @@
 export interface SalesActiveFieldsModel {
   list_of_stores: Array<{
     name: string;
+    store_id: string;
   }>;
   discount_type: Array<{
     id: string;
