@@ -32,32 +32,22 @@ import {
   getHrKraKpiGrade,
   selectGetHrKraKpiGrade,
 } from "../slices/get-hr-kra-kpi-grade.slice";
-import {
-  getHrCoreCompetencyGrade,
-  selectGetHrCoreCompetencyGrade,
-} from "../slices/get-hr-core-competency-grade.slice";
+import { getHrCoreCompetencyGrade } from "../slices/get-hr-core-competency-grade.slice";
 import { getHrRatingScale } from "../slices/get-hr-rating-scale.slice";
 import { getHrPerformanceCriteria } from "../slices/get-hr-performance-criteria.slice";
 import { getHrFunctionalCompetencyAndPunctualityGrade } from "../slices/get-hr-functional-competency-and-punctuality-grade.slice";
 import { getHrAttendanceAndPunctualityGrade } from "../slices/get-hr-attendance-and-punctuality-grade.slice";
 import { getHrComments } from "../slices/get-hr-comments.slice";
-import {
-  SubmitAssessmentState,
-  resetSubmitAssessment,
-  selectSubmitAssessment,
-} from "../slices/submit-assessment";
 import { useNavigate } from "react-router-dom";
-import { getHrActionItems } from "../slices/get-hr-action-items.slice";
 import { getHrAppraisalResponse } from "../slices/get-hr-appraisal-response.slice";
 import { getHrAppraisalDirectReportStaff } from "../slices/get-hr-appraisal-direct-report-staff.slice";
 
-export function HrStaffAssessmentAnswers() {
+export function Hr180DegreeAssessmentAnswers() {
   const query = useQuery();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const evaluateeId = query.get("evaluatee_id");
-  const evaluateeActionItemId = query.get("evaluatee_action_item_id");
 
   const logoutHrState = useAppSelector(selectLogoutHr);
 
@@ -67,19 +57,21 @@ export function HrStaffAssessmentAnswers() {
     if (evaluateeId) {
       dispatch(getHrPerformanceCriteria());
       dispatch(getHrRatingScale());
-      dispatch(getHrKraKpiGrade({ user_id: evaluateeId, type: "self" }));
+      dispatch(getHrKraKpiGrade({ user_id: evaluateeId, type: "view-180" }));
       dispatch(
-        getHrCoreCompetencyGrade({ user_id: evaluateeId, type: "self" })
+        getHrCoreCompetencyGrade({ user_id: evaluateeId, type: "view-180" })
       );
       dispatch(
         getHrFunctionalCompetencyAndPunctualityGrade({
           user_id: evaluateeId,
-          type: "self",
+          type: "view-180",
         })
       );
       dispatch(getHrAttendanceAndPunctualityGrade());
-      dispatch(getHrComments({ user_id: evaluateeId, type: "self" }));
-      dispatch(getHrAppraisalResponse({ user_id: evaluateeId, type: "self" }));
+      dispatch(getHrComments({ user_id: evaluateeId, type: "view-180" }));
+      dispatch(
+        getHrAppraisalResponse({ user_id: evaluateeId, type: "view-180" })
+      );
       dispatch(getHrAppraisalDirectReportStaff(evaluateeId));
     }
   }, [dispatch]);
@@ -133,32 +125,9 @@ export function HrStaffAssessmentAnswers() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center py-4">
-          <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-[700px] space-x-2">
-            <li className="me-2">
-              <div
-                className="inline-block px-4 py-3 rounded-lg hover:text-primary cursor-pointer"
-                onClick={() => {
-                  if (evaluateeId)
-                    navigate(
-                      `/hr/management-assessment?evaluatee_id=${evaluateeId}&evaluatee_action_item_id=${evaluateeActionItemId}`
-                    );
-                }}
-              >
-                Management Assessment
-              </div>
-            </li>
-            <li className="me-2">
-              <div className="inline-block px-4 py-3 text-white bg-primary rounded-lg active cursor-pointer">
-                Employee Self Assessment
-              </div>
-            </li>
-          </ul>
-        </div>
-
         <div className="flex flex-col items-center space-y-3 pb-8">
-          <AssessmentInfo title="Staff Assessment Answer" />
-          <StaffAssessmentAnswersPersonalInfoSection />
+          <AssessmentInfo title="180 Degree Assessment Answer" />
+          {/* <StaffAssessmentAnswersPersonalInfoSection /> */}
           <AssessmentPerformanceCriteria />
           <AssessmentOverallPerformance />
           <AssessmentRatingScale />

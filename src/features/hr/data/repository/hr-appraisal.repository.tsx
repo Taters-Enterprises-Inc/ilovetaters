@@ -114,7 +114,7 @@ export function GetHrAppraisalDirectReportStaffRepository(
 
 export function GetHrAppraisalResponseRepository(
   userId: string,
-  type: "management" | "self"
+  type: "management" | "self" | "180" | "view-180"
 ): Promise<GetHrAppraisalResponseResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/hr/appraisal/response/${type}/${userId}`,
@@ -125,7 +125,7 @@ export function GetHrAppraisalResponseRepository(
 }
 export function GetHrCommentsRepository(
   user_id: string,
-  type: "management" | "self"
+  type: "management" | "self" | "180" | "view-180"
 ): Promise<GetHrCommentsResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/hr/appraisal/comments/${type}/${user_id}`,
@@ -192,7 +192,7 @@ export function GetHrAttendanceAndPunctualityGradeRepository(): Promise<GetHrAtt
 }
 export function GetHrFunctionalCompetencyAndPunctualityGradeRepository(
   user_id: string,
-  type: "management" | "self"
+  type: "management" | "self" | "180" | "view-180"
 ): Promise<GetHrFunctionalCompetencyAndPunctualityGradeResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/hr/appraisal/functional-competency-and-punctuality-grade/${type}/${user_id}`,
@@ -204,7 +204,7 @@ export function GetHrFunctionalCompetencyAndPunctualityGradeRepository(
 
 export function GetHrCoreCompetencyGradeRepository(
   user_id: string,
-  type: "management" | "self"
+  type: "management" | "self" | "180" | "view-180"
 ): Promise<GetHrCoreCompetencyGradeResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/hr/appraisal/core-competency-grade/${type}/${user_id}`,
@@ -216,7 +216,7 @@ export function GetHrCoreCompetencyGradeRepository(
 
 export function GetHrKraKpiGradeRepository(
   user_id: string,
-  type: "management" | "self"
+  type: "management" | "self" | "180" | "view-180"
 ): Promise<GetHrKraKpiGradeResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/hr/appraisal/kra-kpi-grade/${type}/${user_id}`,

@@ -4,6 +4,6 @@ export interface HrAppraisalDirectReportStaffModel {
   last_name: string;
   position: string;
   employee_number: number;
-  date_hired: number;
-  designation: number;
+  hiring_date: number;
+  department: number;
 }

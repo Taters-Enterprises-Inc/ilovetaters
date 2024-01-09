@@ -183,14 +183,28 @@ import {
 } from "features/stock-ordering/presentation/pages";
 import {
   Hr,
+  Hr180DegreeAssessment,
+  Hr180DegreeAssessmentAnswers,
   HrDashboard,
+  HrEmployees,
   HrLogin,
   HrManagementAssessment,
   HrSelfAssessment,
   HrStaffAssessmentAnswers,
+  HrUserEmployees,
 } from "features/hr/presentation/pages";
 import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
+import { SalesDashboard } from "features/sales/presentation/pages";
+import { SalesProfile } from "features/sales/presentation/pages/profile.page";
+import { HrSidebarWrapper } from "features/hr/presentation/components/hr-sidebar-wrapper";
+import { HrJobDetails } from "features/hr/presentation/pages/hr-job-details.page";
+import { HrContactDetails } from "features/hr/presentation/pages/hr-contact-details.page";
+import { HrPersonalDetails } from "features/hr/presentation/pages/hr-personal-details.page";
+import { HrEmergencyDetails } from "features/hr/presentation/pages/hr-emergency-details.page";
+import { HrSalaryDetails } from "features/hr/presentation/pages/hr-salary-details.page";
+import { HrTerminationDetails } from "features/hr/presentation/pages/hr-termination-details.page";
+import { HrOtherDetails } from "features/hr/presentation/pages/hr-other-details.page";
 import {
   SalesDashboard,
   SalesFormList,
@@ -738,19 +752,62 @@ root.render(
                         <Route index element={<HrLogin />} />
 
                         <Route element={<HrGuard />}>
-                          <Route path="dashboard" element={<HrDashboard />} />
-                          <Route
-                            path="self-assessment"
-                            element={<HrSelfAssessment />}
-                          />
-                          <Route
-                            path="management-assessment"
-                            element={<HrManagementAssessment />}
-                          />
-                          <Route
-                            path="staff-assessment-answer"
-                            element={<HrStaffAssessmentAnswers />}
-                          />
+                          <Route element={<HrSidebarWrapper />}>
+                            <Route path="dashboard" element={<HrDashboard />} />
+                            <Route
+                              path="user/job-details"
+                              element={<HrJobDetails />}
+                            />
+                            <Route
+                              path="user/contact-details"
+                              element={<HrContactDetails />}
+                            />
+                            <Route
+                              path="user/personal-details"
+                              element={<HrPersonalDetails />}
+                            />
+                            <Route
+                              path="user/emergency-details"
+                              element={<HrEmergencyDetails />}
+                            />
+                            <Route
+                              path="user/salary-details"
+                              element={<HrSalaryDetails />}
+                            />
+                            <Route
+                              path="user/termination-details"
+                              element={<HrTerminationDetails />}
+                            />
+                            <Route
+                              path="user/other-details"
+                              element={<HrOtherDetails />}
+                            />
+                            <Route
+                              path="self-assessment"
+                              element={<HrSelfAssessment />}
+                            />
+                            <Route
+                              path="180-degree-assessment"
+                              element={<Hr180DegreeAssessment />}
+                            />
+                            <Route
+                              path="management-assessment"
+                              element={<HrManagementAssessment />}
+                            />
+                            <Route
+                              path="staff-assessment-answer"
+                              element={<HrStaffAssessmentAnswers />}
+                            />
+                            <Route
+                              path="180-degree-assessment-answer"
+                              element={<Hr180DegreeAssessmentAnswers />}
+                            />
+                            <Route path="employees" element={<HrEmployees />} />
+                            <Route
+                              path="user/employees"
+                              element={<HrUserEmployees />}
+                            />
+                          </Route>
                         </Route>
                       </Route>
 

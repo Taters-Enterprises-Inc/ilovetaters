@@ -250,7 +250,7 @@ export function StaffAssessmentAnswersPersonalInfoSection() {
                     type="text"
                     readOnly
                     value={
-                      getHrAppraisalDirectReportStaffState.data?.date_hired
+                      getHrAppraisalDirectReportStaffState.data?.hiring_date
                     }
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
                   />
@@ -266,7 +266,7 @@ export function StaffAssessmentAnswersPersonalInfoSection() {
                   <input
                     type="text"
                     value={
-                      getHrAppraisalDirectReportStaffState.data?.designation
+                      getHrAppraisalDirectReportStaffState.data?.department
                     }
                     readOnly
                     className="w-full block text-[10px] h-full m-0 pl-2 text-green-600"
