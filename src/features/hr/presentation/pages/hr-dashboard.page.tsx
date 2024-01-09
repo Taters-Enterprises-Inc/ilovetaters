@@ -173,7 +173,12 @@ export function HrDashboard() {
                               value.item_id == 5 &&
                               value.status_id != undefined
                             ) {
-                              navigate(`/hr/180-degree-assessment`);
+                              navigate("/hr/180-degree-assessment");
+                            } else if (
+                              value.item_id == 7 &&
+                              value.status_id != undefined
+                            ) {
+                              navigate("/hr/assessment-summary");
                             }
                           }}
                           className="text-lg cursor-pointer"

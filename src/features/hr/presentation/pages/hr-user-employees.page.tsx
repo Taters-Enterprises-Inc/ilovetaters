@@ -282,7 +282,15 @@ export function HrUserEmployees() {
                     {getUserEmployeesState.data.employees.map((row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>
-                          {row.first_name + " " + row.last_name}
+                          <div className="font-bold">
+                            {row.first_name + " " + row.last_name}
+                            <span className="font-semibold text-[9px] ml-1 text-gray-500">
+                              {row.employee_number}
+                            </span>
+                          </div>
+                          <div className="font-semibold text-[10px]">
+                            {row.position}
+                          </div>
                         </DataTableCell>
                         <DataTableCell align="left">
                           <button

@@ -202,6 +202,8 @@ import { HrEmergencyDetails } from "features/hr/presentation/pages/hr-emergency-
 import { HrSalaryDetails } from "features/hr/presentation/pages/hr-salary-details.page";
 import { HrTerminationDetails } from "features/hr/presentation/pages/hr-termination-details.page";
 import { HrOtherDetails } from "features/hr/presentation/pages/hr-other-details.page";
+import { HrAssessmentSummary } from "features/hr/presentation/pages/hr-assessment-summary.page";
+import { HrImportUsers } from "features/hr/presentation/pages/hr-import-users.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -698,6 +700,10 @@ root.render(
 
                       <Route path="hr" element={<Hr />}>
                         <Route index element={<HrLogin />} />
+                        <Route
+                          path="import-users"
+                          element={<HrImportUsers />}
+                        />
 
                         <Route element={<HrGuard />}>
                           <Route element={<HrSidebarWrapper />}>
@@ -754,6 +760,11 @@ root.render(
                             <Route
                               path="user/employees"
                               element={<HrUserEmployees />}
+                            />
+
+                            <Route
+                              path="assessment-summary"
+                              element={<HrAssessmentSummary />}
                             />
                           </Route>
                         </Route>

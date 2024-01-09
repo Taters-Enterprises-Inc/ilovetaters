@@ -289,6 +289,8 @@ import getEmployees from "features/hr/presentation/slices/get-employees.slice";
 import getDepartments from "features/hr/presentation/slices/get-departments.slice";
 import getUserEmployees from "features/hr/presentation/slices/get-user-employees.slice";
 import getEmployeeInfo from "features/hr/presentation/slices/get-employee-info.slice";
+import getHrAppraisalSummary from "features/hr/presentation/slices/get-hr-appraisal-summary.slice";
+import hrImportUsers from "features/hr/presentation/slices/hr-import-users.slice";
 
 export const store = configureStore({
   reducer: {
@@ -581,6 +583,8 @@ export const store = configureStore({
     getDepartments,
     getUserEmployees,
     getEmployeeInfo,
+    getHrAppraisalSummary,
+    hrImportUsers,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
