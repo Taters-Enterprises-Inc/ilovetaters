@@ -69,7 +69,7 @@ export function ViewDirectReportStaffActionItemsModal(
                         <table className="w-full text-left text-sm font-light">
                           <thead className="border-b">
                             <tr>
-                              <th className="pl-8 py-2 text-white">Stuff</th>
+                              <th className="pl-8 py-2"></th>
                               <th className="py-2 px-4">Item</th>
                               <th className="py-2 px-4">Status</th>
                               <th className="py-2 px-4 text-white">Action</th>
@@ -89,8 +89,16 @@ export function ViewDirectReportStaffActionItemsModal(
                                       : "border-b"
                                   }`}
                                 >
-                                  <td className="pl-8 py-2">
-                                    {value.staff_name}
+                                  <td className="pl-8 py-2 space-y-[-5px]">
+                                    <div className="font-bold">
+                                      {value.staff_name}
+                                      <span className="font-semibold text-[9px] ml-1 text-gray-500">
+                                        {value.staff_employee_number}
+                                      </span>
+                                    </div>
+                                    <div className="font-semibold text-[12px]">
+                                      {value.staff_position}
+                                    </div>
                                   </td>
                                   <td className="py-2 px-4">
                                     {value.item_name}
@@ -99,7 +107,10 @@ export function ViewDirectReportStaffActionItemsModal(
                                   <td>
                                     <FaEye
                                       className={`text-lg cursor-pointer ${
-                                        value.status_id == 1 ? "hidden" : ""
+                                        value.status_id == 1 ||
+                                        props.fetch_item_id == 5
+                                          ? "hidden"
+                                          : ""
                                       }`}
                                       onClick={() => {
                                         switch (props.fetch_item_id) {
@@ -117,9 +128,9 @@ export function ViewDirectReportStaffActionItemsModal(
                                             );
                                             break;
                                           case 5:
-                                            navigate(
-                                              `/hr/180-degree-assessment-answer?evaluatee_id=${value.staff_id}&evaluatee_action_item_id=${value.id}`
-                                            );
+                                            // navigate(
+                                            //   `/hr/180-degree-assessment-answer?evaluatee_id=${value.staff_id}&evaluatee_action_item_id=${value.id}`
+                                            // );
                                             break;
                                         }
                                       }}

@@ -289,6 +289,8 @@ import getEmployees from "features/hr/presentation/slices/get-employees.slice";
 import getDepartments from "features/hr/presentation/slices/get-departments.slice";
 import getUserEmployees from "features/hr/presentation/slices/get-user-employees.slice";
 import getEmployeeInfo from "features/hr/presentation/slices/get-employee-info.slice";
+import getHrAppraisalSummary from "features/hr/presentation/slices/get-hr-appraisal-summary.slice";
+import hrImportUsers from "features/hr/presentation/slices/hr-import-users.slice";
 import getSalesActiveFields from "features/sales/presentation/slices/get-active-fields.slice";
 import salesSubmitForm from "features/sales/presentation/slices/sales-submit-form.slice";
 import getSalesTCPendingTask from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
@@ -596,6 +598,8 @@ export const store = configureStore({
     getDepartments,
     getUserEmployees,
     getEmployeeInfo,
+    getHrAppraisalSummary,
+    hrImportUsers,
     getSalesActiveFields,
     salesSubmitForm,
     getSalesTCPendingTask,
@@ -610,7 +614,7 @@ export const store = configureStore({
     getStockOrderAllStores,
     stockOrderEditProduct,
     stockOrderActiveStatus,
-    updateFranchiseePayBill,
+    updateFranchiseePayBill
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

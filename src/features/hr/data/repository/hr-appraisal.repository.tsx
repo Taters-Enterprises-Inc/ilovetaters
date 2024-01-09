@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HrAppraisalSummaryModel } from "features/hr/core/domain/hr-appraisal-summary.model";
 import { HrAppraisalDirectReportStaffModel } from "features/hr/core/domain/hr-appraisal-direct-report-staff";
 import { HrAppraisalResponseModel } from "features/hr/core/domain/hr-appraisal-response.model";
 import { HrAttendanceAndPunctualityGradeModel } from "features/hr/core/domain/hr-attendance-and-punctuality-grade.model";
@@ -99,6 +100,35 @@ export interface GetHrAppraisalDirectReportStaffResponse {
     message: string;
     data: HrAppraisalDirectReportStaffModel;
   };
+}
+
+export interface GetHrAppraisalSummaryResponse {
+  data: {
+    message: string;
+    data: Array<HrAppraisalSummaryModel>;
+  };
+}
+
+export interface HrImportUsersResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function HrImportUsersRepository(
+  param: FormData
+): Promise<HrImportUsersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/hr/import-users`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+export function GetHrAppraisalSummaryRepository(): Promise<GetHrAppraisalSummaryResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/hr/appraisal/summary`, {
+    withCredentials: true,
+  });
 }
 
 export function GetHrAppraisalDirectReportStaffRepository(

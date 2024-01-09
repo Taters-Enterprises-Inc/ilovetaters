@@ -204,7 +204,7 @@ export function HrManagementAssessment() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center py-4">
+        {/* <div className="flex flex-col items-center py-4">
           <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 w-[700px] space-x-2">
             <li className="me-2">
               <div
@@ -228,10 +228,10 @@ export function HrManagementAssessment() {
               </div>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         <form
-          className="flex flex-col items-center space-y-3 pb-8"
+          className="flex flex-col items-center space-y-3 pb-8 pt-4"
           onSubmit={handleSubmit}
         >
           <AssessmentInfo title="Management Assessment Form" />
