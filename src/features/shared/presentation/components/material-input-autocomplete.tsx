@@ -21,12 +21,13 @@ interface MaterialInputAutoCompleteProps {
     | undefined;
   getOptionLabel?: ((option: any) => string) | undefined;
   filterSelectedOptions?: boolean;
-  label: string;
+  label?: string;
   sx?: SxProps<Theme> | undefined;
   size?: "small" | "medium" | undefined;
   fullWidth?: boolean;
   required?: boolean;
   disabled?: boolean;
+  placeholder?: string;
   isOptionEqualToValue: (option: any, value: any) => boolean;
 }
 
@@ -54,6 +55,7 @@ export function MaterialInputAutoComplete(
           colorTheme={props.colorTheme}
           onChange={() => {}}
           required={props.required}
+          placeholder={props.placeholder}
           name=""
           label={props.label}
         />

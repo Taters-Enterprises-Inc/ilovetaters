@@ -1311,6 +1311,7 @@ export const STOCK_ORDER_CATEGORY: Array<{
 export const TAB_NAVIGATION = [
   { label: "NEW ORDR", label2: "(MULTI-M SUPPLIER)", label3: "New Order" },
   { label: "REVIEW ORDR", label2: "(TEI PROCUREMENT)", label3: "Review Order" },
+  { label: "PAY BILL", label2: "(FRANCHISEE)", label3: "Franchisee Paybill" },
   {
     label: "DISP ORDR",
     label2: "(MULTI-M SUPPLIER)",
@@ -1337,6 +1338,7 @@ export const STOCK_ORDERING_BUTTON_STYLE = {
 export const STOCK_ORDERING_MODAL_TITLE = [
   { label: "Supplier View Orer" },
   { label: "Procurement Review Orders" },
+  { label: "Franchisee Bills Payment" },
   { label: "Supplier Dispatch Order" },
   { label: "Store Receive Orders" },
   { label: "Delivery Receive Approval" },
@@ -1345,4 +1347,14 @@ export const STOCK_ORDERING_MODAL_TITLE = [
   { label: "Confirm Payment" },
   { label: "Complete Modal" },
   { label: "Cancelled Orders" },
+];
+export const SALES_TAB_NAVIGATION_MANAGER = [
+  { label: "Pending" },
+  { label: "Approved" },
+  { label: "Not Approved" },
+];
+
+export const SALES_TAB_NAVIGATION_TC = [
+  { label: "Pending" },
+  { label: "Checked" },
 ];

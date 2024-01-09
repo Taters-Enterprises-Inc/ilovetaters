@@ -7,6 +7,7 @@ export interface MaterialInputProps extends StandardTextFieldProps {
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   value?: string | null;
   name: string;
+  is_required?: boolean;
 }
 
 export const MaterialInput = styled(
@@ -14,108 +15,51 @@ export const MaterialInput = styled(
   {
     shouldForwardProp: (prop) => prop !== "colorTheme",
   }
-)(({ colorTheme, theme }) => ({
-  ...(colorTheme === "white" && {
-    "& input": {
-      color: "white !important",
-      WebkitTextFillColor: "white !important",
-    },
-    "& label": {
-      color: "white !important",
-    },
-    "& fieldset": {
-      borderColor: "white !important",
-    },
-    "&:hover fieldset": {
-      borderColor: "white !important",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "white !important",
-    },
-    ".MuiSvgIcon-root ": {
-      fill: "white !important",
-    },
-    "& .MuiInputBase-input": {
-      color: "white !important",
-      WebkitTextFillColor: "white !important",
-    },
-  }),
-
-  ...(colorTheme === "black" && {
-    "& input": {
-      color: "#22201A !important",
-      WebkitTextFillColor: "#22201A !important",
-    },
-    "& label": {
-      color: "#22201A !important",
-    },
-    "& fieldset": {
-      borderColor: "#22201A !important",
-    },
-    "&:hover fieldset": {
-      borderColor: "#22201A !important",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#22201A !important",
-    },
-    ".MuiSvgIcon-root ": {
-      fill: "#22201A !important",
-    },
-    "& .MuiInputBase-input": {
-      color: "#22201A !important",
-      WebkitTextFillColor: "#22201A !important",
-    },
-  }),
-
-  ...(colorTheme === "green" && {
-    "& input": {
-      color: "#006600 !important",
-      WebkitTextFillColor: "#006600 !important",
-    },
-    "& label": {
-      color: "#006600 !important",
-    },
-    "& fieldset": {
-      borderColor: "#006600 !important",
-    },
-    "&:hover fieldset": {
-      borderColor: "#006600 !important",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#006600 !important",
-    },
-    ".MuiSvgIcon-root ": {
-      fill: "#006600 !important",
-    },
-    "& .MuiInputBase-input": {
-      color: "#006600 !important",
-      WebkitTextFillColor: "#006600 !important",
-    },
-  }),
-
-  ...(colorTheme === "blue" && {
-    "& input": {
-      color: "#003399 !important",
-      WebkitTextFillColor: "#003399 !important",
-    },
-    "& label": {
-      color: "#003399 !important",
-    },
-    "& fieldset": {
-      borderColor: "#003399 !important",
-    },
-    "&:hover fieldset": {
-      borderColor: "#003399 !important",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#003399 !important",
-    },
-    ".MuiSvgIcon-root ": {
-      fill: "#003399 !important",
-    },
-    "& .MuiInputBase-input": {
-      color: "#003399 !important",
-      WebkitTextFillColor: "#003399 !important",
-    },
-  }),
+)(({ colorTheme, is_required, theme }) => ({
+  "& input": {
+    color: getColor(colorTheme) + " !important",
+    WebkitTextFillColor: getColor(colorTheme) + " !important",
+  },
+  "& label": {
+    color: getColor(colorTheme) + " !important",
+  },
+  "& fieldset": {
+    borderColor: getColor(colorTheme) + " !important",
+  },
+  "&:hover fieldset": {
+    borderColor: getColor(colorTheme) + " !important",
+  },
+  "&.Mui-focused fieldset": {
+    borderColor: getColor(colorTheme) + " !important",
+  },
+  ".MuiSvgIcon-root ": {
+    fill: getIconColor(colorTheme, is_required) + " !important",
+  },
+  "& .MuiInputBase-input": {
+    color: getColor(colorTheme) + " !important",
+    WebkitTextFillColor: getColor(colorTheme) + " !important",
+  },
 }));
+
+const getColor = (colorTheme: string) => {
+  switch (colorTheme) {
+    case "white":
+      return "white";
+    case "black":
+      return "#22201A";
+    case "green":
+      return "#006600";
+    case "blue":
+      return "#003399";
+    default:
+      return "";
+  }
+};
+
+const getIconColor = (colorTheme: string, is_required?: boolean) => {
+  return is_required === undefined
+    ? getColor(colorTheme)
+    : is_required
+    ? "#f44336"
+    : getColor(colorTheme);
+};

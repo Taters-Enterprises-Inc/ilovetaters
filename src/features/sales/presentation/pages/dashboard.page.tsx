@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { SalesHead } from "../components";
+import { SalesDashboardContent, SalesHead } from "../components";
 
 export function SalesDashboard() {
   return (
@@ -14,6 +14,16 @@ export function SalesDashboard() {
           pageTitles: [{ name: "Dashboard", url: "/admin/sales/dashboard" }],
         }}
       />
+      <div className="p-8">
+        <div className="flex flex-col space-y-5">
+          <div>
+            <span className="text-secondary text-4xl font-['Bebas_Neue'] flex-1">
+              Dashboard
+            </span>
+          </div>
+          <SalesDashboardContent />
+        </div>
+      </div>
     </>
   );
 }

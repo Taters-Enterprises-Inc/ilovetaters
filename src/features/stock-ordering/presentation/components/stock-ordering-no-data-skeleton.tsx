@@ -59,7 +59,6 @@ export function StockOrderingWatingSkeleton(
       case 2:
         return (
           <>
-            {doubleComponent()}
             {fullWidthComponent()}
             {doubleComponent()}
           </>
@@ -89,7 +88,15 @@ export function StockOrderingWatingSkeleton(
           </>
         );
 
-      case 7:
+      case 6:
+        return (
+          <>
+            {fullWidthComponent()}
+            {doubleComponent()}
+          </>
+        );
+
+      case 8:
         return (
           <>
             {fullWidthComponent()}

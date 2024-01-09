@@ -291,6 +291,21 @@ import getUserEmployees from "features/hr/presentation/slices/get-user-employees
 import getEmployeeInfo from "features/hr/presentation/slices/get-employee-info.slice";
 import getHrAppraisalSummary from "features/hr/presentation/slices/get-hr-appraisal-summary.slice";
 import hrImportUsers from "features/hr/presentation/slices/hr-import-users.slice";
+import getSalesActiveFields from "features/sales/presentation/slices/get-active-fields.slice";
+import salesSubmitForm from "features/sales/presentation/slices/sales-submit-form.slice";
+import getSalesTCPendingTask from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
+import getSalesManagerPendingTask from "features/sales/presentation/slices/get-sales-manager-pending.slice";
+import getSalesCashierSavedForm from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
+import salesSubmitVerdict from "features/sales/presentation/slices/sales-submit-verdict.slice";
+import getSalesFormData from "features/sales/presentation/slices/get-sales-form-content.slice";
+import getSalesCompleted from "features/sales/presentation/slices/get-sales-completed.slice";
+import getStockOrderSettingProducts from "features/stock-ordering/presentation/slices/stock-order-get-settings-products.slice";
+import stockOrderCreateProduct from "features/stock-ordering/presentation/slices/stock-order-settings-product-create.slice";
+import getStockOrderSettingProductsEdit from "features/stock-ordering/presentation/slices/stock-order-get-settings-products-edit.slice";
+import getStockOrderAllStores from "features/stock-ordering/presentation/slices/stock-order-get-all-stores.slice";
+import stockOrderEditProduct from "features/stock-ordering/presentation/slices/stock-order-settings-product-edit.slice";
+import stockOrderActiveStatus from "features/stock-ordering/presentation/slices/stock-order-settings-product-active-status.slice";
+import updateFranchiseePayBill from "features/stock-ordering/presentation/slices/update-franchisee-pay-bill.slice";
 
 export const store = configureStore({
   reducer: {
@@ -585,6 +600,21 @@ export const store = configureStore({
     getEmployeeInfo,
     getHrAppraisalSummary,
     hrImportUsers,
+    getSalesActiveFields,
+    salesSubmitForm,
+    getSalesTCPendingTask,
+    getSalesManagerPendingTask,
+    getSalesCashierSavedForm,
+    salesSubmitVerdict,
+    getSalesFormData,
+    getSalesCompleted,
+    getStockOrderSettingProducts,
+    stockOrderCreateProduct,
+    getStockOrderSettingProductsEdit,
+    getStockOrderAllStores,
+    stockOrderEditProduct,
+    stockOrderActiveStatus,
+    updateFranchiseePayBill
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
