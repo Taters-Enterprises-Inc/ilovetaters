@@ -49,8 +49,6 @@ export function FormStepperNavigation(props: FormStepperNavigationProps) {
     },
   };
 
-  console.log(props.requiredCheck.length !== 0);
-
   return (
     <Box
       sx={{

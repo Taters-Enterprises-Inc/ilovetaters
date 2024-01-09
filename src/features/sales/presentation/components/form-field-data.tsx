@@ -86,6 +86,8 @@ export function FormFieldData(props: FormFieldDataProps) {
         val = val.replace(/[^0-9.]/g, "");
       }
     }
+
+    console.log(val);
     props.setFormState(
       updateFormState(props.formState, { sectionName, fieldName, val })
     );
@@ -108,6 +110,8 @@ export function FormFieldData(props: FormFieldDataProps) {
 
     return feedback;
   };
+
+  console.log(props.formState);
 
   return (
     <>
@@ -172,6 +176,8 @@ export function FormFieldData(props: FormFieldDataProps) {
                           isOptionEqualToValue={(option, value) => {
                             if (field.name === "discount") {
                               return option.id === value.id;
+                            } else if (field.name === "store") {
+                              return option === value;
                             } else {
                               return option.name === value;
                             }
@@ -179,14 +185,36 @@ export function FormFieldData(props: FormFieldDataProps) {
                           value={dropdownValue(field.section_name, field.name)}
                           onChange={(event, selectedValue) => {
                             if (selectedValue) {
-                              handleOnChange(
-                                field.section_name,
-                                field.name,
-                                field.name === "discount"
-                                  ? selectedValue.id
-                                  : selectedValue.name,
-                                field.datatype
-                              );
+                              if (field.name === "discount") {
+                                handleOnChange(
+                                  field.section_name,
+                                  field.name,
+                                  selectedValue.id,
+                                  field.datatype
+                                );
+                              } else if (field.name === "store") {
+                                handleOnChange(
+                                  field.section_name,
+                                  field.name,
+                                  selectedValue,
+                                  field.datatype
+                                );
+                              } else {
+                                handleOnChange(
+                                  field.section_name,
+                                  field.name,
+                                  selectedValue.name,
+                                  field.datatype
+                                );
+                              }
+                              // handleOnChange(
+                              //   field.section_name,
+                              //   field.name,
+                              //   field.name === "discount"
+                              //     ? selectedValue.id
+                              //     : selectedValue.name,
+                              //   field.datatype
+                              // );
                             }
                           }}
                         />
@@ -231,13 +259,14 @@ export function FormFieldData(props: FormFieldDataProps) {
                       name={field.name}
                       colorTheme={"black"}
                       is_required={field.is_required}
+                      inputProps={{ maxLength: 5 }}
                       label={
                         formStateFieldValue(
                           field.section_name,
                           field.name
                         ).toString() === ""
                           ? ""
-                          : props.formLabel
+                          : field.field_name
                       }
                       value={formStateFieldValue(
                         field.section_name,

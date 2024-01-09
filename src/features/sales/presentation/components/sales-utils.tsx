@@ -6,7 +6,12 @@ import { SubmitFormParam } from "features/sales/core/sales.param";
 interface UpdateFormStateParams {
   sectionName: string;
   fieldName: string;
-  val: string | Date | null;
+  val: StoreInfo | string | Date | null;
+}
+
+interface StoreInfo {
+  name: string;
+  store_id: string;
 }
 
 interface TabPanelProps {
@@ -113,19 +118,39 @@ export const updateFormState = (
   { sectionName, fieldName, val }: UpdateFormStateParams
 ): SubmitFormParam["formState"] => {
   if (!prevData) {
+    if (fieldName === "store") {
+      return {
+        [sectionName]: {
+          [fieldName]: { value: (val as StoreInfo).name },
+          store_id: { value: (val as StoreInfo).store_id },
+        },
+      };
+    } else {
+      return {
+        [sectionName]: {
+          [fieldName]: { value: val as string | Date | null },
+        },
+      };
+    }
+  }
+  if (fieldName === "store") {
     return {
+      ...prevData,
       [sectionName]: {
-        [fieldName]: { value: val },
+        ...prevData[sectionName],
+        [fieldName]: { value: (val as StoreInfo).name },
+        store_id: { value: (val as StoreInfo).store_id },
+      },
+    };
+  } else {
+    return {
+      ...prevData,
+      [sectionName]: {
+        ...prevData[sectionName],
+        [fieldName]: { value: val as string | Date | null },
       },
     };
   }
-  return {
-    ...prevData,
-    [sectionName]: {
-      ...prevData[sectionName],
-      [fieldName]: { value: val },
-    },
-  };
 };
 
 export const formatDate = (inputDate: Date | string) => {
