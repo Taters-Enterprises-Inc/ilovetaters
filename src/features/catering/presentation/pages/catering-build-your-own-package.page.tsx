@@ -155,40 +155,8 @@ export function CateringBuildYourOwnPackage() {
     }
   }, [getSessionState, dispatch]);
 
-  const calculateFreeAddon = () => {
-    let freeItem: Array<ProductModel> = [];
-
-    checkFreeItem({
-      freeItemAvailable: (val) => {
-        freeItem = val;
-      },
-      freeItemNotAvailable: () => {
-        freeItem = [];
-      },
-    });
-
-    if (freeItem.length > 0) {
-      return (
-        <div className="text-white ">
-          🎉 <strong>Claim</strong> FREE{" "}
-          <strong>{freeItem[freeItem.length - 1].name}</strong>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
-  const spliceIntoChunks = (arr: Array<any>, chunkSize: number) => {
-    const res = [];
-    while (arr.length > 0) {
-      const chunk = arr.splice(0, chunkSize);
-      res.push(chunk);
-    }
-    return res;
-  };
-
   const checkFreeItem = (param: {
+    product: CustomizePackageProduct;
     freeItemAvailable: (freeItem: Array<ProductModel>) => void;
     freeItemNotAvailable: (
       almostItem: ProductModel | null,
@@ -215,7 +183,7 @@ export function CateringBuildYourOwnPackage() {
           calculatedPrice += order.prod_calc_amount;
         }
       }
-      const totalPrice = calculatedPrice;
+      const totalPrice = param.product.prod_calc_amount + calculatedPrice;
 
       if (addons) {
         for (let i = 0; i < addons.length; i++) {
@@ -250,6 +218,7 @@ export function CateringBuildYourOwnPackage() {
 
   const handleAddToCart = (product: CustomizePackageProduct) => {
     checkFreeItem({
+      product: product,
       freeItemAvailable: () => {
         SweetAlert.fire({
           title: "Claim you free item! 🎉",
@@ -302,6 +271,7 @@ export function CateringBuildYourOwnPackage() {
 
   const handleCheckout = (product: CustomizePackageProduct) => {
     checkFreeItem({
+      product: product,
       freeItemAvailable: () => {
         SweetAlert.fire({
           title: "Claim you free item! 🎉",

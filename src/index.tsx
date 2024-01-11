@@ -195,8 +195,6 @@ import {
 } from "features/hr/presentation/pages";
 import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
-import { SalesDashboard } from "features/sales/presentation/pages";
-import { SalesProfile } from "features/sales/presentation/pages/profile.page";
 import { HrSidebarWrapper } from "features/hr/presentation/components/hr-sidebar-wrapper";
 import { HrJobDetails } from "features/hr/presentation/pages/hr-job-details.page";
 import { HrContactDetails } from "features/hr/presentation/pages/hr-contact-details.page";
