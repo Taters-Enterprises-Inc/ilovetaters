@@ -8,12 +8,24 @@ import {
   getEmptyRequiredFields,
   hideField,
   setDynamicOption,
+  updateEntryStoreShift,
   updateFormState,
 } from "./sales-utils";
 import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { useAppSelector } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { property } from "lodash";
+import { createQueryParams } from "features/config/helpers";
+import {
+  GetSalesExistingEntryState,
+  getSalesExistingEntry,
+  selectGetSalesExistingEntry,
+} from "../slices/get-sales-existing-entry.slice";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface FormFieldDataProps {
   salesActiveFieldState: SalesActiveFieldsModel | undefined;
@@ -29,7 +41,11 @@ interface FormFieldDataProps {
 }
 
 export function FormFieldData(props: FormFieldDataProps) {
+  const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getSalesExistingEntryCheck = useAppSelector(
+    selectGetSalesExistingEntry
+  );
 
   const getFormField =
     props.salesActiveFieldState?.field_data[props.activeStep]?.field;
@@ -57,6 +73,54 @@ export function FormFieldData(props: FormFieldDataProps) {
       props.setFormState(emailAndName);
     }
   }, [getAdminSessionState.data]);
+
+  useEffect(() => {
+    if (props.formState["General Information"]) {
+      const propertyExist = ["entry_date", "store", "store_id", "shift"].every(
+        (property) =>
+          props.formState["General Information"].hasOwnProperty(property)
+      );
+
+      if (propertyExist) {
+        const queryParams = createQueryParams({
+          entryDate: props.formState["General Information"].entry_date.value,
+          store_id: props.formState["General Information"].store_id.value,
+          shift: props.formState["General Information"].shift.value,
+        });
+
+        dispatch(getSalesExistingEntry(queryParams));
+      }
+    }
+  }, [
+    props.formState["General Information"]?.entry_date?.value,
+    props.formState["General Information"]?.store_id?.value,
+    props.formState["General Information"]?.shift?.value,
+  ]);
+
+  useEffect(() => {
+    if (
+      getSalesExistingEntryCheck.status ===
+        GetSalesExistingEntryState.success &&
+      getSalesExistingEntryCheck.data &&
+      getSalesExistingEntryCheck.data.duplicate !== false
+    ) {
+      dispatch(
+        openMessageModal({
+          message: `WARNING: Data entry already existed. You can't go any furthur until you change the date, store, or shift`,
+          buttons: [
+            {
+              color: "#22201A",
+              text: "OK",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
+        })
+      );
+      props.setFormState(updateEntryStoreShift(props.formState));
+    }
+  }, [getSalesExistingEntryCheck.data?.duplicate]);
 
   const formStateFieldValue = (sectionName: string, fieldName: string) => {
     return props.formState?.[sectionName]?.[fieldName]?.value || "";
@@ -87,7 +151,6 @@ export function FormFieldData(props: FormFieldDataProps) {
       }
     }
 
-    console.log(val);
     props.setFormState(
       updateFormState(props.formState, { sectionName, fieldName, val })
     );
@@ -110,7 +173,6 @@ export function FormFieldData(props: FormFieldDataProps) {
 
     return feedback;
   };
-
   console.log(props.formState);
 
   return (

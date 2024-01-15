@@ -271,6 +271,7 @@ import getSalesCashierSavedForm from "features/sales/presentation/slices/get-sal
 import salesSubmitVerdict from "features/sales/presentation/slices/sales-submit-verdict.slice";
 import getSalesFormData from "features/sales/presentation/slices/get-sales-form-content.slice";
 import getSalesCompleted from "features/sales/presentation/slices/get-sales-completed.slice";
+import getSalesExistingEntry from "features/sales/presentation/slices/get-sales-existing-entry.slice";
 
 export const store = configureStore({
   reducer: {
@@ -545,6 +546,7 @@ export const store = configureStore({
     salesSubmitVerdict,
     getSalesFormData,
     getSalesCompleted,
+    getSalesExistingEntry,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
