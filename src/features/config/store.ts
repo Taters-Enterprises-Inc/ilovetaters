@@ -615,7 +615,7 @@ export const store = configureStore({
     getStockOrderAllStores,
     stockOrderEditProduct,
     stockOrderActiveStatus,
-    updateFranchiseePayBill
+    updateFranchiseePayBill,
     getSalesExistingEntry,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
