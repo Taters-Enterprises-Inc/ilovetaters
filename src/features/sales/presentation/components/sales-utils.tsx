@@ -113,6 +113,23 @@ export const setDynamicOption = (
   return null;
 };
 
+export const updateEntryStoreShift = (
+  prevData: SubmitFormParam["formState"] | undefined
+) => {
+  if (prevData) {
+    return {
+      ...prevData,
+      "General Information": {
+        ...prevData["General Information"],
+        entry_date: { value: null },
+        store: { value: "" },
+        store_id: { value: "" },
+        shift: { value: "" },
+      },
+    };
+  }
+};
+
 export const updateFormState = (
   prevData: SubmitFormParam["formState"] | undefined,
   { sectionName, fieldName, val }: UpdateFormStateParams

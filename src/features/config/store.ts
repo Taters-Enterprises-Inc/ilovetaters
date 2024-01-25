@@ -306,6 +306,7 @@ import getStockOrderAllStores from "features/stock-ordering/presentation/slices/
 import stockOrderEditProduct from "features/stock-ordering/presentation/slices/stock-order-settings-product-edit.slice";
 import stockOrderActiveStatus from "features/stock-ordering/presentation/slices/stock-order-settings-product-active-status.slice";
 import updateFranchiseePayBill from "features/stock-ordering/presentation/slices/update-franchisee-pay-bill.slice";
+import getSalesExistingEntry from "features/sales/presentation/slices/get-sales-existing-entry.slice";
 
 export const store = configureStore({
   reducer: {
@@ -615,6 +616,7 @@ export const store = configureStore({
     stockOrderEditProduct,
     stockOrderActiveStatus,
     updateFranchiseePayBill
+    getSalesExistingEntry,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

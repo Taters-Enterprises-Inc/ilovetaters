@@ -8,6 +8,7 @@ import { SalesCashierSavedFormModel } from "../core/domain/cashier-saved-form.mo
 import { SalesFormDataModel } from "../core/domain/sales-form-data.model";
 import { SalesCompletedModel } from "../core/domain/sales-complete.model";
 import { SalesAllFormDataModel } from "../core/domain/sales-all-form-data.model";
+import { SalesExistingEntryModel } from "../core/domain/sales-existing-entry.model";
 
 export interface GetSalesActiveFieldsResponse {
   data: {
@@ -63,6 +64,13 @@ export interface GetSalesCompletedResponse {
   };
 }
 
+export interface GetSalesExistingEntryResponse {
+  data: {
+    message: string;
+    data: SalesExistingEntryModel;
+  };
+}
+
 export function GetSalesActiveFieldsRepository(): Promise<GetSalesActiveFieldsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/fields`, {
     withCredentials: true,
@@ -113,6 +121,14 @@ export function GetSalesFormDataRepository(
 
 export function GetSalesCompletedRepository(): Promise<GetSalesCompletedResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/dashboard`, {
+    withCredentials: true,
+  });
+}
+
+export function GetSalesExistingEntryRepository(
+  param: string
+): Promise<GetSalesExistingEntryResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/sales/check-duplicate${param}`, {
     withCredentials: true,
   });
 }
