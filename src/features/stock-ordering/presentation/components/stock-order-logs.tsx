@@ -124,8 +124,6 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     window.open(link, "_blank");
   };
 
-  console.log(props.order_details);
-
   return (
     <>
       <div className="p-4 space-y-2 overflow-auto max-h-60">

@@ -11,7 +11,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { StockOrderConfirmTable } from "../components";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
-import { selectGetStockOrderStores } from "../slices/get-store.slice";
+import {
+  getStockOrderStores,
+  selectGetStockOrderStores,
+} from "../slices/get-store.slice";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
@@ -28,6 +31,8 @@ import {
   categoryModel,
   selectedStoreModel,
 } from "features/stock-ordering/core/domain/store-and-category.model";
+import { togglePopupScroll } from "../slices/popup-scroll.slice";
+import { createQueryParams } from "features/config/helpers";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -59,13 +64,28 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [emergencyOrderEnabled, setEmergencyOrderEnabled] = useState(false);
 
   useEffect(() => {
+    dispatch(togglePopupScroll());
+  }, [props.open]);
+
+  useEffect(() => {
     if (getOrderInformation.data) {
-      const getSelectedStore = getStores.data?.stores.find((store) => {
-        return store.store_id === getOrderInformation.data?.selectedStoreId;
-      });
+      if (getStores.data) {
+        const getSelectedStore = getStores.data?.stores.find((store) => {
+          return store.store_id === getOrderInformation.data?.selectedStoreId;
+        });
+
+        setSelectedStore(getSelectedStore);
+      } else {
+        const query = createQueryParams({
+          store_id: getOrderInformation.data?.selectedStoreId ?? "",
+        });
+
+        dispatch(getStockOrderStores(query));
+      }
+
+      console.log(getStores.data);
 
       setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
-      setSelectedStore(getSelectedStore);
       setDeliveryData("");
       setRemarks("");
       setRows([]);
@@ -74,7 +94,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setEmergencyOrderEnabled(false);
       dispatch(getDeliverySchedule());
     }
-  }, [props.open]);
+  }, [props.open, getStores.data]);
 
   useEffect(() => {
     if (isEditCancelled) {
@@ -220,13 +240,11 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     return null;
   }
 
-  console.log(logisticType);
-
   return (
     <>
       <div
         id="place-order-modal"
-        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+        className="fixed  -top-5 inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
