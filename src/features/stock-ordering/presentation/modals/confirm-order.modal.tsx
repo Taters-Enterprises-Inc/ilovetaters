@@ -15,7 +15,10 @@ import {
   getStockOrderStores,
   selectGetStockOrderStores,
 } from "../slices/get-store.slice";
-import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
+import {
+  confirmNewOrder,
+  selectconfirmNewOrder,
+} from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
@@ -33,6 +36,7 @@ import {
 } from "features/stock-ordering/core/domain/store-and-category.model";
 import { togglePopupScroll } from "../slices/popup-scroll.slice";
 import { createQueryParams } from "features/config/helpers";
+import { categoryType } from "../components/stock-ordering-utils";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -83,18 +87,17 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         dispatch(getStockOrderStores(query));
       }
 
-      console.log(getStores.data);
-
       setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
+      setRows(getOrderInformation.data.OrderData ?? []);
+
       setDeliveryData("");
       setRemarks("");
-      setRows([]);
       setIsEdit(false);
       setLogisticType(undefined);
       setEmergencyOrderEnabled(false);
       dispatch(getDeliverySchedule());
     }
-  }, [props.open, getStores.data]);
+  }, [props.open, getStores.data, getOrderInformation.data]);
 
   useEffect(() => {
     if (isEditCancelled) {
@@ -102,10 +105,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setisEditCancelled(false);
     }
   }, [isEditCancelled]);
-
-  const handleTableRows = (TableData: OrderTableData[]) => {
-    setRows(TableData);
-  };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -263,19 +262,20 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 space-y-5 border-secondary">
               <StockOrderConfirmTable
-                handleTableRows={handleTableRows}
-                setCategory={setCategory}
                 category={{
                   category_id: category?.category_id ?? "",
                   category_name: category?.category_name ?? "",
                 }}
                 store={{
-                  store_id: selectedStore?.name ?? "",
-                  store_name: selectedStore?.store_id ?? "",
+                  store_id: selectedStore?.store_id ?? "",
+                  name: selectedStore?.name ?? "",
+                  franchise_type_id: selectedStore?.franchise_type_id ?? "",
                 }}
                 isEditCancelled={isEditCancelled}
                 isConfirmOrder={true}
                 isEdit={isEdit}
+                rows={rows}
+                setRows={setRows}
               />
               {getStores.data && (
                 <div className="space-y-3">

@@ -4,41 +4,30 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Autocomplete,
-  TextField,
   Button,
-  ButtonGroup,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Column } from "features/shared/presentation/components/data-table";
 import { useEffect, useState } from "react";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
-import {
-  getStockOrderProducts,
-  selectGetStockOrderProducts,
-} from "../slices/get-products.slice";
-import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
+import { selectGetStockOrderProducts } from "../slices/get-products.slice";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
+import { FaRegTrashAlt } from "react-icons/fa";
+import {
+  categoryModel,
+  selectedStoreModel,
+} from "features/stock-ordering/core/domain/store-and-category.model";
 
 interface StockOrderConfirmTableProps {
   isConfirmOrder: boolean;
   isEditCancelled: boolean;
   isEdit: boolean;
-  handleTableRows: (TableData: OrderTableData[]) => void;
-  setCategory: (categoryData: {
-    category_id: string;
-    category_name: string;
-  }) => void;
-  category: {
-    category_id: string;
-    category_name: string;
-  };
-  store: {
-    store_id: string;
-    store_name: string;
-  };
+  rows: OrderTableData[];
+  setRows: (rowData: OrderTableData[]) => void;
+  category: categoryModel;
+  store: selectedStoreModel;
 }
 
 const columns: Array<Column> = [
@@ -50,42 +39,51 @@ const columns: Array<Column> = [
   },
   { id: "cost", label: "Cost  " },
   { id: "orderQty", label: "Order Qty  " },
+  { id: "trash", label: "" },
 ];
 
 export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
-  const [rows, setRows] = useState<OrderTableData[]>([]);
-
-  const dispatch = useAppDispatch();
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
   const getProductInformation = useAppSelector(selectGetStockOrderProducts);
+  const [addButtonDisabled, setAddButtonDisabled] = useState(false);
 
   useEffect(() => {
-    props.handleTableRows(rows);
+    const lastIndex = props.rows.length;
+    const lastProduct = props.rows[lastIndex - 1];
 
-    if (props.category && getOrderInformation.data) {
-      props.setCategory({
-        category_id: getOrderInformation.data?.category.category_id,
-        category_name: getOrderInformation.data?.category.category_name,
-      });
+    if (
+      lastProduct?.productName === undefined ||
+      lastProduct?.productName === ""
+    ) {
+      setAddButtonDisabled(true);
+      // setConfirmButtonDisabled(true);
+    } else {
+      setAddButtonDisabled(false);
+      // setConfirmButtonDisabled(false);
     }
-  }, [rows, getOrderInformation.data, props.isEditCancelled]);
+  }, [props.rows]);
 
   //Need to refactor this block of code
   useEffect(() => {
     if (
-      (getOrderInformation.data && props.isConfirmOrder) ||
+      (props.rows && props.isConfirmOrder) ||
       (props.isEditCancelled && getOrderInformation.data)
     ) {
-      setRows(getOrderInformation.data.OrderData);
+      props.setRows(props.rows);
     }
-  }, [getOrderInformation.data, props.isEditCancelled]);
+  }, [props.rows, props.isEditCancelled]);
 
   //------
+
+  const handleDiscardChanges = () => {
+    const updatedRows = props.rows.filter((row) => row.productId !== "");
+    props.setRows(updatedRows);
+  };
 
   const productOptions = getProductInformation.data?.products
     .flatMap((options) => options)
     .filter((item) => {
-      const excludedItems = rows.map((items) => items.productName);
+      const excludedItems = props.rows.map((items) => items.productName);
 
       return !excludedItems.includes(item.product_name);
     })
@@ -100,7 +98,7 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
     },
     rowsIndex: number
   ) => {
-    const updatedRows = rows.map((r, index) => {
+    const updatedRows = props.rows.map((r, index) => {
       if (index === rowsIndex) {
         const { product_id, product_name, uom, cost } = value;
         return {
@@ -113,8 +111,44 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
       }
       return r;
     });
-    setRows(updatedRows);
+    props.setRows(updatedRows);
   };
+
+  const addRow = () => {
+    setAddButtonDisabled(true);
+
+    const defaultRow: OrderTableData = {
+      productId: "",
+      productName: "",
+      uom: "",
+      cost: "",
+      orderQty: "",
+    };
+
+    const updatedRows = [...props.rows, defaultRow];
+    props.setRows(updatedRows);
+  };
+
+  const removeRow = (product_Id: string) => {
+    const removedProduct = props.rows.find(
+      (product) => product.productId === product_Id
+    );
+    if (removedProduct) {
+      const updatedRows = props.rows.filter(
+        (product) => product.productId !== product_Id
+      );
+      props.setRows(updatedRows);
+
+      if (
+        updatedRows.length > 0 &&
+        updatedRows[updatedRows.length - 1].productId !== ""
+      ) {
+        setAddButtonDisabled(false);
+      }
+    }
+  };
+
+  console.log(props.rows);
 
   return (
     <div>
@@ -130,7 +164,7 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((productProperty, rowsIndex) => {
+            {props.rows.map((productProperty, rowsIndex) => {
               const { productId, productName, uom, cost, orderQty } =
                 productProperty;
 
@@ -146,7 +180,7 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                         size={"small"}
                         options={getProductInformation.data.products.filter(
                           (item) => {
-                            const excludedItems = rows.map(
+                            const excludedItems = props.rows.map(
                               (items) => items.productName
                             );
 
@@ -157,9 +191,11 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                         isOptionEqualToValue={(option, value) =>
                           option.name === value.product_name
                         }
-                        label={productName}
+                        placeholder={productName}
                         onChange={(event, value) => {
-                          handleProductChange(value, rowsIndex);
+                          if (value) {
+                            handleProductChange(value, rowsIndex);
+                          }
                         }}
                         filterSelectedOptions
                       />
@@ -171,11 +207,17 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                   <TableCell sx={{ width: 75 }}>{cost}</TableCell>
                   <TableCell sx={{ width: 125 }}>
                     <StockOrderHandleQuantity
-                      rows={rows}
-                      setRows={setRows}
+                      rows={props.rows}
+                      setRows={(rows) => props.setRows(rows)}
                       rowsIndex={rowsIndex}
                       currentValue={orderQty}
                       propertyKey={"orderQty"}
+                    />
+                  </TableCell>
+                  <TableCell sx={{ width: 50 }}>
+                    <FaRegTrashAlt
+                      className="text-lg text-primary"
+                      onClick={() => removeRow(productId)}
                     />
                   </TableCell>
                 </TableRow>
@@ -184,12 +226,25 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
           </TableBody>
         </Table>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between px-5 py-1">
           <div className="flex items-stretch">
             <span className="text-base text-primary capitalize self-center ml-3">
               {getOrderInformation.data?.category.category_name}
             </span>
           </div>
+
+          {props.isEdit && (
+            <div className="flex space-x-3">
+              <Button
+                onClick={addRow}
+                disabled={addButtonDisabled}
+                fullWidth
+                size="small"
+              >
+                Add
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

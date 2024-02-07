@@ -29,7 +29,7 @@ export function StockOrderProcessCompleted(
 
   const orderProductData: OrderTableData[] = props.rows.product_data.map(
     (product) => ({
-      productId: product.id,
+      productId: product.product_id,
       productName: product.product_name,
       uom: product.uom,
       cost: product.cost,
@@ -39,6 +39,7 @@ export function StockOrderProcessCompleted(
 
   const storeId = props.rows.order_information.store_id;
   const storeName = props.rows.order_information.store_name;
+  const storeAddress = props.rows.order_information.ship_to_address;
   const categoryId = props.rows.order_information.category_id;
   const categoryName = props.rows.order_information.category_name;
 
@@ -72,7 +73,10 @@ export function StockOrderProcessCompleted(
                         confirmNewOrder({
                           data: {
                             selectedStoreId: storeId,
-                            selectedAddress: storeName,
+                            selectedAddress: {
+                              ship_to_address: storeAddress,
+                              store_id: storeId,
+                            },
                             category: {
                               category_id: categoryId,
                               category_name: categoryName,
