@@ -6,28 +6,20 @@ import {
   TableBody,
   Button,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useAppSelector } from "features/config/hooks";
 import { Column } from "features/shared/presentation/components/data-table";
 import { useEffect, useState } from "react";
-import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import { selectGetStockOrderProducts } from "../slices/get-products.slice";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import { FaRegTrashAlt } from "react-icons/fa";
-import {
-  categoryModel,
-  selectedStoreModel,
-} from "features/stock-ordering/core/domain/store-and-category.model";
 
 interface StockOrderConfirmTableProps {
-  isConfirmOrder: boolean;
-  isEditCancelled: boolean;
   isEdit: boolean;
   rows: OrderTableData[];
   setRows: (rowData: OrderTableData[]) => void;
-  category: categoryModel;
-  store: selectedStoreModel;
+  categoryName: string;
 }
 
 const columns: Array<Column> = [
@@ -43,7 +35,6 @@ const columns: Array<Column> = [
 ];
 
 export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
-  const getOrderInformation = useAppSelector(selectconfirmNewOrder);
   const getProductInformation = useAppSelector(selectGetStockOrderProducts);
   const [addButtonDisabled, setAddButtonDisabled] = useState(false);
 
@@ -56,38 +47,10 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
       lastProduct?.productName === ""
     ) {
       setAddButtonDisabled(true);
-      // setConfirmButtonDisabled(true);
     } else {
       setAddButtonDisabled(false);
-      // setConfirmButtonDisabled(false);
     }
   }, [props.rows]);
-
-  //Need to refactor this block of code
-  useEffect(() => {
-    if (
-      (props.rows && props.isConfirmOrder) ||
-      (props.isEditCancelled && getOrderInformation.data)
-    ) {
-      props.setRows(props.rows);
-    }
-  }, [props.rows, props.isEditCancelled]);
-
-  //------
-
-  const handleDiscardChanges = () => {
-    const updatedRows = props.rows.filter((row) => row.productId !== "");
-    props.setRows(updatedRows);
-  };
-
-  const productOptions = getProductInformation.data?.products
-    .flatMap((options) => options)
-    .filter((item) => {
-      const excludedItems = props.rows.map((items) => items.productName);
-
-      return !excludedItems.includes(item.product_name);
-    })
-    .map((item) => item.product_name);
 
   const handleProductChange = (
     value: {
@@ -147,8 +110,6 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
       }
     }
   };
-
-  console.log(props.rows);
 
   return (
     <div>
@@ -229,7 +190,7 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
         <div className="flex justify-between px-5 py-1">
           <div className="flex items-stretch">
             <span className="text-base text-primary capitalize self-center ml-3">
-              {getOrderInformation.data?.category.category_name}
+              {props.categoryName}
             </span>
           </div>
 

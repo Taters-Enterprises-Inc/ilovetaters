@@ -36,7 +36,10 @@ import {
 } from "features/stock-ordering/core/domain/store-and-category.model";
 import { togglePopupScroll } from "../slices/popup-scroll.slice";
 import { createQueryParams } from "features/config/helpers";
-import { categoryType } from "../components/stock-ordering-utils";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -52,10 +55,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const [selectedStore, setSelectedStore] = useState<selectedStoreModel>();
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [category, setCategory] = useState<categoryModel>();
   const [deliveryDate, setDeliveryData] = useState<string | null>("");
   const [remarks, setRemarks] = useState("");
   const [rows, setRows] = useState<OrderTableData[]>([]);
+  const [tempRows, setTempRows] = useState<OrderTableData[]>([]);
   const [logisticType, setLogisticType] = useState<{
     id: string | null | undefined;
     name: string | null | undefined;
@@ -65,6 +68,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [openPopup, setOpenPopup] = useState(false);
   const [deliveryDateError, setDeliveryDateError] = useState(false);
   const [isEditCancelled, setisEditCancelled] = useState(false);
+  const [isConfirmOrder, setIsConfirmOrder] = useState(false);
   const [emergencyOrderEnabled, setEmergencyOrderEnabled] = useState(false);
 
   useEffect(() => {
@@ -89,6 +93,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
       setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
       setRows(getOrderInformation.data.OrderData ?? []);
+      setTempRows(rows);
 
       setDeliveryData("");
       setRemarks("");
@@ -101,31 +106,56 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   useEffect(() => {
     if (isEditCancelled) {
-      setRows(getOrderInformation.data?.OrderData ?? []);
+      setRows(tempRows);
       setisEditCancelled(false);
+      setSelectedAddress(getOrderInformation.data?.selectedAddress ?? "");
+    } else if (isConfirmOrder) {
+      setTempRows(rows);
+      setIsConfirmOrder(false);
     }
-  }, [isEditCancelled]);
+  }, [isEditCancelled, isConfirmOrder]);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     dispatch(
-      insertNewOrder({
-        selectedStoreId: selectedStore?.store_id,
-        deliveryScheduleData: deliveryDate ?? "",
-        selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
-        remarks: remarks,
-        logisticType: emergencyOrderEnabled ? logisticType?.id ?? "" : "",
-        category: {
-          category_id: category?.category_id ?? "",
-          category_name: category?.category_name ?? "",
-        },
-        OrderData: rows,
+      openMessageModal({
+        message: `Are sure you want to order this again?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              dispatch(
+                insertNewOrder({
+                  selectedStoreId: selectedStore?.store_id,
+                  deliveryScheduleData: deliveryDate ?? "",
+                  selectedAddress:
+                    getOrderInformation.data?.selectedAddress ?? "",
+                  remarks: remarks,
+                  logisticType: emergencyOrderEnabled
+                    ? logisticType?.id ?? ""
+                    : "",
+                  category:
+                    (getOrderInformation.data?.category as categoryModel) ??
+                    null,
+                  OrderData: rows,
+                })
+              );
+
+              document.body.classList.remove("overflow-hidden");
+              dispatch(closeMessageModal());
+              props.onClose();
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {},
+          },
+        ],
       })
     );
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
   };
 
   const schedule = getDeliveryScheduleState.data?.find(
@@ -201,6 +231,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const handleConfirmEdit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
+    setIsConfirmOrder(true);
     setIsEdit(false);
   };
 
@@ -262,17 +293,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 space-y-5 border-secondary">
               <StockOrderConfirmTable
-                category={{
-                  category_id: category?.category_id ?? "",
-                  category_name: category?.category_name ?? "",
-                }}
-                store={{
-                  store_id: selectedStore?.store_id ?? "",
-                  name: selectedStore?.name ?? "",
-                  franchise_type_id: selectedStore?.franchise_type_id ?? "",
-                }}
-                isEditCancelled={isEditCancelled}
-                isConfirmOrder={true}
+                categoryName={
+                  getOrderInformation.data?.category.category_name ??
+                  "Unable to determine category name please contact MIS Department"
+                }
                 isEdit={isEdit}
                 rows={rows}
                 setRows={setRows}
@@ -362,7 +386,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                         <Button
                           fullWidth
                           variant="contained"
-                          disabled={!selectedAddress ? true : false}
+                          disabled={rows.some(
+                            (product) => product.productId === ""
+                          )}
                           onClick={handleConfirmEdit}
                           sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
