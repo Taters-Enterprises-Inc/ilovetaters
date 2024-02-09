@@ -175,11 +175,13 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                       propertyKey={"orderQty"}
                     />
                   </TableCell>
-                  <TableCell sx={{ width: 50 }}>
-                    <FaRegTrashAlt
-                      className="text-lg text-primary"
-                      onClick={() => removeRow(productId)}
-                    />
+                  <TableCell sx={{ width: props.isEdit ? 0 : 50 }}>
+                    {props.isEdit && (
+                      <FaRegTrashAlt
+                        className="text-lg text-primary"
+                        onClick={() => removeRow(productId)}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               );

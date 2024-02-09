@@ -120,7 +120,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
     dispatch(
       openMessageModal({
-        message: `Are sure you want to order this again?`,
+        message: `Are sure you want to place this order?`,
         buttons: [
           {
             color: "#CC5801",

@@ -38,10 +38,12 @@ import {
 import { TAB_NAVIGATION } from "features/shared/constants";
 
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import {
   BackdropLoading,
   DataList,
+  MaterialDateInput,
+  MaterialDateTimeInput,
+  MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
 import {
   selectstockOrderSideBar,
@@ -117,6 +119,9 @@ export function OrderContents() {
   const store = query.get("store");
   const tabValue = query.get("tab");
 
+  const startDate = query.get("startDate");
+  const endDate = query.get("endDate");
+
   let columns: Array<Column> = [
     { id: "store_name", label: "Store" },
     { id: "id", label: "Order Number" },
@@ -165,6 +170,8 @@ export function OrderContents() {
       order: order,
       store: store,
       search: search,
+      startDate: startDate,
+      endDate: endDate,
       tab: newValue,
     };
     const queryParams = createQueryParams(params);
@@ -180,12 +187,27 @@ export function OrderContents() {
       per_page: perPage,
       order_by: orderBy,
       order: order,
+      store: store,
       search: search,
+      startDate: startDate,
+      endDate: endDate,
       tab: tabValue,
     });
 
     dispatch(getStockOrders(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
+  }, [
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    store,
+    search,
+    startDate,
+    endDate,
+    tabValue,
+    modals,
+  ]);
 
   return (
     <>
@@ -264,7 +286,81 @@ export function OrderContents() {
             </Tabs>
 
             <TabPanel index={Number(tabValue)} value={Number(tabValue)}>
-              <div className="hidden md:block">
+              <div className="hidden md:block space-y-3">
+                <div className="flex space-x-5">
+                  <div className="flex-1 space-y-1">
+                    <span>Filter store:</span>
+                    <MaterialInputAutoComplete
+                      colorTheme={"black"}
+                      size="small"
+                      options={
+                        getAdminSessionState.data?.admin.user_details.stores ??
+                        []
+                      }
+                      getOptionLabel={(option) => option.name || ""}
+                      isOptionEqualToValue={(option, value) =>
+                        option.name === value.name
+                      }
+                      onChange={(event, value) => {
+                        if (value) {
+                          const params = {
+                            page_no: null,
+                            per_page: perPage,
+                            status: status,
+                            order_by: orderBy,
+                            order: order,
+                            store: value.name,
+                            search: search,
+                            startDate: startDate,
+                            endDate: endDate,
+                            tab: tabValue,
+                          };
+                          const queryParams = createQueryParams(params);
+                          navigate({
+                            pathname: "",
+                            search: queryParams,
+                          });
+                        } else {
+                          navigate({
+                            pathname: "",
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex space-x-2">
+                    <div className="flex-1 space-y-1">
+                      <span>Start Date</span>
+                      <MaterialDateInput
+                        value={null}
+                        size="small"
+                        colorTheme={"black"}
+                        onChange={function (
+                          value: Date | null,
+                          keyboardInputValue?: string | undefined
+                        ): void {
+                          throw new Error("Function not implemented.");
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex-1 space-y-1">
+                      <span>End Date</span>
+                      <MaterialDateInput
+                        value={null}
+                        size="small"
+                        colorTheme={"black"}
+                        onChange={function (
+                          value: Date | null,
+                          keyboardInputValue?: string | undefined
+                        ): void {
+                          throw new Error("Function not implemented.");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <DataTable
                   order={order === "asc" ? "asc" : "desc"}
                   orderBy={orderBy ?? "last_updated"}
@@ -281,6 +377,8 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      startDate: startDate,
+                      endDate: endDate,
                       tab: tabValue,
                     };
                     const queryParams = createQueryParams(params);
@@ -302,6 +400,8 @@ export function OrderContents() {
                         order: isAsc ? "desc" : "asc",
                         store: store,
                         search: search,
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -325,6 +425,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -348,6 +450,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -420,6 +524,8 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      startDate: startDate,
+                      endDate: endDate,
                       tab: tabValue,
                     };
 
@@ -440,6 +546,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -463,6 +571,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
