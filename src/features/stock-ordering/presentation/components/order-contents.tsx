@@ -10,6 +10,7 @@ import {
   Badge,
   BadgeProps,
   Box,
+  Button,
   Divider,
   IconButton,
   SpeedDial,
@@ -50,11 +51,21 @@ import {
   togglestockOrderSideBar,
 } from "../slices/stock-order.slice";
 import { dateSetup } from "./stock-ordering-utils";
+import { OrderFilter } from ".";
+import { stubFalse } from "lodash";
+import { CiFilter } from "react-icons/ci";
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+interface DataFilterData {
+  store?: string | null;
+  type?: string | null;
+  start?: string | null;
+  end?: string | null;
 }
 
 interface Modals {
@@ -107,6 +118,7 @@ export function OrderContents() {
 
   const [payMultipleBillingState, setPayMultipleBillingState] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [openFilter, setOpenFilter] = useState<HTMLButtonElement | null>(null);
 
   const query = useQuery();
   const pageNo = query.get("page_no");
@@ -119,6 +131,7 @@ export function OrderContents() {
   const store = query.get("store");
   const tabValue = query.get("tab");
 
+  const dateType = query.get("dateType");
   const startDate = query.get("startDate");
   const endDate = query.get("endDate");
 
@@ -189,6 +202,7 @@ export function OrderContents() {
       order: order,
       store: store,
       search: search,
+      dateType: dateType,
       startDate: startDate,
       endDate: endDate,
       tab: tabValue,
@@ -203,6 +217,7 @@ export function OrderContents() {
     order,
     store,
     search,
+    dateType,
     startDate,
     endDate,
     tabValue,
@@ -287,7 +302,14 @@ export function OrderContents() {
 
             <TabPanel index={Number(tabValue)} value={Number(tabValue)}>
               <div className="hidden md:block space-y-3">
-                <div className="flex space-x-5">
+                <Button
+                  startIcon={<CiFilter />}
+                  variant="contained"
+                  onClick={(event) => setOpenFilter(event.currentTarget)}
+                >
+                  Filter
+                </Button>
+                {/* <div className="flex space-x-5">
                   <div className="flex-1 space-y-1">
                     <span>Filter store:</span>
                     <MaterialInputAutoComplete
@@ -311,6 +333,8 @@ export function OrderContents() {
                             order: order,
                             store: value.name,
                             search: search,
+                                          dateType: dateType,
+
                             startDate: startDate,
                             endDate: endDate,
                             tab: tabValue,
@@ -360,7 +384,7 @@ export function OrderContents() {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <DataTable
                   order={order === "asc" ? "asc" : "desc"}
                   orderBy={orderBy ?? "last_updated"}
@@ -377,6 +401,8 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      dateType: dateType,
+
                       startDate: startDate,
                       endDate: endDate,
                       tab: tabValue,
@@ -400,6 +426,8 @@ export function OrderContents() {
                         order: isAsc ? "desc" : "asc",
                         store: store,
                         search: search,
+                        dateType: dateType,
+
                         startDate: startDate,
                         endDate: endDate,
                         tab: tabValue,
@@ -425,6 +453,7 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
                         startDate: startDate,
                         endDate: endDate,
                         tab: tabValue,
@@ -450,6 +479,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+
                         startDate: startDate,
                         endDate: endDate,
                         tab: tabValue,
@@ -524,6 +555,8 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      dateType: dateType,
+
                       startDate: startDate,
                       endDate: endDate,
                       tab: tabValue,
@@ -546,6 +579,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+
                         startDate: startDate,
                         endDate: endDate,
                         tab: tabValue,
@@ -571,6 +606,8 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+
                         startDate: startDate,
                         endDate: endDate,
                         tab: tabValue,
@@ -695,6 +732,37 @@ export function OrderContents() {
           );
         }
       )}
+
+      <OrderFilter
+        anchor={openFilter}
+        onClose={() => setOpenFilter(null)}
+        filter={(data: DataFilterData | string) => {
+          console.log(data);
+          if (typeof data !== "string") {
+            const params = {
+              page_no: null,
+              per_page: perPage,
+              status: status,
+              order_by: orderBy,
+              order: order,
+              store: data.store,
+              search: search,
+              dateType: data.type,
+              startDate: data.start,
+              endDate: data.end,
+            };
+            const queryParams = createQueryParams(params);
+            navigate({
+              pathname: "",
+              search: queryParams,
+            });
+          } else {
+            navigate({
+              pathname: "",
+            });
+          }
+        }}
+      />
 
       <PlaceOrderModal
         open={modals.placeOrder}

@@ -1,3 +1,5 @@
+export { OrderFilter } from "./order-filter";
+
 export { StockAuditSidebarWrapper } from "./stock-ordering-sidebar-wrapper";
 export { StockOrderDrawer } from "./stock-order-drawer";
 export { StockOrderDrawerMenu } from "./stock-order-drawer-menu";
