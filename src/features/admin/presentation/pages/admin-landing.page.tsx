@@ -53,6 +53,7 @@ export function AdminLandingPage() {
     shop: false,
     sos: false,
     sales: false,
+    ticket: false,
   });
 
   let nav = [
@@ -71,6 +72,11 @@ export function AdminLandingPage() {
       label: "Sales",
       availability: navAvailability.sales,
     },
+    {
+      url: "/admin/ticketing/dashboard",
+      label: "Ticketing",
+      availability: navAvailability.ticket,
+    },
   ];
 
   const { first_name, last_name } =
@@ -86,6 +92,7 @@ export function AdminLandingPage() {
         shop: userAdmin?.groups?.length !== 0,
         sos: userAdmin?.sos_groups?.length !== 0,
         sales: userAdmin?.sales_groups?.length !== 0,
+        ticket: true, // Need to change/update
       }));
     }
   }, [getAdminSessionState.data]);
