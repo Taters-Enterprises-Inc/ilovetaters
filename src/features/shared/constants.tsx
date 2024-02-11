@@ -1327,9 +1327,9 @@ export const TAB_NAVIGATION = [
     label2: "(TEI STORE MGR)",
     label3: "Delivery Receive Order",
   },
-  // { label: "UPD BILL", label2: "(MULTI-M FINANCE)", label3: "Update Billing" },
-  // { label: "PAY BILL", label2: "(TEI FINANCE)", label3: "Pay Billing" },
-  // { label: "CONF PAY", label2: "(MULTI-M FINANCE)", label3: "Confirm Payment" },
+  { label: "UPD BILL", label2: "(MULTI-M FINANCE)", label3: "Update Billing" },
+  { label: "PAY BILL", label2: "(TEI FINANCE)", label3: "Pay Billing" },
+  { label: "CONF PAY", label2: "(MULTI-M FINANCE)", label3: "Confirm Payment" },
   { label: "ORDERS", label2: "COMPLETE", label3: "Complete Orders" },
   { label: "CANCELLED", label2: "ORDERS", label3: "Cancelled Order" },
 ];

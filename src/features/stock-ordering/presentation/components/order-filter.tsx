@@ -31,10 +31,10 @@ export function OrderFilter(props: OrderFilterProps) {
 
   const [filter, setfilter] = useState<filterData | null>(null);
   const dateOption = [
-    { id: 1, text: "Order placement date" },
-    { id: 2, text: "Requested delivery date" },
-    { id: 3, text: "Commited delivery date" },
-    { id: 3, text: "Actual delivery date" },
+    { id: 1, text: "Order placement date", name: "order_placement_date" },
+    { id: 2, text: "Requested delivery date", name: "requested_delivery_date" },
+    { id: 3, text: "Commited delivery date", name: "commited_delivery_date" },
+    { id: 4, text: "Actual delivery date", name: "actual_delivery_date" },
   ];
 
   const handleFilter = () => {
@@ -52,6 +52,13 @@ export function OrderFilter(props: OrderFilterProps) {
   };
 
   const handleResetFilter = () => {
+    setfilter((previousValue) => ({
+      ...previousValue,
+      store: null,
+      type: null,
+      start: null,
+      end: null,
+    }));
     props.filter({ store: null, type: null, start: null, end: null });
   };
 
@@ -137,7 +144,7 @@ export function OrderFilter(props: OrderFilterProps) {
                   if (value) {
                     setfilter({
                       ...filter,
-                      type: value.text ?? null,
+                      type: value.name ?? null,
                     });
                   } else {
                     setfilter({
@@ -159,6 +166,7 @@ export function OrderFilter(props: OrderFilterProps) {
                   colorTheme={"black"}
                   openTo="year"
                   views={["year", "month", "day"]}
+                  disableFuture={false}
                   onChange={(value: any) => {
                     setfilter({
                       ...filter,

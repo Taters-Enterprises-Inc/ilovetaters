@@ -290,8 +290,11 @@ export function OrderContents() {
                     </StyledBadge>
                   }
                   style={
-                    index === 2 &&
-                    getStockOrdersState.data?.franchise_type !== 2
+                    (index === 2 &&
+                      getStockOrdersState.data?.franchise_type !== 2) ||
+                    index === 6 ||
+                    index === 7 ||
+                    index === 8
                       ? { display: "none" }
                       : {}
                   }
@@ -668,7 +671,6 @@ export function OrderContents() {
         anchor={openFilter}
         onClose={() => setOpenFilter(null)}
         filter={(data: DataFilterData | string) => {
-          console.log(data);
           if (typeof data !== "string") {
             const params = {
               page_no: null,
@@ -676,11 +678,11 @@ export function OrderContents() {
               status: status,
               order_by: orderBy,
               order: order,
-              store: data.store,
+              store: data.store ?? null,
               search: search,
-              dateType: data.type,
-              startDate: data.start,
-              endDate: data.end,
+              dateType: data.type ?? null,
+              startDate: data.start ?? null,
+              endDate: data.end ?? null,
             };
             const queryParams = createQueryParams(params);
             navigate({
