@@ -29,13 +29,13 @@ export function TicketingDrawerMenu() {
   const menuitems = [
     {
       text: "Dashboard",
-      path: "dashboard",
+      path: "ticketing/dashboard",
       icon: <MdDashboardCustomize size={20} />,
       enable: true,
     },
     {
       text: "Create Ticket",
-      path: "create-ticket",
+      path: "ticketing/create-ticket",
       icon: <PiNotePencil size={20} />,
       enable: true,
     },

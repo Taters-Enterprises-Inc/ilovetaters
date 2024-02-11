@@ -90,7 +90,7 @@ const SideBarContent = () => {
             "opacity-0 translate-x-28 overflow-hidden"
           }`}
         >
-          Ticketing
+          Ticketing System
         </h1>
       </div>
 
