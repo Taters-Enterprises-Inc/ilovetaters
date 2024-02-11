@@ -215,7 +215,7 @@ import {
 import { SalesHistory } from "features/sales/presentation/pages/history.page";
 import { SalesForm } from "features/sales/presentation/pages/form.page";
 import { SalesRealtimeWrapper } from "features/sales/presentation/components";
-import { DashboardPage } from "features/ticketing/presentation/pages";
+import { TicketingDashboard } from "features/ticketing/presentation/pages";
 import { TicketingSidebarWrapper } from "features/ticketing/presentation/components/sidebar";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -514,7 +514,7 @@ root.render(
                               <Route path="ticketing">
                                 <Route
                                   path="dashboard"
-                                  element={<DashboardPage />}
+                                  element={<TicketingDashboard />}
                                 />
                               </Route>
                             </Route>
