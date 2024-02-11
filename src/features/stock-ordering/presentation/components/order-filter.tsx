@@ -51,6 +51,10 @@ export function OrderFilter(props: OrderFilterProps) {
     }
   };
 
+  const handleResetFilter = () => {
+    props.filter({ store: null, type: null, start: null, end: null });
+  };
+
   return (
     <Popover
       anchorEl={props.anchor}
@@ -78,9 +82,14 @@ export function OrderFilter(props: OrderFilterProps) {
       <div className="space-y-3">
         <div className="flex justify-between">
           <span className="text-xl font-semibold">Filter</span>
-          <Button variant="contained" size="small" onClick={handleFilter}>
-            Save filter
-          </Button>
+          <div className="flex space-x-3">
+            <Button variant="text" size="small" onClick={handleResetFilter}>
+              Reset filter
+            </Button>
+            <Button variant="text" size="small" onClick={handleFilter}>
+              Save filter
+            </Button>
+          </div>
         </div>
         <div className="flex-1 space-y-3">
           <div className="flex-1 space-y-1">

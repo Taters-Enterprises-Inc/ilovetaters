@@ -145,9 +145,8 @@ export function OrderContents() {
     },
     { id: "commited_delivery_date", label: "Commited Delivery Date" },
     { id: "actual_delivery_date", label: "Actual Delivery Date" },
-    { id: "description", label: "status" },
-
-    { id: "short_name", label: "Payment Status" },
+    // { id: "description", label: "status" },
+    // { id: "short_name", label: "Payment Status" },
     { id: "action", label: "Action" },
   ];
 
@@ -309,82 +308,7 @@ export function OrderContents() {
                 >
                   Filter
                 </Button>
-                {/* <div className="flex space-x-5">
-                  <div className="flex-1 space-y-1">
-                    <span>Filter store:</span>
-                    <MaterialInputAutoComplete
-                      colorTheme={"black"}
-                      size="small"
-                      options={
-                        getAdminSessionState.data?.admin.user_details.stores ??
-                        []
-                      }
-                      getOptionLabel={(option) => option.name || ""}
-                      isOptionEqualToValue={(option, value) =>
-                        option.name === value.name
-                      }
-                      onChange={(event, value) => {
-                        if (value) {
-                          const params = {
-                            page_no: null,
-                            per_page: perPage,
-                            status: status,
-                            order_by: orderBy,
-                            order: order,
-                            store: value.name,
-                            search: search,
-                                          dateType: dateType,
 
-                            startDate: startDate,
-                            endDate: endDate,
-                            tab: tabValue,
-                          };
-                          const queryParams = createQueryParams(params);
-                          navigate({
-                            pathname: "",
-                            search: queryParams,
-                          });
-                        } else {
-                          navigate({
-                            pathname: "",
-                          });
-                        }
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex space-x-2">
-                    <div className="flex-1 space-y-1">
-                      <span>Start Date</span>
-                      <MaterialDateInput
-                        value={null}
-                        size="small"
-                        colorTheme={"black"}
-                        onChange={function (
-                          value: Date | null,
-                          keyboardInputValue?: string | undefined
-                        ): void {
-                          throw new Error("Function not implemented.");
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex-1 space-y-1">
-                      <span>End Date</span>
-                      <MaterialDateInput
-                        value={null}
-                        size="small"
-                        colorTheme={"black"}
-                        onChange={function (
-                          value: Date | null,
-                          keyboardInputValue?: string | undefined
-                        ): void {
-                          throw new Error("Function not implemented.");
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div> */}
                 <DataTable
                   order={order === "asc" ? "asc" : "desc"}
                   orderBy={orderBy ?? "last_updated"}
@@ -524,8 +448,8 @@ export function OrderContents() {
                           ? dateSetup(order.actual_delivery_date, true)
                           : order.actual_delivery_date}
                       </DataTableCell>
-                      <DataTableCell>{order.description}</DataTableCell>
-                      <DataTableCell>{order.short_name}</DataTableCell>
+                      {/* <DataTableCell>{order.description}</DataTableCell>
+                      <DataTableCell>{order.short_name}</DataTableCell> */}
                       <DataTableCell>
                         <IconButton onClick={() => handleAction(order.id)}>
                           {order.logistic_id ? (
@@ -540,7 +464,14 @@ export function OrderContents() {
                 </DataTable>
               </div>
 
-              <div className="block md:hidden">
+              <div className="block md:hidden space-y-5">
+                <Button
+                  startIcon={<CiFilter />}
+                  variant="contained"
+                  onClick={(event) => setOpenFilter(event.currentTarget)}
+                >
+                  Filter
+                </Button>
                 <DataList
                   search={search ?? ""}
                   emptyMessage={`"No ${
