@@ -18,6 +18,7 @@ import { BsFillPersonFill, BsListTask } from "react-icons/bs";
 import { FaHistory } from "react-icons/fa";
 import { selectTicketingSideBar } from "../../slices/ticketing-sidebar.slice";
 import { PiNotePencil } from "react-icons/pi";
+import { IoTicketSharp } from "react-icons/io5";
 
 export function TicketingDrawerMenu() {
   const ticketingSidebar = useAppSelector(selectTicketingSideBar);
@@ -31,6 +32,12 @@ export function TicketingDrawerMenu() {
       text: "Dashboard",
       path: "ticketing/dashboard",
       icon: <MdDashboardCustomize size={20} />,
+      enable: true,
+    },
+    {
+      text: "My Tickets",
+      path: "ticketing/my-tickets",
+      icon: <IoTicketSharp size={20} />,
       enable: true,
     },
     {
