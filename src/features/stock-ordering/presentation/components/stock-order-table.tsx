@@ -107,6 +107,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
       product_id: "",
       product_name: "",
       uom: "",
+      cost: "",
       category_id: "",
       order_qty: null,
       commited_qty: null,

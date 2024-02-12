@@ -1,5 +1,6 @@
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import {
+  StockOrderProcessCompleted,
   StockOrderProcessFranchiseePayBill,
   StockOrderProcessProcurementReviewOrder,
   StockOrderProcessStoreManagerDeliveryRecieveOrderApproval,
@@ -94,6 +95,15 @@ export function StockOrderProcessActionEnabler(
     case 8:
       return (
         <StockOrderProcessSupplierConfirmPayment
+          orderId={props.orderId}
+          rows={props.row}
+          onClose={props.onClose}
+        />
+      );
+
+    case 9:
+      return (
+        <StockOrderProcessCompleted
           orderId={props.orderId}
           rows={props.row}
           onClose={props.onClose}

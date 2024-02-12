@@ -1,4 +1,5 @@
 import { OrderTableData } from "./domain/order-table-row.model";
+import { categoryModel } from "./domain/store-and-category.model";
 
 export interface test {
   test: string;
@@ -10,10 +11,7 @@ export interface InsertNewOrderParam {
   deliveryScheduleData: string;
   remarks: string;
   logisticType: string;
-  category: {
-    category_id: string;
-    category_name: string;
-  };
+  category: categoryModel;
   OrderData: OrderTableData[];
 }
 

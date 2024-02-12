@@ -10,6 +10,7 @@ import {
   Badge,
   BadgeProps,
   Box,
+  Button,
   Divider,
   IconButton,
   SpeedDial,
@@ -38,21 +39,33 @@ import {
 import { TAB_NAVIGATION } from "features/shared/constants";
 
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import {
   BackdropLoading,
   DataList,
+  MaterialDateInput,
+  MaterialDateTimeInput,
+  MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
 import {
   selectstockOrderSideBar,
   togglestockOrderSideBar,
 } from "../slices/stock-order.slice";
 import { dateSetup } from "./stock-ordering-utils";
+import { OrderFilter } from ".";
+import { stubFalse } from "lodash";
+import { CiFilter } from "react-icons/ci";
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+interface DataFilterData {
+  store?: string | null;
+  type?: string | null;
+  start?: string | null;
+  end?: string | null;
 }
 
 interface Modals {
@@ -105,6 +118,7 @@ export function OrderContents() {
 
   const [payMultipleBillingState, setPayMultipleBillingState] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [openFilter, setOpenFilter] = useState<HTMLButtonElement | null>(null);
 
   const query = useQuery();
   const pageNo = query.get("page_no");
@@ -117,6 +131,10 @@ export function OrderContents() {
   const store = query.get("store");
   const tabValue = query.get("tab");
 
+  const dateType = query.get("dateType");
+  const startDate = query.get("startDate");
+  const endDate = query.get("endDate");
+
   let columns: Array<Column> = [
     { id: "store_name", label: "Store" },
     { id: "id", label: "Order Number" },
@@ -127,9 +145,8 @@ export function OrderContents() {
     },
     { id: "commited_delivery_date", label: "Commited Delivery Date" },
     { id: "actual_delivery_date", label: "Actual Delivery Date" },
-    { id: "description", label: "status" },
-
-    { id: "short_name", label: "Payment Status" },
+    // { id: "description", label: "status" },
+    // { id: "short_name", label: "Payment Status" },
     { id: "action", label: "Action" },
   ];
 
@@ -165,6 +182,8 @@ export function OrderContents() {
       order: order,
       store: store,
       search: search,
+      startDate: startDate,
+      endDate: endDate,
       tab: newValue,
     };
     const queryParams = createQueryParams(params);
@@ -180,12 +199,29 @@ export function OrderContents() {
       per_page: perPage,
       order_by: orderBy,
       order: order,
+      store: store,
       search: search,
+      dateType: dateType,
+      startDate: startDate,
+      endDate: endDate,
       tab: tabValue,
     });
 
     dispatch(getStockOrders(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
+  }, [
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    store,
+    search,
+    dateType,
+    startDate,
+    endDate,
+    tabValue,
+    modals,
+  ]);
 
   return (
     <>
@@ -254,8 +290,11 @@ export function OrderContents() {
                     </StyledBadge>
                   }
                   style={
-                    index === 2 &&
-                    getStockOrdersState.data?.franchise_type !== 2
+                    (index === 2 &&
+                      getStockOrdersState.data?.franchise_type !== 2) ||
+                    index === 6 ||
+                    index === 7 ||
+                    index === 8
                       ? { display: "none" }
                       : {}
                   }
@@ -264,7 +303,15 @@ export function OrderContents() {
             </Tabs>
 
             <TabPanel index={Number(tabValue)} value={Number(tabValue)}>
-              <div className="hidden md:block">
+              <div className="hidden md:block space-y-3">
+                <Button
+                  startIcon={<CiFilter />}
+                  variant="contained"
+                  onClick={(event) => setOpenFilter(event.currentTarget)}
+                >
+                  Filter
+                </Button>
+
                 <DataTable
                   order={order === "asc" ? "asc" : "desc"}
                   orderBy={orderBy ?? "last_updated"}
@@ -281,6 +328,10 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      dateType: dateType,
+
+                      startDate: startDate,
+                      endDate: endDate,
                       tab: tabValue,
                     };
                     const queryParams = createQueryParams(params);
@@ -302,6 +353,10 @@ export function OrderContents() {
                         order: isAsc ? "desc" : "asc",
                         store: store,
                         search: search,
+                        dateType: dateType,
+
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -325,6 +380,9 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -348,6 +406,10 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -389,8 +451,8 @@ export function OrderContents() {
                           ? dateSetup(order.actual_delivery_date, true)
                           : order.actual_delivery_date}
                       </DataTableCell>
-                      <DataTableCell>{order.description}</DataTableCell>
-                      <DataTableCell>{order.short_name}</DataTableCell>
+                      {/* <DataTableCell>{order.description}</DataTableCell>
+                      <DataTableCell>{order.short_name}</DataTableCell> */}
                       <DataTableCell>
                         <IconButton onClick={() => handleAction(order.id)}>
                           {order.logistic_id ? (
@@ -405,7 +467,14 @@ export function OrderContents() {
                 </DataTable>
               </div>
 
-              <div className="block md:hidden">
+              <div className="block md:hidden space-y-5">
+                <Button
+                  startIcon={<CiFilter />}
+                  variant="contained"
+                  onClick={(event) => setOpenFilter(event.currentTarget)}
+                >
+                  Filter
+                </Button>
                 <DataList
                   search={search ?? ""}
                   emptyMessage={`"No ${
@@ -420,6 +489,10 @@ export function OrderContents() {
                       order: order,
                       store: store,
                       search: val === "" ? null : val,
+                      dateType: dateType,
+
+                      startDate: startDate,
+                      endDate: endDate,
                       tab: tabValue,
                     };
 
@@ -440,6 +513,10 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -463,6 +540,10 @@ export function OrderContents() {
                         order_by: orderBy,
                         order: order,
                         search: search,
+                        dateType: dateType,
+
+                        startDate: startDate,
+                        endDate: endDate,
                         tab: tabValue,
                       };
 
@@ -585,6 +666,36 @@ export function OrderContents() {
           );
         }
       )}
+
+      <OrderFilter
+        anchor={openFilter}
+        onClose={() => setOpenFilter(null)}
+        filter={(data: DataFilterData | string) => {
+          if (typeof data !== "string") {
+            const params = {
+              page_no: null,
+              per_page: perPage,
+              status: status,
+              order_by: orderBy,
+              order: order,
+              store: data.store ?? null,
+              search: search,
+              dateType: data.type ?? null,
+              startDate: data.start ?? null,
+              endDate: data.end ?? null,
+            };
+            const queryParams = createQueryParams(params);
+            navigate({
+              pathname: "",
+              search: queryParams,
+            });
+          } else {
+            navigate({
+              pathname: "",
+            });
+          }
+        }}
+      />
 
       <PlaceOrderModal
         open={modals.placeOrder}
