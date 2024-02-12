@@ -286,8 +286,8 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import {
-  AddToCartCateringProductsState,
-  selectAddToCartCateringProducts,
+  AddToCartCateringProductState,
+  selectAddToCartCateringProduct,
 } from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 
 import {
@@ -429,21 +429,66 @@ import {
   updateOrderItemsState,
 } from "features/stock-ordering/presentation/slices/update-order-items.slice";
 import {
-  GetSalesActiveFieldsState,
+  selectSubmitKra,
+  SubmitKraState,
+} from "features/hr/presentation/slices/submit-kra";
+import {
+  selectUpdateKra,
+  UpdateKraState,
+} from "features/hr/presentation/slices/update-kra";
+import {
+  selectUpdateActionItem,
+  UpdateActionItemState,
+} from "features/hr/presentation/slices/update-action-item";
+import {
+  selectSubmitAssessment,
+  SubmitAssessmentState,
+} from "features/hr/presentation/slices/submit-assessment";
+import {
   selectGetSalesActiveFields,
+  GetSalesActiveFieldsState,
 } from "features/sales/presentation/slices/get-active-fields.slice";
 import {
-  GetSalesTCPendingTaskState,
-  selectGetSalesTCPendingTask,
-} from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
+  selectGetSalesCashierSavedForm,
+  GetSalesCashierSavedFormState,
+} from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
 import {
-  GetSalesManagerPendingTaskState,
   selectGetSalesManagerPendingTask,
+  GetSalesManagerPendingTaskState,
 } from "features/sales/presentation/slices/get-sales-manager-pending.slice";
 import {
-  GetSalesCashierSavedFormState,
-  selectGetSalesCashierSavedForm,
-} from "features/sales/presentation/slices/get-sales-cashier-saved-form.slice";
+  selectGetSalesTCPendingTask,
+  GetSalesTCPendingTaskState,
+} from "features/sales/presentation/slices/get-sales-tc-pending-task.slice";
+import {
+  GetStockOrderSettingProductsState,
+  selectGetStockOrderSettingProducts,
+} from "features/stock-ordering/presentation/slices/stock-order-get-settings-products.slice";
+import {
+  GetStockOrderSettingProductsEditState,
+  selectGetStockOrderSettingProductsEdit,
+} from "features/stock-ordering/presentation/slices/stock-order-get-settings-products-edit.slice";
+import {
+  selectGetStockOrderAllStores,
+  GetStockOrderAllStoresState,
+} from "features/stock-ordering/presentation/slices/stock-order-get-all-stores.slice";
+import {
+  selectstockOrderEditProduct,
+  stockOrderEditProductState,
+} from "features/stock-ordering/presentation/slices/stock-order-settings-product-edit.slice";
+import {
+  selectstockOrderCreateProduct,
+  stockOrderCreateProductState,
+} from "features/stock-ordering/presentation/slices/stock-order-settings-product-create.slice";
+import {
+  selectstockOrderActiveStatus,
+  stockOrderActiveStatusState,
+} from "features/stock-ordering/presentation/slices/stock-order-settings-product-active-status.slice";
+
+Swal.mixin({
+  background: "#22201A",
+  color: "white",
+});
 
 const SweetAlert = withReactContent(Swal);
 
@@ -607,8 +652,8 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );
-  const addToCartCateringProductsState = useAppSelector(
-    selectAddToCartCateringProducts
+  const addToCartCateringProductState = useAppSelector(
+    selectAddToCartCateringProduct
   );
 
   const updateAdminCateringOrderItemRemarksState = useAppSelector(
@@ -691,6 +736,13 @@ export function LoadingAndSnackbarWrapper() {
 
   const stockUpdateOrderItems = useAppSelector(selectUpdateOrderItems);
 
+  const submitKraState = useAppSelector(selectSubmitKra);
+
+  const updateKraState = useAppSelector(selectUpdateKra);
+
+  const updateActionItemState = useAppSelector(selectUpdateActionItem);
+  const submitAssessmentState = useAppSelector(selectSubmitAssessment);
+
   const salesGetFieldAvailability = useAppSelector(selectGetSalesActiveFields);
 
   const salesGetTCPendingTask = useAppSelector(selectGetSalesTCPendingTask);
@@ -702,6 +754,208 @@ export function LoadingAndSnackbarWrapper() {
   const salesGetCashierSavedForm = useAppSelector(
     selectGetSalesCashierSavedForm
   );
+
+  const getStockOrderSettingProducts = useAppSelector(
+    selectGetStockOrderSettingProducts
+  );
+
+  const getStockOrderSettingProductsEditState = useAppSelector(
+    selectGetStockOrderSettingProductsEdit
+  );
+
+  const getStockOrderAllStoresState = useAppSelector(
+    selectGetStockOrderAllStores
+  );
+
+  const stockOrderEditProductStates = useAppSelector(
+    selectstockOrderEditProduct
+  );
+
+  const stockOrderCreateProductStates = useAppSelector(
+    selectstockOrderCreateProduct
+  );
+
+  const stockOrderActiveStatusStates = useAppSelector(
+    selectstockOrderActiveStatus
+  );
+
+  useEffect(() => {
+    switch (stockOrderActiveStatusStates.status) {
+      case stockOrderActiveStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case stockOrderActiveStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case stockOrderActiveStatusState.success:
+        showAlert(setSuccessAlert, stockOrderActiveStatusStates.message);
+        break;
+      case stockOrderActiveStatusState.fail:
+        showAlert(setFailsAlert, stockOrderActiveStatusStates.message);
+        break;
+    }
+  }, [stockOrderActiveStatusStates]);
+
+  useEffect(() => {
+    switch (stockOrderCreateProductStates.status) {
+      case stockOrderCreateProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case stockOrderCreateProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case stockOrderCreateProductState.success:
+        showAlert(setSuccessAlert, stockOrderCreateProductStates.message);
+        break;
+      case stockOrderCreateProductState.fail:
+        showAlert(setFailsAlert, stockOrderCreateProductStates.message);
+        break;
+    }
+  }, [stockOrderCreateProductStates]);
+
+  useEffect(() => {
+    switch (stockOrderEditProductStates.status) {
+      case stockOrderEditProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case stockOrderEditProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case stockOrderEditProductState.success:
+        showAlert(setSuccessAlert, stockOrderEditProductStates.message);
+        break;
+      case stockOrderEditProductState.fail:
+        showAlert(setFailsAlert, stockOrderEditProductStates.message);
+        break;
+    }
+  }, [stockOrderEditProductStates]);
+
+  useEffect(() => {
+    switch (getStockOrderAllStoresState.status) {
+      case GetStockOrderAllStoresState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStockOrderAllStoresState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStockOrderAllStoresState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStockOrderAllStoresState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStockOrderAllStoresState]);
+
+  useEffect(() => {
+    switch (getStockOrderSettingProductsEditState.status) {
+      case GetStockOrderSettingProductsEditState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStockOrderSettingProductsEditState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStockOrderSettingProductsEditState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStockOrderSettingProductsEditState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [submitAssessmentState]);
+
+  useEffect(() => {
+    switch (getStockOrderSettingProducts.status) {
+      case GetStockOrderSettingProductsState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStockOrderSettingProductsState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStockOrderSettingProductsState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStockOrderSettingProductsState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStockOrderSettingProducts]);
+
+  useEffect(() => {
+    switch (submitAssessmentState.status) {
+      case SubmitAssessmentState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SubmitAssessmentState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitAssessmentState.success:
+        showAlert(setSuccessAlert, submitAssessmentState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitAssessmentState.fail:
+        showAlert(setFailsAlert, submitAssessmentState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [submitAssessmentState]);
+
+  useEffect(() => {
+    switch (updateActionItemState.status) {
+      case UpdateActionItemState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateActionItemState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateActionItemState.success:
+        showAlert(setSuccessAlert, updateActionItemState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateActionItemState.fail:
+        showAlert(setFailsAlert, updateActionItemState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateActionItemState]);
+
+  useEffect(() => {
+    switch (updateKraState.status) {
+      case UpdateKraState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateKraState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateKraState.success:
+        showAlert(setSuccessAlert, updateKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateKraState.fail:
+        showAlert(setFailsAlert, updateKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateKraState]);
+
+  useEffect(() => {
+    switch (submitKraState.status) {
+      case SubmitKraState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SubmitKraState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitKraState.success:
+        showAlert(setSuccessAlert, submitKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SubmitKraState.fail:
+        showAlert(setFailsAlert, submitKraState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [submitKraState]);
 
   useEffect(() => {
     switch (salesGetCashierSavedForm.status) {
@@ -1427,31 +1681,35 @@ export function LoadingAndSnackbarWrapper() {
   }, [getSnacksDeliveredDealAvailableStoresState]);
 
   useEffect(() => {
-    switch (addToCartCateringProductsState.status) {
-      case AddToCartCateringProductsState.inProgress:
+    switch (addToCartCateringProductState.status) {
+      case AddToCartCateringProductState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case AddToCartCateringProductsState.initial:
+      case AddToCartCateringProductState.initial:
         setOpenBackdropLoading(false);
         break;
-      case AddToCartCateringProductsState.success:
-        SweetAlert.fire(
-          "Package Created!",
-          addToCartCateringProductsState.message,
-          "success"
-        );
+      case AddToCartCateringProductState.success:
+        SweetAlert.fire({
+          title: "Package Created!",
+          text: addToCartCateringProductState.message,
+          icon: "success",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
-      case AddToCartCateringProductsState.fail:
-        SweetAlert.fire(
-          "Oops...",
-          addToCartCateringProductsState.message,
-          "error"
-        );
+      case AddToCartCateringProductState.fail:
+        SweetAlert.fire({
+          title: "Oops...",
+          text: addToCartCateringProductState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
     }
-  }, [addToCartCateringProductsState]);
+  }, [addToCartCateringProductState]);
 
   useEffect(() => {
     switch (updateAdminCateringOrderItemRemarksState.status) {
@@ -2352,15 +2610,23 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case SignUpMobileUserState.success:
-        SweetAlert.fire(
-          "Account Registered!",
-          signUpMobileUserState.message,
-          "success"
-        );
+        SweetAlert.fire({
+          title: "Account Registered!",
+          text: signUpMobileUserState.message,
+          icon: "success",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
       case SignUpMobileUserState.fail:
-        SweetAlert.fire("Oops...", signUpMobileUserState.message, "error");
+        SweetAlert.fire({
+          title: "Oops...",
+          text: signUpMobileUserState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
     }

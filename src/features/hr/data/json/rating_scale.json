@@ -1,0 +1,25 @@
+{
+  "message": "",
+  "data": [
+    {
+      "name": "Exceptional",
+      "description": "A role model, mentor or leader that embodies values & exhibits outstanding behaviors, skills, and expertise."
+    },
+    {
+      "name": "Highly Effective",
+      "description": "Generally demonstartes competencies at levels exceeding expectations for their position."
+    },
+    {
+      "name": "Effective",
+      "description": "Achieves performance and desmostrates competencies at a level consistent with their position."
+    },
+    {
+      "name": "Needs Improvement",
+      "description": "Sometimes meets expectations or goals"
+    },
+    {
+      "name": "Needs Coaching",
+      "description": "Regularly demonstrates behaviors incosistent with competencies and values."
+    }
+  ]
+}

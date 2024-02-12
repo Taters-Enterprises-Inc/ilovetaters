@@ -8,7 +8,7 @@ import {
   GetCateringPackageDetailsParam,
   UploadContractParam,
   CateringUploadProofOfPaymentParam,
-  AddToCartProductsParam,
+  AddToCartProductParam,
   GetCateringCategoryProductsParam,
 } from "features/catering/core/catering.params";
 import { CateringPackageDetailsModel } from "features/catering/core/domain/catering-package-details.model";
@@ -68,7 +68,7 @@ export interface CateringUploadProofOfPaymentResponse {
   };
 }
 
-export interface AddToCartCateringProductsResponse {
+export interface AddToCartCateringProductResponse {
   data: {
     message: string;
   };
@@ -96,9 +96,9 @@ export function GetCateringCategoryProductsRepository(
   );
 }
 
-export function AddToCartCateringProductsRepository(
-  param: AddToCartProductsParam
-): Promise<CateringUploadProofOfPaymentResponse> {
+export function AddToCartCateringProductRepository(
+  param: AddToCartProductParam
+): Promise<AddToCartCateringProductResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/cart/catering-product/`,
     param,

@@ -1,7 +1,9 @@
 import { IoMdClose } from "react-icons/io";
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UploadFile } from "features/shared/presentation/components/upload-file";
+import { togglePopupScroll } from "../slices/popup-scroll.slice";
+import { useAppDispatch } from "features/config/hooks";
 
 interface UploadDeliveryRecieptModalProps {
   open: boolean;
@@ -13,7 +15,12 @@ interface UploadDeliveryRecieptModalProps {
 export function UploadDeliveryRecieptModal(
   props: UploadDeliveryRecieptModalProps
 ) {
+  const dispatch = useAppDispatch();
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+
+  useEffect(() => {
+    dispatch(togglePopupScroll());
+  }, [props.open]);
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -35,7 +42,7 @@ export function UploadDeliveryRecieptModal(
     <>
       <div
         id="place-order-modal"
-        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+        className="fixed inset-0 -top-5 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
       >
         <div className="w-[97%] lg:w-[25%] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
@@ -62,7 +69,7 @@ export function UploadDeliveryRecieptModal(
               />
               <h4 className="mt-1 text-sm leading-5 text-secondary">
                 <strong>Note:</strong>
-                Maximum file size is 5MB.
+                Maximum file size is 2MB.
               </h4>
               {props.isButtonAvailable ? (
                 <div>

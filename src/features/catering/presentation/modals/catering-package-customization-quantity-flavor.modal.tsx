@@ -11,7 +11,7 @@ import {
 } from "features/shop/presentation/slices/get-product-details.slice";
 import { useState, useRef, ChangeEvent, useEffect } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { BsFillCartPlusFill } from "react-icons/bs";
+import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
@@ -39,6 +39,7 @@ interface CateringPackageCustomizationQuantityFlavorModalProps {
   open: boolean;
   onClose: () => void;
   onAddProduct: (product: CustomizePackageProduct) => void;
+  onCheckout: (product: CustomizePackageProduct) => void;
 }
 export function CateringPackageCustomizationQuantityFlavorModal(
   props: CateringPackageCustomizationQuantityFlavorModalProps
@@ -207,7 +208,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
     }
   };
 
-  const handleAddProductToPackage = () => {
+  const handleAddProductToPackage = (type: "checkout" | "add-to-cart") => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -266,7 +267,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
 
       let flavors_details = createFlavorDetails();
 
-      props.onAddProduct({
+      let product: CustomizePackageProduct = {
         prod_id: getProductDetailsState.data.product.id,
         prod_image_name: getProductDetailsState.data.product.product_image,
         prod_name: getProductDetailsState.data.product.name,
@@ -282,7 +283,13 @@ export function CateringPackageCustomizationQuantityFlavorModal(
         prod_sku_id: -1,
         prod_sku: -1,
         prod_type: "product",
-      });
+      };
+
+      if (type == "add-to-cart") {
+        props.onAddProduct(product);
+      } else if (type == "checkout") {
+        props.onCheckout(product);
+      }
 
       props.onClose();
     }
@@ -505,15 +512,27 @@ export function CateringPackageCustomizationQuantityFlavorModal(
             </>
           ))}
 
-          <button
-            onClick={handleAddProductToPackage}
-            className="text-white !mt-8 text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-          >
-            <BsFillCartPlusFill className="text-3xl" />
-            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-              Add product
-            </span>
-          </button>
+          <div className="space-y-4 !mt-8 ">
+            <button
+              onClick={() => handleAddProductToPackage("checkout")}
+              className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+            >
+              <BsFillBagCheckFill className="text-3xl" />
+              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                Checkout
+              </span>
+            </button>
+
+            <button
+              onClick={() => handleAddProductToPackage("add-to-cart")}
+              className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+            >
+              <BsFillCartPlusFill className="text-3xl" />
+              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                Add to cart
+              </span>
+            </button>
+          </div>
         </section>
       </div>
     </div>

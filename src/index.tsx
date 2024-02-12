@@ -177,8 +177,19 @@ import {
   ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
-  StockOrderView,
+  StockOrderingSettingsCreateProductsPage,
+  StockOrderingSettingsEditProductsPage,
+  StockOrderingSettingsProductsPage,
 } from "features/stock-ordering/presentation/pages";
+import {
+  Hr,
+  HrDashboard,
+  HrLogin,
+  HrManagementAssessment,
+  HrSelfAssessment,
+  HrStaffAssessmentAnswers,
+} from "features/hr/presentation/pages";
+import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
 import {
   SalesDashboard,
@@ -422,14 +433,32 @@ root.render(
                                     path="order"
                                     element={<StockOrderOrders />}
                                   />
-                                  <Route
-                                    path="order/view"
-                                    element={<StockOrderView />}
-                                  />
+
                                   <Route
                                     path="profile"
                                     element={<ProfilePage />}
                                   />
+
+                                  <Route path="settings">
+                                    <Route
+                                      path="products"
+                                      element={
+                                        <StockOrderingSettingsProductsPage />
+                                      }
+                                    />
+                                    <Route
+                                      path="products/create"
+                                      element={
+                                        <StockOrderingSettingsCreateProductsPage />
+                                      }
+                                    />
+                                    <Route
+                                      path="products/edit/:id"
+                                      element={
+                                        <StockOrderingSettingsEditProductsPage />
+                                      }
+                                    />
+                                  </Route>
                                 </Route>
                               </Route>
                             </Route>
@@ -702,6 +731,26 @@ root.render(
                           <Route element={<AuditFormSideStepper />}>
                             <Route path="audit/form" element={<AuditForm />} />
                           </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="hr" element={<Hr />}>
+                        <Route index element={<HrLogin />} />
+
+                        <Route element={<HrGuard />}>
+                          <Route path="dashboard" element={<HrDashboard />} />
+                          <Route
+                            path="self-assessment"
+                            element={<HrSelfAssessment />}
+                          />
+                          <Route
+                            path="management-assessment"
+                            element={<HrManagementAssessment />}
+                          />
+                          <Route
+                            path="staff-assessment-answer"
+                            element={<HrStaffAssessmentAnswers />}
+                          />
                         </Route>
                       </Route>
 

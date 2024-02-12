@@ -18,6 +18,8 @@ import {
   updateCancelledStatus,
   updateBillingOrderParam,
   updateOrderItemsParam,
+  stockOrderSettingsProductParam,
+  FranchiseePayBillParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -25,6 +27,10 @@ import { GetProductDataModel } from "../core/domain/get-product-data.model";
 import { GetPayBillingSiModel } from "../core/domain/get-pay-billing-si.model";
 import { DeliveryScheduleModel } from "../core/domain/delivery-schedule.model";
 import { OrderTableData } from "../core/domain/order-table-row.model";
+import { OverdueTaskModel } from "../core/domain/overdue-task.model";
+import { StockOrderingSettingsProducts } from "../core/domain/stock-ordering-all-products.model";
+import { StockOrderProductModel } from "../core/domain/stock-order-product.model";
+import { StockOrderAllStoreModel } from "../core/domain/stock-order-all-store.model";
 
 export interface GetStockOrderStoresResponse {
   data: {
@@ -157,12 +163,64 @@ export interface updateOrderItemsResponse {
   };
 }
 
+export interface GetStockOrderSettingProductsResponse {
+  data: {
+    message: string;
+    data: StockOrderingSettingsProducts;
+  };
+}
+
+export interface stockOrderCreateProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetStockOrderSettingProductsEditResponse {
+  data: {
+    message: string;
+    data: StockOrderProductModel;
+  };
+}
+
+export interface GetStockOrderAllStoresResponse {
+  data: {
+    message: string;
+    data: StockOrderAllStoreModel;
+  };
+}
+
+export interface stockOrderEditProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface stockOrderActiveStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface updateFranchiseePayBillResponse {
+  data: {
+    message: string;
+  };
+}
+
 export function GetStockOrderStoresRepository(
   store_id: string
 ): Promise<GetStockOrderStoresResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/order/stores${store_id}`, {
     withCredentials: true,
   });
+}
+
+export interface GetOverdueTaskResponse {
+  data: {
+    message: string;
+    data: Array<OverdueTaskModel>;
+  };
 }
 
 export function InsertNewOrderRepository(
@@ -334,6 +392,98 @@ export function updateOrderItemsRepository(
     `${REACT_APP_DOMAIN_URL}api/stock/update/order-items`,
     param,
     {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetOverdueTaskRepository(): Promise<GetOverdueTaskResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/get/overdue-task`, {
+    withCredentials: true,
+  });
+}
+
+export function GetStockOrderSettingProductsRepository(
+  param: string
+): Promise<GetStockOrderSettingProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/stock/settings/products${param}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function stockOrderCreateProductRepository(
+  param: stockOrderSettingsProductParam
+): Promise<stockOrderCreateProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/settings/create-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetStockOrderSettingProductsEditRepository(
+  param: string
+): Promise<GetStockOrderSettingProductsEditResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/stock/settings/edit-product/${param}`,
+
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetStockOrderAllStoresRepository(): Promise<GetStockOrderAllStoresResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/stock/settings/all-store`,
+
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function stockOrderEditProductRepository(param: {
+  id: string;
+  productData: stockOrderSettingsProductParam;
+}): Promise<stockOrderEditProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/settings/edit-product/${param.id}`,
+    param.productData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function stockOrderActiveStatusRepository(param: {
+  id: string;
+  active_status: boolean;
+}): Promise<stockOrderActiveStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/settings/product-status`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function updateFranchiseePayBillRepository(
+  param: FranchiseePayBillParam
+): Promise<updateFranchiseePayBillResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/order/franchisee-pay-bill`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       withCredentials: true,
     }
   );

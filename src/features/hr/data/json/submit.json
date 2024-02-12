@@ -1,0 +1,66 @@
+{
+  "kra_kpi_grade": [
+    {
+      "id": 0,
+      "key_result_areas_or_key_performance_indicators": "Sample Answer",
+      "result_achieved_or_not_achieved": "Sample Answer",
+      "score": 4.0
+    },
+    {
+      "id": 1,
+      "key_result_areas_or_key_performance_indicators": "Sample Answer",
+      "result_achieved_or_not_achieved": "Sample Answer",
+      "score": 4.0
+    },
+    {
+      "id": 2,
+      "key_result_areas_or_key_performance_indicators": "Sample Answer",
+      "result_achieved_or_not_achieved": "Sample Answer",
+      "score": 4.0
+    }
+  ],
+  "core_competency_grade": [
+    {
+      "id": 0,
+      "rating": 4.0,
+      "critical_incidents_or_comments": "Sample Answer"
+    },
+    {
+      "id": 1,
+      "rating": 4.3,
+      "critical_incidents_or_comments": "Sample Answer"
+    },
+    {
+      "id": 2,
+      "rating": 4.1,
+      "critical_incidents_or_comments": "Sample Answer"
+    }
+  ],
+  "functional_competency_and_punctuality_grade": [
+    {
+      "id": 0,
+      "rating": 4.0,
+      "critical_incidents_or_comments": "Sample Answer"
+    },
+    {
+      "id": 1,
+      "rating": 4.3,
+      "critical_incidents_or_comments": "Sample Answer"
+    },
+    {
+      "id": 2,
+      "rating": 4.1,
+      "critical_incidents_or_comments": "Sample Answer"
+    }
+  ],
+  "attendance_and_punctuality": {
+    "absences": 4.0,
+    "tardiness": 4.0
+  },
+  "comments": {
+    "key_strengths": "",
+    "areas_for_development": "",
+    "major_development_plans_for_next_year": "",
+    "comments_on_your_overall_performance_and_development_plan": ""
+  }
+}

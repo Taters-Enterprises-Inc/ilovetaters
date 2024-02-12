@@ -2,6 +2,7 @@ export interface GetProductDataModel {
   order_information: {
     store_name: string;
     store_id: string;
+    franchise_type_id: number | null;
     id: string;
     ship_to_address: string;
     status_id: number;
@@ -29,6 +30,7 @@ export interface GetProductDataModel {
     payment_detail_image: string;
     delivery_receipt: string;
     updated_delivery_receipt: string;
+    franchisee_payment_detail_image: string;
 
     //Tracking
     tracking: Array<{
@@ -51,12 +53,13 @@ export interface GetProductDataModel {
     product_id: string;
     product_name: string;
     uom: string;
+    cost: string;
     category_id: string;
-    order_qty: string;
-    commited_qty: string;
-    delivered_qty: string;
-    total_cost: string;
+    order_qty: string | null;
+    commited_qty: string | null;
+    delivered_qty: string | null;
+    total_cost: string | null;
     order_information_id: string;
-    out_of_stock: boolean;
+    out_of_stock: boolean | null;
   }>;
 }

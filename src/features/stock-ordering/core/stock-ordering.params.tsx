@@ -1,4 +1,5 @@
 import { OrderTableData } from "./domain/order-table-row.model";
+import { categoryModel } from "./domain/store-and-category.model";
 
 export interface test {
   test: string;
@@ -10,10 +11,7 @@ export interface InsertNewOrderParam {
   deliveryScheduleData: string;
   remarks: string;
   logisticType: string;
-  category: {
-    category_id: string;
-    category_name: string;
-  };
+  category: categoryModel;
   OrderData: OrderTableData[];
 }
 
@@ -55,13 +53,13 @@ export interface updateStatus {
 
 export interface newOrdersParam {
   id: string;
-  commitedDelivery: string;
+  commitedDelivery: string | null;
   remarks: string;
   product_data: {
     id: string;
     productId: string;
-    commitedQuantity: string;
-    out_of_stock: boolean;
+    commitedQuantity: string | null;
+    out_of_stock: boolean | null;
   }[];
 }
 
@@ -106,7 +104,7 @@ export interface updatReviewParam {
   product_data: {
     id: string;
     productId: string;
-    commitedQuantity: string;
+    commitedQuantity: string | null;
   }[];
 }
 
@@ -129,6 +127,21 @@ export interface updateOrderItemsParam {
   productId: string;
   productName: string;
   uom: string;
-  orderQty: string;
+  orderQty: string | null;
   order_information_id: string;
+}
+
+export interface stockOrderSettingsProductParam {
+  productId: string;
+  productName: string;
+  uom: string;
+  categoryType: number | undefined;
+  cost: number | null;
+  store_id: number[];
+}
+
+export interface FranchiseePayBillParam {
+  id: string;
+  remarks: string;
+  uploadedBillingReceipt: File | string;
 }

@@ -20,21 +20,15 @@ import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
+import {
+  selectedStoreModel,
+  categoryModel,
+} from "features/stock-ordering/core/domain/store-and-category.model";
 
 interface PlaceOrdersModalProps {
   open: boolean;
   onClose: () => void;
   openConfirmationState: (value: boolean) => void;
-}
-
-interface selectedStore {
-  store_id: string;
-  name: string;
-}
-
-interface category {
-  category_id: string;
-  category_name: string;
 }
 
 export function PlaceOrderModal(props: PlaceOrdersModalProps) {
@@ -44,14 +38,14 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
   const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [isDisabled, setDisabled] = useState(true);
-  const [selectedStore, setSelectedStore] = useState<selectedStore>();
+  const [selectedStore, setSelectedStore] = useState<selectedStoreModel>();
 
-  const [category, setCategory] = useState<category>();
+  const [category, setCategory] = useState<categoryModel>();
 
   const [rows, setRows] = useState<OrderTableData[]>([]);
 
   useEffect(() => {
-    setSelectedStore({ store_id: "", name: "" });
+    setSelectedStore({ store_id: "", name: "", franchise_type_id: "" });
     setCategory({ category_id: "", category_name: "" });
     setSelectedAddress("");
     setDisabled(true);
@@ -62,7 +56,9 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       store_id: selectedStore?.store_id ?? "",
     });
 
-    dispatch(getStockOrderStores(query));
+    if (props.open) {
+      dispatch(getStockOrderStores(query));
+    }
   }, [dispatch, selectedStore]);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {

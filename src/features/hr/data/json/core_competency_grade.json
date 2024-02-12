@@ -1,0 +1,40 @@
+{
+  "message": "",
+  "data": [
+    {
+      "id": 0,
+      "title": "Honesty",
+      "description": "Uprightness of character and action. Has a strong inclination to tollie, steal, or deceive in any way. An active disposition regard for the standards of one's profession, calling, or ition."
+    },
+    {
+      "id": 1,
+      "title": "Excellence",
+      "description": "Being good at a good thing. Has the ability to strive to be the best one can be and to do the best thatonecando."
+    },
+    {
+      "id": 2,
+      "title": "Responsiblity",
+      "description": "Understands and knows the obligations of his/her duties and able to perform the duties or tasks assigned."
+    },
+    {
+      "id": 3,
+      "title": "Respect",
+      "description": "Ability to show appreciation for someone's traits or qualities and treating people with dignity and gratitude. Able to abide with the company's Code of Conduct."
+    },
+    {
+      "id": 4,
+      "title": "Ownership",
+      "description": "Displays proactive, solution-oriented, accountable, transparent and commitment in the performance of his/her duties. Displays the abiity to take on challenges."
+    },
+    {
+      "id": 5,
+      "title": "Integrity",
+      "description": "Possessing upstanding character traits, work ethics, sound judgement, and loyalty. Consistenctly doing the right thing through words and actions."
+    },
+    {
+      "id": 6,
+      "title": "Customer 1st",
+      "description": "Consistently seeking ways to deliver a positive Customer experience by designing and delivering services with the Customer in mind. Able to go above and beyond to deliver exceptional service."
+    }
+  ]
+}

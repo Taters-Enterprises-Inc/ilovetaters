@@ -7,7 +7,7 @@ interface StockOrderHandleQuantityProps {
   rows: any[];
   setRows: (row: any[]) => void;
   rowsIndex: number;
-  currentValue: string;
+  currentValue: string | null;
   propertyKey: string;
   precedingPropertyKey?: string;
 }
@@ -33,7 +33,7 @@ export function StockOrderHandleQuantity(props: StockOrderHandleQuantityProps) {
       if (index === props.rowsIndex) {
         if (event.currentTarget.id === "minus") {
           const minusVal = value - 1;
-          value = minusVal >= 0 ? minusVal : 0;
+          value = minusVal > 0 ? minusVal : 1;
         } else if (event.currentTarget.id === "plus") {
           const plusVal = value + 1;
           value = plusVal < 9999 ? plusVal : 9999;
