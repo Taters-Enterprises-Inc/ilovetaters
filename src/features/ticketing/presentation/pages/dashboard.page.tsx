@@ -1,3 +1,4 @@
+import { TicketingDashboardContents } from "../components/ticketing-dashboard-content";
 import { TicketingHead } from "../components/ticketing-head";
 
 export function TicketingDashboard() {
@@ -15,6 +16,10 @@ export function TicketingDashboard() {
           ],
         }}
       />
+
+      <div className="p-8">
+        <TicketingDashboardContents />
+      </div>
     </>
   );
 }
