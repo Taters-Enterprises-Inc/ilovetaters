@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { MdDashboardCustomize } from "react-icons/md";
+import { MdDashboardCustomize, MdOutlinePayment } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { SiPlatformdotsh } from "react-icons/si";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -37,12 +37,26 @@ export function SalesDrawerMenu() {
       (group) => group.id === 3
     );
 
+  const owner = getAdminSessionState.data?.admin.user_details.sales_groups.some(
+    (group) => group.id === 3
+  );
+
+  const payable = getAdminSessionState.data?.admin.user_details.sos_groups.some(
+    (group) => group.id === 7 || group.id === 8 || group.id === 9
+  );
+
   const menuitems = [
     {
       text: "Dashboard",
       path: "dashboard",
       icon: <MdDashboardCustomize size={20} />,
       enable: true,
+    },
+    {
+      text: "Payable",
+      path: "payable",
+      icon: <MdOutlinePayment size={20} />,
+      enable: payable || owner,
     },
     {
       text: "Form",

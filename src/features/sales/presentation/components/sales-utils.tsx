@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Badge, BadgeProps, Box, Typography, styled } from "@mui/material";
 import { SalesActiveFieldsModel } from "features/sales/core/domain/active-fields.model";
 import { SalesFormDataModel } from "features/sales/core/domain/sales-form-data.model";
 import { SubmitFormParam } from "features/sales/core/sales.param";
@@ -232,3 +232,13 @@ export const getFormState = (
       return {};
   }
 };
+
+export const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: 3,
+    top: -13,
+    border: `2px solid #ffcd17`,
+    backgroundColor: "#ffcd17",
+    padding: "0 4px",
+  },
+}));

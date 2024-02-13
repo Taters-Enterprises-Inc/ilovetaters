@@ -192,6 +192,7 @@ import {
 import { HrGuard } from "features/hr/presentation/guards/hr.guard";
 import { SalesSidebarWrapper } from "features/sales/presentation/components/sidebar";
 import {
+  PayablePage,
   SalesDashboard,
   SalesFormList,
   SalesSavedForm,
@@ -479,6 +480,11 @@ root.render(
                                   <Route
                                     path="form-list/saved-form"
                                     element={<SalesSavedForm />}
+                                  />
+
+                                  <Route
+                                    path="payable"
+                                    element={<PayablePage />}
                                   />
 
                                   <Route

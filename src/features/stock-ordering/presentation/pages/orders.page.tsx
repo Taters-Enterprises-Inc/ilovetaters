@@ -18,7 +18,7 @@ export function StockOrderOrders() {
         }}
       />
       <div className="p-8">
-        <OrderContents />
+        <OrderContents isPayment={false} />
       </div>
     </>
   );
