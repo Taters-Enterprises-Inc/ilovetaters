@@ -17,7 +17,7 @@ export function TicketingDashboard() {
         }}
       />
 
-      <div className="p-8">
+      <div className="p-4">
         <TicketingDashboardContents />
       </div>
     </>
