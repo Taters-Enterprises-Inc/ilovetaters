@@ -1,3 +1,4 @@
+import { CreateTicketContents } from "../components/ticketing-create-ticket-content";
 import { TicketingHead } from "../components/ticketing-head";
 
 export function CreateTicket() {
@@ -16,7 +17,9 @@ export function CreateTicket() {
         }}
       />
 
-      <div className="p-8"></div>
+      <div className="p-8">
+        <CreateTicketContents />
+      </div>
     </>
   );
 }
