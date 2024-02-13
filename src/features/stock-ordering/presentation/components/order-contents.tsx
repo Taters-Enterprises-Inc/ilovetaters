@@ -26,6 +26,7 @@ import { FaEye } from "react-icons/fa";
 import { FcHighPriority } from "react-icons/fc";
 
 import {
+  GetStockOrdersState,
   getStockOrders,
   resetGetStockOrders,
   selectGetStockOrders,
@@ -50,10 +51,19 @@ import {
   selectstockOrderSideBar,
   togglestockOrderSideBar,
 } from "../slices/stock-order.slice";
-import { dateSetup } from "./stock-ordering-utils";
+import {
+  dateSetup,
+  eliminateTab,
+  isPayableCheck,
+} from "./stock-ordering-utils";
 import { OrderFilter } from ".";
 import { stubFalse } from "lodash";
 import { CiFilter } from "react-icons/ci";
+import {
+  selectSalesSideBar,
+  toggleSalesSideBar,
+} from "features/sales/presentation/slices/sales-sidebar.slice";
+import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -70,6 +80,10 @@ interface DataFilterData {
 
 interface Modals {
   [key: string]: boolean;
+}
+
+interface OrderContentsProps {
+  isPayment: boolean;
 }
 
 const TabPanel = (props: TabPanelProps) => {
@@ -102,13 +116,14 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
-export function OrderContents() {
+export function OrderContents(props: OrderContentsProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const stockOrderSideBar = useAppSelector(selectstockOrderSideBar);
+  const salesSideBarState = useAppSelector(selectSalesSideBar);
 
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
@@ -151,8 +166,10 @@ export function OrderContents() {
   ];
 
   const handleModalToggle = (modal: string) => {
-    if (stockOrderSideBar.status) {
+    if (stockOrderSideBar.status && !props.isPayment) {
       dispatch(togglestockOrderSideBar());
+    } else if (salesSideBarState.status && props.isPayment) {
+      dispatch(toggleSalesSideBar());
     }
     setModals((prevModals) => ({
       ...prevModals,
@@ -182,6 +199,7 @@ export function OrderContents() {
       order: order,
       store: store,
       search: search,
+      dateType: dateType,
       startDate: startDate,
       endDate: endDate,
       tab: newValue,
@@ -207,7 +225,28 @@ export function OrderContents() {
       tab: tabValue,
     });
 
-    dispatch(getStockOrders(query));
+    if (
+      (!getStockOrdersState.data &&
+        getStockOrdersState.status !== GetStockOrdersState.success) ||
+      tabValue === null
+    ) {
+      const queryParams = createQueryParams({
+        tab:
+          Number(
+            isPayableCheck(
+              props.isPayment,
+              getAdminSessionState.data?.admin.user_details.sos_groups ?? []
+            )?.id
+          ) - 1 ?? null,
+      });
+      navigate({
+        pathname: "",
+        search: queryParams,
+      });
+      dispatch(getStockOrders(queryParams));
+    } else {
+      dispatch(getStockOrders(query));
+    }
   }, [
     dispatch,
     pageNo,
@@ -228,7 +267,8 @@ export function OrderContents() {
       <div className="space-y-3">
         <div className="">
           <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-            Order {" > " + TAB_NAVIGATION[Number(tabValue)].label3}
+            Material management{" "}
+            {" > " + TAB_NAVIGATION[Number(tabValue)].label3}
           </span>
         </div>
 
@@ -292,9 +332,7 @@ export function OrderContents() {
                   style={
                     (index === 2 &&
                       getStockOrdersState.data?.franchise_type !== 2) ||
-                    index === 6 ||
-                    index === 7 ||
-                    index === 8
+                    eliminateTab(props.isPayment, index)
                       ? { display: "none" }
                       : {}
                   }
