@@ -1335,6 +1335,11 @@ export const STOCK_ORDERING_BUTTON_STYLE = {
   backgroundColor: "#CC5801",
 };
 
+export const TICKETING_BUTTON_STYLE = {
+  color: "white",
+  backgroundColor: "#CC5801",
+};
+
 export const STOCK_ORDERING_MODAL_TITLE = [
   { label: "Supplier View Orer" },
   { label: "Procurement Review Orders" },
