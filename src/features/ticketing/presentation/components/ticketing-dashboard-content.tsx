@@ -8,6 +8,8 @@ import {
 import { ChangeEvent } from "react";
 import { FaEye } from "react-icons/fa";
 import { TbCheckupList } from "react-icons/tb";
+import { TicketingTriageModal } from "../modals/ticketing-triage.modal";
+import React from "react";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -18,6 +20,8 @@ const columns: Array<Column> = [
 ];
 
 export function TicketingDashboardContents() {
+  const [openTriageModal, setOpenTriageModal] = React.useState(false);
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:items-end">
@@ -135,7 +139,7 @@ export function TicketingDashboardContents() {
                 </button>
                 <button
                   onClick={() => {
-                    alert("Button Not Yet Working");
+                    setOpenTriageModal(true);
                   }}
                 >
                   <TbCheckupList className="text-lg" />
@@ -145,6 +149,11 @@ export function TicketingDashboardContents() {
           </DataTable>
         </div>
       </>
+
+      <TicketingTriageModal
+        open={openTriageModal}
+        onClose={() => setOpenTriageModal(false)}
+      />
     </>
   );
 }
