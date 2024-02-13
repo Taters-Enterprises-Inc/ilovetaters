@@ -53,6 +53,7 @@ export interface GetProductDataModel {
     product_id: string;
     product_name: string;
     uom: string;
+    cost: string;
     category_id: string;
     order_qty: string | null;
     commited_qty: string | null;

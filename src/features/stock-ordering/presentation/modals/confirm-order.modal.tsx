@@ -11,8 +11,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { StockOrderConfirmTable } from "../components";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
-import { selectGetStockOrderStores } from "../slices/get-store.slice";
-import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
+import {
+  getStockOrderStores,
+  selectGetStockOrderStores,
+} from "../slices/get-store.slice";
+import {
+  confirmNewOrder,
+  selectconfirmNewOrder,
+} from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
@@ -28,6 +34,12 @@ import {
   categoryModel,
   selectedStoreModel,
 } from "features/stock-ordering/core/domain/store-and-category.model";
+import { togglePopupScroll } from "../slices/popup-scroll.slice";
+import { createQueryParams } from "features/config/helpers";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -43,10 +55,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const [selectedStore, setSelectedStore] = useState<selectedStoreModel>();
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [category, setCategory] = useState<categoryModel>();
   const [deliveryDate, setDeliveryData] = useState<string | null>("");
   const [remarks, setRemarks] = useState("");
   const [rows, setRows] = useState<OrderTableData[]>([]);
+  const [tempRows, setTempRows] = useState<OrderTableData[]>([]);
   const [logisticType, setLogisticType] = useState<{
     id: string | null | undefined;
     name: string | null | undefined;
@@ -56,57 +68,94 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [openPopup, setOpenPopup] = useState(false);
   const [deliveryDateError, setDeliveryDateError] = useState(false);
   const [isEditCancelled, setisEditCancelled] = useState(false);
+  const [isConfirmOrder, setIsConfirmOrder] = useState(false);
   const [emergencyOrderEnabled, setEmergencyOrderEnabled] = useState(false);
 
   useEffect(() => {
+    dispatch(togglePopupScroll());
+  }, [props.open]);
+
+  useEffect(() => {
     if (getOrderInformation.data) {
-      const getSelectedStore = getStores.data?.stores.find((store) => {
-        return store.store_id === getOrderInformation.data?.selectedStoreId;
-      });
+      if (getStores.data) {
+        const getSelectedStore = getStores.data?.stores.find((store) => {
+          return store.store_id === getOrderInformation.data?.selectedStoreId;
+        });
+
+        setSelectedStore(getSelectedStore);
+      } else {
+        const query = createQueryParams({
+          store_id: getOrderInformation.data?.selectedStoreId ?? "",
+        });
+
+        dispatch(getStockOrderStores(query));
+      }
 
       setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
-      setSelectedStore(getSelectedStore);
+      setRows(getOrderInformation.data.OrderData ?? []);
+      setTempRows(rows);
+
       setDeliveryData("");
       setRemarks("");
-      setRows([]);
       setIsEdit(false);
       setLogisticType(undefined);
       setEmergencyOrderEnabled(false);
       dispatch(getDeliverySchedule());
     }
-  }, [props.open]);
+  }, [props.open, getStores.data, getOrderInformation.data]);
 
   useEffect(() => {
     if (isEditCancelled) {
-      setRows(getOrderInformation.data?.OrderData ?? []);
+      setRows(tempRows);
       setisEditCancelled(false);
+      setSelectedAddress(getOrderInformation.data?.selectedAddress ?? "");
+    } else if (isConfirmOrder) {
+      setTempRows(rows);
+      setIsConfirmOrder(false);
     }
-  }, [isEditCancelled]);
-
-  const handleTableRows = (TableData: OrderTableData[]) => {
-    setRows(TableData);
-  };
+  }, [isEditCancelled, isConfirmOrder]);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     dispatch(
-      insertNewOrder({
-        selectedStoreId: selectedStore?.store_id,
-        deliveryScheduleData: deliveryDate ?? "",
-        selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
-        remarks: remarks,
-        logisticType: emergencyOrderEnabled ? logisticType?.id ?? "" : "",
-        category: {
-          category_id: category?.category_id ?? "",
-          category_name: category?.category_name ?? "",
-        },
-        OrderData: rows,
+      openMessageModal({
+        message: `Are sure you want to place this order?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              dispatch(
+                insertNewOrder({
+                  selectedStoreId: selectedStore?.store_id,
+                  deliveryScheduleData: deliveryDate ?? "",
+                  selectedAddress:
+                    getOrderInformation.data?.selectedAddress ?? "",
+                  remarks: remarks,
+                  logisticType: emergencyOrderEnabled
+                    ? logisticType?.id ?? ""
+                    : "",
+                  category:
+                    (getOrderInformation.data?.category as categoryModel) ??
+                    null,
+                  OrderData: rows,
+                })
+              );
+
+              document.body.classList.remove("overflow-hidden");
+              dispatch(closeMessageModal());
+              props.onClose();
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {},
+          },
+        ],
       })
     );
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
   };
 
   const schedule = getDeliveryScheduleState.data?.find(
@@ -182,6 +231,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const handleConfirmEdit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
+    setIsConfirmOrder(true);
     setIsEdit(false);
   };
 
@@ -220,13 +270,11 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     return null;
   }
 
-  console.log(logisticType);
-
   return (
     <>
       <div
         id="place-order-modal"
-        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+        className="fixed  -top-5 inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
@@ -245,19 +293,13 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 space-y-5 border-secondary">
               <StockOrderConfirmTable
-                handleTableRows={handleTableRows}
-                setCategory={setCategory}
-                category={{
-                  category_id: category?.category_id ?? "",
-                  category_name: category?.category_name ?? "",
-                }}
-                store={{
-                  store_id: selectedStore?.name ?? "",
-                  store_name: selectedStore?.store_id ?? "",
-                }}
-                isEditCancelled={isEditCancelled}
-                isConfirmOrder={true}
+                categoryName={
+                  getOrderInformation.data?.category.category_name ??
+                  "Unable to determine category name please contact MIS Department"
+                }
                 isEdit={isEdit}
+                rows={rows}
+                setRows={setRows}
               />
               {getStores.data && (
                 <div className="space-y-3">
@@ -344,7 +386,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                         <Button
                           fullWidth
                           variant="contained"
-                          disabled={!selectedAddress ? true : false}
+                          disabled={rows.some(
+                            (product) => product.productId === ""
+                          )}
                           onClick={handleConfirmEdit}
                           sx={STOCK_ORDERING_BUTTON_STYLE}
                         >

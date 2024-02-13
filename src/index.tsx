@@ -206,6 +206,7 @@ import { HrOtherDetails } from "features/hr/presentation/pages/hr-other-details.
 import { HrAssessmentSummary } from "features/hr/presentation/pages/hr-assessment-summary.page";
 import { HrImportUsers } from "features/hr/presentation/pages/hr-import-users.page";
 import {
+  PayablePage,
   SalesDashboard,
   SalesFormList,
   SalesSavedForm,
@@ -497,6 +498,11 @@ root.render(
                                   <Route
                                     path="form-list/saved-form"
                                     element={<SalesSavedForm />}
+                                  />
+
+                                  <Route
+                                    path="payable"
+                                    element={<PayablePage />}
                                   />
 
                                   <Route

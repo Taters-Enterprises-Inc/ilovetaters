@@ -82,6 +82,11 @@ export function AdminLandingPage() {
   const { first_name, last_name } =
     getAdminSessionState.data?.admin.user_details ?? {};
 
+  const payableEnable =
+    getAdminSessionState.data?.admin.user_details.sos_groups.some(
+      (group) => group.id === 7 || group.id === 8 || group.id === 9
+    );
+
   //handle the new property here
   useEffect(() => {
     if (getAdminSessionState.data) {
@@ -91,7 +96,7 @@ export function AdminLandingPage() {
         ...prevState,
         shop: userAdmin?.groups?.length !== 0,
         sos: userAdmin?.sos_groups?.length !== 0,
-        sales: userAdmin?.sales_groups?.length !== 0,
+        sales: userAdmin?.sales_groups?.length !== 0 || Boolean(payableEnable),
         ticket: true, // Need to change/update
       }));
     }

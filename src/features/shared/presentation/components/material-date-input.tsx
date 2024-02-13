@@ -74,7 +74,7 @@ export function MaterialDateInput(props: MaterialDateInputProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} className="flex-1">
       <DesktopDatePicker
-        disableFuture
+        disableFuture={props.disableFuture}
         label={props.label}
         openTo={props.openTo}
         views={props.views}
