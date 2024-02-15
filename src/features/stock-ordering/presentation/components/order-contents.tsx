@@ -161,7 +161,7 @@ export function OrderContents(props: OrderContentsProps) {
     { id: "commited_delivery_date", label: "Commited Delivery Date" },
     { id: "actual_delivery_date", label: "Actual Delivery Date" },
     // { id: "description", label: "status" },
-    // { id: "short_name", label: "Payment Status" },
+    { id: "short_name", label: "Payment Status" },
     { id: "action", label: "Action" },
   ];
 
@@ -194,14 +194,14 @@ export function OrderContents(props: OrderContentsProps) {
     const params = {
       page_no: null,
       per_page: perPage,
-      status: status,
-      order_by: orderBy,
-      order: order,
-      store: store,
-      search: search,
-      dateType: dateType,
-      startDate: startDate,
-      endDate: endDate,
+      status: null,
+      order_by: null,
+      order: null,
+      store: null,
+      search: null,
+      dateType: null,
+      startDate: null,
+      endDate: null,
       tab: newValue,
     };
     const queryParams = createQueryParams(params);
@@ -231,6 +231,15 @@ export function OrderContents(props: OrderContentsProps) {
       tabValue === null
     ) {
       const queryParams = createQueryParams({
+        page_no: pageNo,
+        per_page: perPage,
+        order_by: orderBy,
+        order: order,
+        store: store,
+        search: search,
+        dateType: dateType,
+        startDate: startDate,
+        endDate: endDate,
         tab:
           Number(
             isPayableCheck(
@@ -489,8 +498,8 @@ export function OrderContents(props: OrderContentsProps) {
                           ? dateSetup(order.actual_delivery_date, true)
                           : order.actual_delivery_date}
                       </DataTableCell>
-                      {/* <DataTableCell>{order.description}</DataTableCell>
-                      <DataTableCell>{order.short_name}</DataTableCell> */}
+                      {/* <DataTableCell>{order.description}</DataTableCell>*/}
+                      <DataTableCell>{order.short_name}</DataTableCell>
                       <DataTableCell>
                         <IconButton onClick={() => handleAction(order.id)}>
                           {order.logistic_id ? (
@@ -721,6 +730,7 @@ export function OrderContents(props: OrderContentsProps) {
               dateType: data.type ?? null,
               startDate: data.start ?? null,
               endDate: data.end ?? null,
+              tab: tabValue,
             };
             const queryParams = createQueryParams(params);
             navigate({
