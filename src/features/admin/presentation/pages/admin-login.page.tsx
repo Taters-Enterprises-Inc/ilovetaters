@@ -56,7 +56,7 @@ export function AdminLogin() {
     getAdminSessionState.data &&
     getAdminSessionState.status === GetAdminSessionState.success
   ) {
-    return <Navigate to={"/admin/landing"} />;
+    return <Navigate to={"/admin/home"} />;
   }
 
   return (

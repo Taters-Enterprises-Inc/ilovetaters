@@ -41,3 +41,7 @@ export { AdminSnackshopDashboard } from "./admin-snackshop-dashboard.page";
 export { AdminCustomerFeedbackDashboard } from "./admin-customer-feedback-dashboard.page";
 
 export { AdminLandingPage } from "./admin-landing.page";
+
+//New
+
+export { AdminHomePage } from "./admin-home.page";

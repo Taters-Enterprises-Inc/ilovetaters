@@ -82,6 +82,7 @@ import {
   AdminSnackshopDashboard,
   AdminCustomerFeedbackDashboard,
   AdminLandingPage,
+  AdminHomePage,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -425,12 +426,15 @@ root.render(
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
                         <Route element={<AdminNotificationWrapper />}>
+                          <Route element={<AdminSidebarWrapper />}>
+                            <Route path="home" element={<AdminHomePage />} />
+                          </Route>
                           {/* <Route
                             path="landing"
                             element={<AdminLandingPage />}
                           /> */}
 
-                          <Route element={<AdminGuard />}>
+                          {/* <Route element={<AdminGuard />}>
                             <Route
                               path="landing"
                               element={<AdminLandingPage />}
@@ -709,7 +713,7 @@ root.render(
                                 </Route>
                               </Route>
                             </Route>
-                          </Route>
+                          </Route> */}
                         </Route>
                       </Route>
 

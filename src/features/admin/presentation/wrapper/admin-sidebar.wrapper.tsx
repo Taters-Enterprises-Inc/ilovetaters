@@ -10,7 +10,6 @@ export function AdminSidebarWrapper() {
   return (
     <main className="flex min-h-screen">
       <AdminDrawerDesktop />
-      <AdminDrawerMobile />
 
       <section
         id="admin-main-section"
