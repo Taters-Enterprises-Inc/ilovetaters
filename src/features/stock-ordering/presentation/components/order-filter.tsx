@@ -15,19 +15,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
-import {
-  getAdminSession,
-  selectGetAdminSession,
-} from "features/admin/presentation/slices/get-admin-session.slice";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { useAppSelector } from "features/config/hooks";
-import { theme } from "features/shared/constants";
 import {
   MaterialDateInput,
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
-import { set } from "lodash";
 import { useEffect, useState } from "react";
 
 import { FaChevronDown } from "react-icons/fa";
@@ -45,7 +38,7 @@ function union(a: readonly StoreArray[], b: readonly StoreArray[]) {
 }
 
 interface filterData {
-  store?: string | null;
+  store?: readonly StoreArray[] | null;
   type?: string | null;
   start?: string | null;
   end?: string | null;
@@ -68,11 +61,12 @@ interface StoreArray extends Array<ListOfActiveStores> {}
 export function OrderFilter(props: OrderFilterProps) {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
-  const [filter, setfilter] = useState<filterData | null>(null);
+  const [filter, setFilter] = useState<filterData | null>(null);
   const [checked, setChecked] = useState<readonly StoreArray[]>([]);
   const [storeList, setStoreList] = useState<readonly StoreArray[]>([]);
-
-  const stores = getAdminSessionState.data?.admin.user_details.stores;
+  const [filteredStoreDataList, setFilteredStoreDataList] = useState<
+    readonly StoreArray[]
+  >([]);
 
   const dateOption = [
     { id: 1, text: "Order placement date", name: "order_placement_date" },
@@ -96,6 +90,13 @@ export function OrderFilter(props: OrderFilterProps) {
     }
   }, [props.anchor]);
 
+  useEffect(() => {
+    setFilter((previousValue) => ({
+      ...previousValue,
+      store: checked ?? [],
+    }));
+  }, [checked]);
+
   const handleFilter = () => {
     if (filter?.store !== null) {
       props.filter(filter ?? "");
@@ -113,13 +114,15 @@ export function OrderFilter(props: OrderFilterProps) {
   };
 
   const handleResetFilter = () => {
-    setfilter((previousValue) => ({
+    setFilter((previousValue) => ({
       ...previousValue,
       store: null,
       type: null,
       start: null,
       end: null,
     }));
+    setChecked([]);
+    setFilteredStoreDataList([]);
     props.filter({ store: null, type: null, start: null, end: null });
 
     props.onClose();
@@ -140,17 +143,28 @@ export function OrderFilter(props: OrderFilterProps) {
       store.filter((row) => row.name.toLowerCase().includes(searchTerm))
     );
 
-    setStoreList(searchTerm ? filtered : storeListData);
+    const newFilter = filtered.filter((values) => values.length !== 0);
+
+    if (searchTerm) {
+      setStoreList(filtered);
+      setFilteredStoreDataList(newFilter);
+    } else {
+      setStoreList(storeListData);
+      setFilteredStoreDataList([]);
+    }
   };
 
   const numberOfChecked = (items: readonly StoreArray[]) =>
     intersection(checked, items).length;
 
   const handleSelectAllStore = (items: readonly StoreArray[]) => () => {
-    if (numberOfChecked(items) === items.length) {
-      setChecked(not(checked, items));
+    const newItems =
+      filteredStoreDataList.length !== 0 ? filteredStoreDataList : items;
+
+    if (numberOfChecked(newItems) === newItems.length) {
+      setChecked(not(checked, newItems));
     } else {
-      setChecked(union(checked, items));
+      setChecked(union(checked, newItems));
     }
   };
 
@@ -166,6 +180,71 @@ export function OrderFilter(props: OrderFilterProps) {
 
     setChecked(newChecked);
   };
+
+  const filterStoreList = (items: readonly StoreArray[]) => (
+    <Card elevation={0}>
+      <CardHeader
+        avatar={
+          <Checkbox
+            onClick={handleSelectAllStore(items)}
+            checked={
+              numberOfChecked(items) === items.length && items.length !== 0
+            }
+            indeterminate={
+              numberOfChecked(items) !== items.length &&
+              numberOfChecked(items) !== 0
+            }
+            disabled={items.length === 0}
+            inputProps={{
+              "aria-label": "all items selected",
+            }}
+          />
+        }
+        title={"List of active stores"}
+        subheader={`${numberOfChecked(items)}/${items.length} selected`}
+      />
+      <TextField
+        fullWidth
+        variant="standard"
+        placeholder="Search store"
+        size="small"
+        onChange={handleStoreSearch}
+        name={"searchStore"}
+      />
+      <List dense component="div" role="list">
+        {items.map((value: StoreArray, index) => {
+          const labelId = `store-list-item-${value}-label`;
+          if (value.length !== 0) {
+            return (
+              <>
+                <ListItemButton
+                  key={index}
+                  role="listitem"
+                  onClick={handleSelectStore(value)}
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      checked={checked.indexOf(value) !== -1}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    id={labelId}
+                    primary={value.map((row) => row.name)}
+                  />
+                </ListItemButton>
+                <Divider variant="middle" />
+              </>
+            );
+          }
+        })}
+      </List>
+    </Card>
+  );
 
   return (
     <Popover
@@ -212,104 +291,7 @@ export function OrderFilter(props: OrderFilterProps) {
             >
               <Typography>Store</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Card elevation={0}>
-                <CardHeader
-                  avatar={
-                    <Checkbox
-                      onClick={handleSelectAllStore(
-                        stores as unknown as readonly StoreArray[]
-                      )}
-                      checked={
-                        numberOfChecked(
-                          stores as unknown as readonly StoreArray[]
-                        ) === stores?.length && stores?.length !== 0
-                      }
-                      indeterminate={
-                        numberOfChecked(
-                          stores as unknown as readonly StoreArray[]
-                        ) !== stores?.length &&
-                        numberOfChecked(
-                          stores as unknown as readonly StoreArray[]
-                        ) !== 0
-                      } //if not equal to length and not equal to zer0
-                      inputProps={{
-                        "aria-label": "all items selected",
-                      }}
-                    />
-                  }
-                  title={"List of active stores"}
-                  subheader={`${numberOfChecked(
-                    stores as unknown as readonly StoreArray[]
-                  )}/${stores?.length} selected`}
-                />
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  placeholder="Search store"
-                  size="small"
-                  onChange={handleStoreSearch}
-                  name={"searchStore"}
-                />
-                <List dense component="div" role="list">
-                  {storeList.map((value: StoreArray, index) => {
-                    const labelId = `store-list-item-${value}-label`;
-                    return (
-                      <>
-                        <ListItemButton
-                          key={index}
-                          role="listitem"
-                          onClick={handleSelectStore(value)}
-                        >
-                          <ListItemIcon>
-                            <Checkbox
-                              checked={checked.indexOf(value) !== -1}
-                              tabIndex={-1}
-                              disableRipple
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                            />
-                          </ListItemIcon>
-                          <ListItemText
-                            id={labelId}
-                            primary={value.map((row) => row.name)}
-                          />
-                        </ListItemButton>
-                        <Divider variant="middle" />
-                      </>
-                    );
-                  })}
-                </List>
-              </Card>
-
-              {/* <MaterialInputAutoComplete
-                placeholder="Filter by store"
-                colorTheme={"black"}
-                fullWidth
-                size="small"
-                options={
-                  stores.stores ?? []
-                }
-                getOptionLabel={(option) => option.name || ""}
-                isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
-                }
-                onChange={(event, value) => {
-                  if (value) {
-                    setfilter({
-                      ...filter,
-                      store: value.name ?? null,
-                    });
-                  } else {
-                    setfilter({
-                      ...filter,
-                      store: null,
-                    });
-                  }
-                }}
-              /> */}
-            </AccordionDetails>
+            <AccordionDetails>{filterStoreList(storeList)}</AccordionDetails>
           </Accordion>
           <Divider />
           <Accordion elevation={0}>
@@ -335,12 +317,12 @@ export function OrderFilter(props: OrderFilterProps) {
                     }
                     onChange={(event, value) => {
                       if (value) {
-                        setfilter({
+                        setFilter({
                           ...filter,
                           type: value.name ?? null,
                         });
                       } else {
-                        setfilter({
+                        setFilter({
                           ...filter,
                           type: null,
                           start: null,
@@ -361,7 +343,7 @@ export function OrderFilter(props: OrderFilterProps) {
                       views={["year", "month", "day"]}
                       disableFuture={false}
                       onChange={(value: any) => {
-                        setfilter({
+                        setFilter({
                           ...filter,
                           start: value ?? null,
                         });
@@ -378,7 +360,7 @@ export function OrderFilter(props: OrderFilterProps) {
                       openTo="year"
                       views={["year", "month", "day"]}
                       onChange={(value: any) => {
-                        setfilter({
+                        setFilter({
                           ...filter,
                           end: value ?? null,
                         });

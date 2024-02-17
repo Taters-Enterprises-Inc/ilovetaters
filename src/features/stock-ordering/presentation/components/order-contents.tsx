@@ -71,8 +71,14 @@ interface TabPanelProps {
   value: number;
 }
 
+interface ListOfActiveStores {
+  store_id: number;
+  name: string;
+  menu_name: string;
+}
+
 interface DataFilterData {
-  store?: string | null;
+  store?: readonly StoreArray[] | null;
   type?: string | null;
   start?: string | null;
   end?: string | null;
@@ -85,6 +91,7 @@ interface Modals {
 interface OrderContentsProps {
   isPayment: boolean;
 }
+interface StoreArray extends Array<ListOfActiveStores> {}
 
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
@@ -719,13 +726,15 @@ export function OrderContents(props: OrderContentsProps) {
         onClose={() => setOpenFilter(null)}
         filter={(data: DataFilterData | string) => {
           if (typeof data !== "string") {
+            const storeIds = data.store?.map((store) => store[0].store_id);
+
             const params = {
               page_no: null,
               per_page: perPage,
               status: status,
               order_by: orderBy,
               order: order,
-              store: data.store ?? null,
+              store: storeIds ? JSON.stringify(storeIds) : null,
               search: search,
               dateType: data.type ?? null,
               startDate: data.start ?? null,
