@@ -44,6 +44,7 @@ import {
 interface ConfirmOrdersModalProps {
   open: boolean;
   onClose: () => void;
+  openPaymentMethodState?: (value: boolean) => void;
 }
 
 export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
@@ -156,6 +157,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         ],
       })
     );
+    // props.openPaymentMethodState?.(false);
   };
 
   const schedule = getDeliveryScheduleState.data?.find(
