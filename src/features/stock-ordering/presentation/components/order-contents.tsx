@@ -21,7 +21,12 @@ import {
   styled,
 } from "@mui/material";
 import { TiDocumentAdd } from "react-icons/ti";
-import { ConfirmOrdersModal, PlaceOrderModal, ProcessModal } from "../modals";
+import {
+  ConfirmOrdersModal,
+  PaymentMethodModal,
+  PlaceOrderModal,
+  ProcessModal,
+} from "../modals";
 import { FaEye } from "react-icons/fa";
 import { FcHighPriority } from "react-icons/fc";
 
@@ -135,6 +140,7 @@ export function OrderContents(props: OrderContentsProps) {
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
     confirmOrder: false,
+    paymentMethod: false,
     processModal: false,
   });
 
@@ -188,6 +194,16 @@ export function OrderContents(props: OrderContentsProps) {
     setModals((prevModals) => ({
       ...prevModals,
       confirmOrder: value,
+      paymentMethod: false,
+      placeOrder: false,
+    }));
+  };
+
+  const handlePaymentModal = (value: boolean) => {
+    setModals((prevModals) => ({
+      ...prevModals,
+      paymentMethod: value,
+      confirmOrder: false,
       placeOrder: false,
     }));
   };
@@ -765,6 +781,12 @@ export function OrderContents(props: OrderContentsProps) {
       <ConfirmOrdersModal
         open={modals.confirmOrder}
         onClose={() => handleModalToggle("confirmOrder")}
+        openPaymentMethodState={handlePaymentModal}
+      />
+
+      <PaymentMethodModal
+        open={modals.paymentMethod}
+        onClose={() => handleModalToggle("paymentMethod")}
       />
 
       <ProcessModal
