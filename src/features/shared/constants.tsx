@@ -872,6 +872,28 @@ export const BSC_STATUS: Array<{
   },
 ];
 
+export const TICKET_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Open",
+    color: "#cca300",
+  },
+  {
+    name: "Resolved",
+    color: "#004d00",
+  },
+  {
+    name: "Closed",
+    color: "#a21013",
+  },
+];
+
 declare module "@mui/material/styles" {
   interface Palette {
     tertiary: Palette["primary"];
@@ -1332,6 +1354,12 @@ export const TAB_NAVIGATION = [
   { label: "CONF PAY", label2: "(MULTI-M FINANCE)", label3: "Confirm Payment" },
   { label: "ORDERS", label2: "COMPLETE", label3: "Complete Orders" },
   { label: "CANCELLED", label2: "ORDERS", label3: "Cancelled Order" },
+];
+
+export const TICKETING_TAB_NAVIGATION = [
+  { label: "OPEN", label2: "Open Tickets" },
+  { label: "RESOLVED", label2: "Resolved Tickets" },
+  { label: "CLOSED", label2: "Closed Tickets" },
 ];
 
 export const STOCK_ORDERING_BUTTON_STYLE = {
