@@ -5,3 +5,4 @@ export { PopupModal } from "./popup.modal";
 export { ExcelPreviewModal } from "./excel-preview.modal";
 export { ProcessModal } from "./process.modal";
 export { PayBillingModal } from "./pay-your-billing.modal";
+export { PaymentMethodModal } from "./payment-method.modal";
