@@ -13,7 +13,7 @@ interface formData {
   ticketDetails: string;
 }
 
-export function CreateTicketContents() {
+export function SubmitTicketContents() {
   const [formState, setFormState] = useState<formData>({
     ticketTitle: "",
     department: null,
@@ -31,7 +31,7 @@ export function CreateTicketContents() {
     <div className="flex flex-col space-y-5">
       <div>
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Create a Ticket
+          Submit a Ticket
         </span>
       </div>
       <form action="" className="w-full px-10 space-y-5">

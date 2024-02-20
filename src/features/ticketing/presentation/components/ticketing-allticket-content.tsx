@@ -19,7 +19,7 @@ const columns: Array<Column> = [
   { id: "actions", label: "Actions" },
 ];
 
-export function TicketingDashboardContents() {
+export function AllTicketsContents() {
   const [openTriageModal, setOpenTriageModal] = React.useState(false);
 
   return (

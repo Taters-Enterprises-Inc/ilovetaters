@@ -1,3 +1,3 @@
-export { TicketingDashboard } from "./dashboard.page";
+export { AllTickets } from "./all-tickets.page";
 export { MyTickets } from "./my-tickets.page";
-export { CreateTicket } from "./create-ticket.page";
+export { SubmitTicket } from "./submit-ticket.page";

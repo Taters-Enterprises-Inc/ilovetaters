@@ -73,7 +73,7 @@ export function AdminLandingPage() {
       availability: navAvailability.sales,
     },
     {
-      url: "/admin/ticketing/dashboard",
+      url: "/admin/ticketing/all-tickets",
       label: "Ticketing",
       availability: navAvailability.ticket,
     },

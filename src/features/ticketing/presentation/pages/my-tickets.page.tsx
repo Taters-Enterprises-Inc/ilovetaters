@@ -8,7 +8,7 @@ export function MyTickets() {
         TicketingBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/admin/ticketing/dashboard",
+            url: "/admin/ticketing/all-tickets",
           },
           className: "lg:h-[200px]",
           pageTitles: [

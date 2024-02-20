@@ -29,8 +29,8 @@ export function TicketingDrawerMenu() {
 
   const menuitems = [
     {
-      text: "Dashboard",
-      path: "ticketing/dashboard",
+      text: "All Tickets",
+      path: "ticketing/all-tickets",
       icon: <MdDashboardCustomize size={20} />,
       enable: true,
     },
@@ -41,8 +41,8 @@ export function TicketingDrawerMenu() {
       enable: true,
     },
     {
-      text: "Create Ticket",
-      path: "ticketing/create-ticket",
+      text: "Submit a Ticket",
+      path: "ticketing/submit-ticket",
       icon: <PiNotePencil size={20} />,
       enable: true,
     },

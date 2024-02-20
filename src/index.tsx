@@ -216,10 +216,10 @@ import {
 import { SalesHistory } from "features/sales/presentation/pages/history.page";
 import { SalesForm } from "features/sales/presentation/pages/form.page";
 import { SalesRealtimeWrapper } from "features/sales/presentation/components";
-import { TicketingDashboard } from "features/ticketing/presentation/pages";
+import { AllTickets } from "features/ticketing/presentation/pages";
 import { TicketingSidebarWrapper } from "features/ticketing/presentation/components/sidebar";
 import { MyTickets } from "features/ticketing/presentation/pages";
-import { CreateTicket } from "features/ticketing/presentation/pages";
+import { SubmitTicket } from "features/ticketing/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -521,16 +521,16 @@ root.render(
                             <Route element={<TicketingSidebarWrapper />}>
                               <Route path="ticketing">
                                 <Route
-                                  path="dashboard"
-                                  element={<TicketingDashboard />}
+                                  path="all-tickets"
+                                  element={<AllTickets />}
                                 />
                                 <Route
                                   path="my-tickets"
                                   element={<MyTickets />}
                                 />
                                 <Route
-                                  path="create-ticket"
-                                  element={<CreateTicket />}
+                                  path="submit-ticket"
+                                  element={<SubmitTicket />}
                                 />
                               </Route>
                             </Route>

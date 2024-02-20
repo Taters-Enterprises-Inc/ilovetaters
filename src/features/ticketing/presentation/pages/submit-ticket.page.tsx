@@ -1,24 +1,24 @@
-import { TicketingDashboardContents } from "../components/ticketing-dashboard-content";
+import { SubmitTicketContents } from "../components/ticketing-submit-ticket-content";
 import { TicketingHead } from "../components/ticketing-head";
 
-export function TicketingDashboard() {
+export function SubmitTicket() {
   return (
     <>
       <TicketingHead
         TicketingBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/admin/ticketing/dashboard",
+            url: "/admin/ticketing/all-tickets",
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Dashboard", url: "/admin/ticketing/dashboard" },
+            { name: "Submit a Ticket", url: "/admin/ticketing/submit-ticket" },
           ],
         }}
       />
 
-      <div className="p-4">
-        <TicketingDashboardContents />
+      <div className="p-8">
+        <SubmitTicketContents />
       </div>
     </>
   );

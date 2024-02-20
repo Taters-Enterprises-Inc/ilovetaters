@@ -1,24 +1,24 @@
-import { CreateTicketContents } from "../components/ticketing-create-ticket-content";
+import { AllTicketsContents } from "../components/ticketing-allticket-content";
 import { TicketingHead } from "../components/ticketing-head";
 
-export function CreateTicket() {
+export function AllTickets() {
   return (
     <>
       <TicketingHead
         TicketingBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/admin/ticketing/dashboard",
+            url: "/admin/ticketing/all-tickets",
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Create Ticket", url: "/admin/ticketing/create-ticket" },
+            { name: "All Tickets", url: "/admin/ticketing/all-tickets" },
           ],
         }}
       />
 
-      <div className="p-8">
-        <CreateTicketContents />
+      <div className="p-4">
+        <AllTicketsContents />
       </div>
     </>
   );
