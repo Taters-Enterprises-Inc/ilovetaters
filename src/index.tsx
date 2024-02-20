@@ -220,6 +220,7 @@ import { AllTickets } from "features/ticketing/presentation/pages";
 import { TicketingSidebarWrapper } from "features/ticketing/presentation/components/sidebar";
 import { MyTickets } from "features/ticketing/presentation/pages";
 import { SubmitTicket } from "features/ticketing/presentation/pages";
+import { ViewTicket } from "features/ticketing/presentation/pages/view-ticket.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -531,6 +532,10 @@ root.render(
                                 <Route
                                   path="submit-ticket"
                                   element={<SubmitTicket />}
+                                />
+                                <Route
+                                  path="view-ticket"
+                                  element={<ViewTicket />}
                                 />
                               </Route>
                             </Route>
