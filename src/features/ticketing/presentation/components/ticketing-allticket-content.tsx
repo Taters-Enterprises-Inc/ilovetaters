@@ -10,6 +10,7 @@ import { FaEye } from "react-icons/fa";
 import { TbCheckupList } from "react-icons/tb";
 import { TicketingTriageModal } from "../modals/ticketing-triage.modal";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -129,21 +130,21 @@ export function AllTicketsContents() {
               <DataTableCell>My PC Isn't Working</DataTableCell>
               <DataTableCell>February 13, 2024</DataTableCell>
               <DataTableCell>
-                <button
-                  onClick={() => {
-                    alert("Button Not Yet Working");
-                  }}
-                  style={{ marginRight: "10px" }}
-                >
-                  <FaEye className="text-lg" />
-                </button>
-                <button
-                  onClick={() => {
-                    setOpenTriageModal(true);
-                  }}
-                >
-                  <TbCheckupList className="text-lg" />
-                </button>
+                <div className="flex items-center">
+                  <Link
+                    to="/admin/ticketing/view-ticket"
+                    style={{ marginRight: "10px" }}
+                  >
+                    <FaEye className="text-lg" />
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setOpenTriageModal(true);
+                    }}
+                  >
+                    <TbCheckupList className="text-lg" />
+                  </button>
+                </div>
               </DataTableCell>
             </DataTableRow>
           </DataTable>

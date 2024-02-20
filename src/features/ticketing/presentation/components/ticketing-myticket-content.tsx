@@ -12,7 +12,7 @@ import {
 } from "features/shared/presentation/components/data-table";
 import { ChangeEvent, useEffect } from "react";
 import { FaEye } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const StyledBadge = styled(Badge)<BadgeProps>(() => ({
   "& .MuiBadge-badge": {
@@ -158,14 +158,12 @@ export function MyTicketContents() {
                   <DataTableCell>My PC Isn't Working</DataTableCell>
                   <DataTableCell>February 13, 2024</DataTableCell>
                   <DataTableCell>
-                    <button
-                      onClick={() => {
-                        alert("Button Not Yet Working");
-                      }}
+                    <Link
+                      to="/admin/ticketing/view-ticket"
                       style={{ marginRight: "10px" }}
                     >
                       <FaEye className="text-lg" />
-                    </button>
+                    </Link>
                   </DataTableCell>
                 </DataTableRow>
               </DataTable>
