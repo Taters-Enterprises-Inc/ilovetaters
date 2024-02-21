@@ -262,23 +262,24 @@ export function OrderFilter(props: OrderFilterProps) {
       PaperProps={{
         elevation: 4,
         sx: {
-          padding: 2,
           width: { sm: "100%", md: "50%", lg: "25%" },
           overflow: "auto",
         },
         style: { maxHeight: "50vh" },
       }}
     >
-      <div className="space-y-3">
-        <div className="flex justify-between">
-          <span className="text-xl font-semibold">Filter</span>
-          <div className="flex space-x-3">
-            <Button variant="text" size="small" onClick={handleResetFilter}>
-              Reset filter
-            </Button>
-            <Button variant="text" size="small" onClick={handleFilter}>
-              Save filter
-            </Button>
+      <div className="px-5 space-y-3">
+        <div className="sticky top-0 bg-white w-full py-3 z-10">
+          <div className="flex justify-between">
+            <span className="text-xl font-semibold">Filter</span>
+            <div className="flex space-x-3">
+              <Button variant="text" size="small" onClick={handleResetFilter}>
+                Reset filter
+              </Button>
+              <Button variant="text" size="small" onClick={handleFilter}>
+                Save filter
+              </Button>
+            </div>
           </div>
         </div>
 

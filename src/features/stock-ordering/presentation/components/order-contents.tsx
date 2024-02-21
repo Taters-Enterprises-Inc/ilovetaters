@@ -69,6 +69,9 @@ import {
   toggleSalesSideBar,
 } from "features/sales/presentation/slices/sales-sidebar.slice";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
+import { GoRows } from "react-icons/go";
+import React from "react";
+import { start } from "repl";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -294,6 +297,19 @@ export function OrderContents(props: OrderContentsProps) {
     modals,
   ]);
 
+  const filterStoresByIds = (
+    stores: ListOfActiveStores[],
+    storeIds: number[]
+  ): ListOfActiveStores[] => {
+    return stores.filter((store) => storeIds.includes(store.store_id));
+  };
+
+  const filteredStores: ListOfActiveStores[] = filterStoresByIds(
+    getAdminSessionState.data?.admin.user_details
+      .stores as ListOfActiveStores[],
+    store ? JSON.parse(store ?? "") : []
+  );
+
   return (
     <>
       <div className="space-y-3">
@@ -374,14 +390,49 @@ export function OrderContents(props: OrderContentsProps) {
 
             <TabPanel index={Number(tabValue)} value={Number(tabValue)}>
               <div className="hidden md:block space-y-3">
-                <Button
-                  startIcon={<CiFilter />}
-                  variant="contained"
-                  onClick={(event) => setOpenFilter(event.currentTarget)}
-                >
-                  Filter
-                </Button>
+                <div className="flex flex-col space-y-1">
+                  <div>
+                    <Button
+                      startIcon={<CiFilter />}
+                      variant="contained"
+                      onClick={(event) => setOpenFilter(event.currentTarget)}
+                    >
+                      Filter
+                    </Button>
+                  </div>
 
+                  <div
+                    className={`${filteredStores.length === 0 ? "hidden" : ""}`}
+                  >
+                    <span className="font-semibold">
+                      You are filtering store by:{" "}
+                    </span>
+
+                    {filteredStores.map((row, index) => (
+                      <React.Fragment key={row.store_id}>
+                        {row.name}
+                        {index !== filteredStores.length - 1 && ", "}
+                      </React.Fragment>
+                    ))}
+                  </div>
+
+                  <div
+                    className={`${
+                      dateType === null ||
+                      startDate === null ||
+                      endDate === null
+                        ? "hidden"
+                        : ""
+                    }`}
+                  >
+                    <span className="font-semibold">Filtering</span>{" "}
+                    {dateType?.replace(/_/g, " ")}
+                    <span className="font-semibold">: from </span>{" "}
+                    {dateSetup(startDate ?? "", false)}{" "}
+                    <span className="font-semibold"> to </span>
+                    {dateSetup(endDate ?? "", false)}
+                  </div>
+                </div>
                 <DataTable
                   order={order === "asc" ? "asc" : "desc"}
                   orderBy={orderBy ?? "last_updated"}
