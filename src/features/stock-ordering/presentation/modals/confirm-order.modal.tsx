@@ -1,6 +1,21 @@
 import { IoMdClose } from "react-icons/io";
-import { useEffect, useState } from "react";
-import { Autocomplete, Button, IconButton, TextField } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import {
+  Autocomplete,
+  Button,
+  ClickAwayListener,
+  Divider,
+  Grow,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   LocalizationProvider,
@@ -40,11 +55,12 @@ import {
   openMessageModal,
   closeMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
+import { FaChevronDown } from "react-icons/fa";
+import { MdOutlinePayments } from "react-icons/md";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
   onClose: () => void;
-  openPaymentMethodState?: (value: boolean) => void;
 }
 
 export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
@@ -71,6 +87,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [isEditCancelled, setisEditCancelled] = useState(false);
   const [isConfirmOrder, setIsConfirmOrder] = useState(false);
   const [emergencyOrderEnabled, setEmergencyOrderEnabled] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     dispatch(togglePopupScroll());
@@ -146,18 +163,21 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
               document.body.classList.remove("overflow-hidden");
               dispatch(closeMessageModal());
+              setConfirmOpen(null);
               props.onClose();
             },
           },
           {
             color: "#22201A",
             text: "No",
-            onClick: () => {},
+            onClick: () => {
+              setConfirmOpen(null);
+              dispatch(closeMessageModal());
+            },
           },
         ],
       })
     );
-    // props.openPaymentMethodState?.(false);
   };
 
   const schedule = getDeliveryScheduleState.data?.find(
@@ -296,7 +316,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 space-y-5 border-secondary">
               <StockOrderConfirmTable
                 categoryName={
-                  getOrderInformation.data?.category.category_name ??
+                  getOrderInformation.data?.category?.category_name ??
                   "Unable to determine category name please contact MIS Department"
                 }
                 isEdit={isEdit}
@@ -413,13 +433,17 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                             fullWidth
                             variant="contained"
                             disabled={isQuantityEmpty() || deliveryDateError}
-                            type="submit"
                             sx={STOCK_ORDERING_BUTTON_STYLE}
+                            type="submit"
+                            
                           >
                             {emergencyOrderEnabled
                               ? "Emergency Confirm"
                               : "Confirm"}
                           </Button>
+
+                          
+
                           <IconButton
                             onClick={handleEmergencyButton}
                             aria-label="emergency-button"

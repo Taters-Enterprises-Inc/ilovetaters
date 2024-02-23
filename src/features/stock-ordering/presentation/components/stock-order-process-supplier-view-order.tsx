@@ -1,6 +1,13 @@
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
-import { TextField, Button, ButtonGroup } from "@mui/material";
+import {
+  TextField,
+  Button,
+  ButtonGroup,
+  FormControlLabel,
+  FormGroup,
+  Switch,
+} from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StockOrderRemarks } from "./stock-order-remarks";
 import { useState } from "react";
@@ -16,6 +23,12 @@ import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { updateNewOrders } from "../slices/update-new-order.slice";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { isQuantityEmpty } from "./stock-ordering-utils";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
+import { categoryModel } from "features/stock-ordering/core/domain/store-and-category.model";
+import { insertNewOrder } from "../slices/insert-new-order.slice";
 
 interface SupplierViewOrderProps {
   orderId: string;
@@ -37,34 +50,52 @@ export function StockOrderProcessSupplierViewOrder(
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState<
     string | null
   >(null);
-
-  const handleOnSubmit = () => {
-    const reviewOrdersProductDataParam: newOrdersParam["product_data"] =
-      props.rows?.product_data.map((productsItem) => ({
-        id: productsItem.id,
-        productId: productsItem.product_id,
-        commitedQuantity: productsItem.commited_qty,
-
-        out_of_stock: productsItem.out_of_stock,
-      })) ?? [];
-
-    const reviewOrdersParamData: newOrdersParam = {
-      id: props.orderId,
-      commitedDelivery: CommitedDeliveryDate,
-      remarks: remarks,
-      product_data: reviewOrdersProductDataParam,
-    };
-
-    dispatch(updateNewOrders(reviewOrdersParamData));
-
-    props.onClose(true);
-  };
+  const [payFirstCheck, setPayFirstCheck] = useState<boolean>(false);
 
   const handleSubmitOrder = (event: { preventDefault: () => void }) => {
     event.preventDefault();
+    dispatch(
+      openMessageModal({
+        message: "Are you sure you want to commit the order?",
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              const reviewOrdersProductDataParam: newOrdersParam["product_data"] =
+                props.rows?.product_data.map((productsItem) => ({
+                  id: productsItem.id,
+                  productId: productsItem.product_id,
+                  commitedQuantity: productsItem.commited_qty,
 
-    setPreSubmitAlert(true);
-    setOpenPopup(true);
+                  out_of_stock: productsItem.out_of_stock,
+                })) ?? [];
+
+              const reviewOrdersParamData: newOrdersParam = {
+                id: props.orderId,
+                commitedDelivery: CommitedDeliveryDate,
+                remarks: remarks,
+                product_data: reviewOrdersProductDataParam,
+                penalty: payFirstCheck,
+              };
+
+              dispatch(updateNewOrders(reviewOrdersParamData));
+
+              props.onClose(true);
+              document.body.classList.remove("overflow-hidden");
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
 
   const handleCancelledOrder = () => {
@@ -75,6 +106,43 @@ export function StockOrderProcessSupplierViewOrder(
     dispatch(updateOrderCancelled(cancelParameter));
 
     props.onClose(true);
+    document.body.classList.remove("overflow-hidden");
+    dispatch(closeMessageModal());
+  };
+
+  const handleOnclickCancel = () => {
+    dispatch(
+      openMessageModal({
+        message: "Are you sure you want to cancel?",
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              handleCancelledOrder();
+              // props.onClose(true);
+              // document.body.classList.remove("overflow-hidden");
+              // dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
+  };
+
+  const handlePayFirstSwitch = (event: {
+    preventDefault: () => void;
+    target: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
+    event.preventDefault();
+    setPayFirstCheck(event.target.checked);
   };
 
   const convertTo12HourFormat = (time: string) => {
@@ -106,6 +174,17 @@ export function StockOrderProcessSupplierViewOrder(
     <>
       <form onSubmit={handleSubmitOrder}>
         <div className="px-2 space-y-3">
+          <div>
+            <FormControlLabel
+              control={
+                <Switch value={payFirstCheck} onChange={handlePayFirstSwitch} />
+              }
+              label={
+                "By turning this on, it will force the store to pay first before delivery"
+              }
+            />
+          </div>
+
           <StockOrderRemarks remarks={remarks} setRemarks={setRemarks} />
 
           <div className="flex flex-col space-y-2 md:flex-row md:space-x-5 ">
@@ -157,41 +236,23 @@ export function StockOrderProcessSupplierViewOrder(
             </div>
 
             <div className="basis-full md:basis-1/2 space-y-3">
-              {preview ? (
-                <Button
-                  fullWidth
-                  type="submit"
-                  variant="contained"
-                  sx={{ color: "white", backgroundColor: "#CC5801" }}
-                >
-                  Confirm
-                </Button>
-              ) : (
-                <Button
-                  disabled={
-                    isQuantityEmpty(
-                      props.rows.product_data,
-                      props.rows.order_information.status_id
-                    ) || CommitedDeliveryDate === null
-                  }
-                  fullWidth
-                  variant="contained"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setPreview(true);
-                  }}
-                  sx={{ color: "white", backgroundColor: "#CC5801" }}
-                >
-                  Preview
-                </Button>
-              )}
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                sx={{ color: "white", backgroundColor: "#CC5801" }}
+                disabled={
+                  isQuantityEmpty(
+                    props.rows.product_data,
+                    props.rows.order_information.status_id
+                  ) || CommitedDeliveryDate === null
+                }
+              >
+                Confirm
+              </Button>
 
               <ButtonGroup fullWidth size="small" variant="text">
-                <Button
-                  onClick={() => {
-                    setOpenPopup(true);
-                  }}
-                >
+                <Button onClick={handleOnclickCancel}>
                   <span className="text-primary underline">Cancel Order</span>
                 </Button>
 
@@ -205,21 +266,6 @@ export function StockOrderProcessSupplierViewOrder(
           </div>
         </div>
       </form>
-
-      <PopupModal
-        open={openPopup}
-        title={preSubmitAlert ? "Confirmation!" : "Warning!"}
-        message={
-          preSubmitAlert
-            ? "Are you sure you want to commit the order?"
-            : "Are you sure you want to cancel the order?"
-        }
-        icon={<BsCheckCircleFill className="text-3xl text-[#00FA9A]" />}
-        handleYesButton={preSubmitAlert ? handleOnSubmit : handleCancelledOrder}
-        handleNoButton={() => {
-          setOpenPopup(false);
-        }}
-      />
     </>
   );
 }

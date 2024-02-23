@@ -128,8 +128,6 @@ export function StockOrderProcessFinancePayBilling(
     props.onClose();
   };
 
-  console.log(InvoiceData);
-
   return (
     <>
       <div className="space-y-2">

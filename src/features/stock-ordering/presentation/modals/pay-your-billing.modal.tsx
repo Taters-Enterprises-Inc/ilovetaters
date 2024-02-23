@@ -68,7 +68,7 @@ export function PayBillingModal(props: PayBillingModalProps) {
                   description="DeliveryReciept"
                 />
                 <h4 className="mt-1 text-sm leading-5 text-secondary">
-                  <strong>Note:</strong>
+                  <strong>Note: </strong>
                   Maximum file size is 2MB.
                 </h4>
               </div>

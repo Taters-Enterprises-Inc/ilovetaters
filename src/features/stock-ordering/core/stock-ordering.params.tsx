@@ -61,6 +61,7 @@ export interface newOrdersParam {
     commitedQuantity: string | null;
     out_of_stock: boolean | null;
   }[];
+  penalty: boolean;
 }
 
 export interface receiveOrdersParam {

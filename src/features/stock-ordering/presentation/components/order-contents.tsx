@@ -832,12 +832,6 @@ export function OrderContents(props: OrderContentsProps) {
       <ConfirmOrdersModal
         open={modals.confirmOrder}
         onClose={() => handleModalToggle("confirmOrder")}
-        openPaymentMethodState={handlePaymentModal}
-      />
-
-      <PaymentMethodModal
-        open={modals.paymentMethod}
-        onClose={() => handleModalToggle("paymentMethod")}
       />
 
       <ProcessModal

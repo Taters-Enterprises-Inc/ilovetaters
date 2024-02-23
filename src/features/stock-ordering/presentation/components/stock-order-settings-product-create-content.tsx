@@ -72,8 +72,6 @@ export default function StockOrderSettingsProductCreateContent() {
       store_id: formState.stores?.map((store) => store.store_id) || [],
     };
 
-    console.log(createProductParam);
-
     dispatch(stockOrderCreateProduct(createProductParam));
   };
 
