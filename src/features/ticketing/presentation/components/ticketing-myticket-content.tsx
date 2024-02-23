@@ -119,6 +119,7 @@ export function MyTicketContents() {
           </Tabs>
 
           <TabPanel value={Number(tabValue)} index={Number(tabValue)}>
+            {/* Desktop View */}
             <div className="hidden md:block space-y-3">
               <DataTable
                 order={order === "asc" ? "asc" : "desc"}
@@ -169,6 +170,7 @@ export function MyTicketContents() {
               </DataTable>
             </div>
 
+            {/* Mobile View */}
             <div className="block md:hidden space-y-5">
               <DataList
                 search={search ?? ""}
@@ -197,10 +199,8 @@ export function MyTicketContents() {
                 page={0} // 👈 Edit this
               >
                 <div className="space-y-2 mt-2">
-                  <div
-                    onClick={() => {
-                      alert("Button Not Yet Working");
-                    }}
+                  <Link
+                    to="/admin/ticketing/view-ticket"
                     className="flex flex-col border border-gray-200 rounded-md shadow-sm p-2 bg-white"
                   >
                     <div className="flex justify-between text-normal">
@@ -211,7 +211,7 @@ export function MyTicketContents() {
                       <span>Date Created:</span>
                       <span>February 13, 2024</span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </DataList>
             </div>
