@@ -33,6 +33,7 @@ export function AllTicketsContents() {
       </div>
 
       <>
+        {/* Mobile View */}
         <div className="p-4 lg:hidden">
           <DataList
             search={""} // 👈  Edit This
@@ -59,28 +60,47 @@ export function AllTicketsContents() {
             page={0} // 👈 Edit this
           >
             <hr className="mt-4" />
-            <div className="flex flex-col px-4 py-2 border-b">
-              <span className="flex flex-wrap items-center space-x-1 text-xl">
-                <span>My PC Isn't Working</span>
-                <span
-                  className="px-2 py-1 text-xs rounded-full"
-                  style={{
-                    color: "white",
-                    backgroundColor: "#cca300",
+            <div className="flex justify-between items-center px-4 py-2 border-b">
+              <div className="flex flex-col">
+                <span className="flex flex-wrap items-center space-x-1 text-xl">
+                  <span>My PC Isn't Working</span>
+                  <span
+                    className="px-2 py-1 text-xs rounded-full"
+                    style={{
+                      color: "white",
+                      backgroundColor: "#cca300",
+                    }}
+                  >
+                    Open
+                  </span>
+                </span>
+                <span className="text-xs text-gray-600">
+                  <strong>Ticket Number:</strong> 159
+                </span>
+                <span className="text-xs text-gray-600">
+                  <strong>Date Created:</strong> February 13, 2024
+                </span>
+              </div>
+              <div className="flex items-center">
+                <Link
+                  to="/admin/ticketing/view-ticket"
+                  style={{ marginRight: "10px" }}
+                >
+                  <FaEye className="text-lg" />
+                </Link>
+                <button
+                  onClick={() => {
+                    setOpenTriageModal(true);
                   }}
                 >
-                  Open
-                </span>
-              </span>
-              <span className="text-xs text-gray-600">
-                <strong>Ticket Number:</strong> 159
-              </span>
-              <span className="text-xs text-gray-600">
-                <strong>Date Created:</strong> February 13, 2024
-              </span>
+                  <TbCheckupList className="text-lg" />
+                </button>
+              </div>
             </div>
           </DataList>
         </div>
+
+        {/* Desktop View */}
         <div className="hidden p-4 lg:block">
           <DataTable
             order={"asc" ? "asc" : "desc"} // 👈  Edit This
