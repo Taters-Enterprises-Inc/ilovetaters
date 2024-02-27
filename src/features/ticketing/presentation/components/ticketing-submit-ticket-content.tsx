@@ -2,7 +2,7 @@ import {
   MaterialInput,
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
-import { department } from "./ticketing-utils";
+import { department, urgency } from "./ticketing-utils";
 import { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { TICKETING_BUTTON_STYLE } from "features/shared/constants";
@@ -10,6 +10,7 @@ import { TICKETING_BUTTON_STYLE } from "features/shared/constants";
 interface formData {
   ticketTitle: string;
   department: { id: number | undefined; name: string } | null;
+  urgency: { id: number | undefined; name: string } | null;
   ticketDetails: string;
 }
 
@@ -17,6 +18,7 @@ export function SubmitTicketContents() {
   const [formState, setFormState] = useState<formData>({
     ticketTitle: "",
     department: null,
+    urgency: null,
     ticketDetails: "",
   });
 
@@ -53,12 +55,28 @@ export function SubmitTicketContents() {
           options={department ?? []}
           label="Department (Optional)"
           getOptionLabel={(option) => option.name ?? ""}
-          placeholder="Choose Department"
+          placeholder="Select Department"
           value={formState.department}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           onChange={(event, selectedValue) => {
             if (selectedValue) {
               handleOnChange(selectedValue, "department");
+            }
+          }}
+        />
+
+        <MaterialInputAutoComplete
+          required
+          colorTheme={"black"}
+          options={urgency ?? []}
+          label="Urgency"
+          getOptionLabel={(option) => option.name ?? ""}
+          placeholder="Select Urgency"
+          value={formState.urgency}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          onChange={(event, selectedValue) => {
+            if (selectedValue) {
+              handleOnChange(selectedValue, "urgency");
             }
           }}
         />

@@ -1,5 +1,5 @@
 export const department = [
-  { id: 0, name: "Choose Department" },
+  { id: 0, name: "Unsure" },
   { id: 1, name: "Executive Office" },
   { id: 2, name: "General Services Department" },
   { id: 3, name: "Marketing Department" },
@@ -18,4 +18,10 @@ export const department = [
   { id: 16, name: "Free Lancer" },
   { id: 17, name: "Data Analyst" },
   { id: 18, name: "Business Dev" },
+];
+
+export const urgency = [
+  { id: 0, name: "Low" },
+  { id: 1, name: "Medium" },
+  { id: 2, name: "High" },
 ];
