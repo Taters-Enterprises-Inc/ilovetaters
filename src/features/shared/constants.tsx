@@ -1352,12 +1352,6 @@ export const TAB_NAVIGATION = [
   { label: "CANCELLED", label2: "ORDERS", label3: "Cancelled Order" },
 ];
 
-export const TICKETING_TAB_NAVIGATION = [
-  { label: "OPEN", label2: "Open Tickets" },
-  { label: "RESOLVED", label2: "Resolved Tickets" },
-  { label: "CLOSED", label2: "Closed Tickets" },
-];
-
 export const STOCK_ORDERING_BUTTON_STYLE = {
   color: "white",
   backgroundColor: "#CC5801",
