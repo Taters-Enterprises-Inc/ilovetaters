@@ -7,6 +7,10 @@ import { GetProductDataModel } from "features/stock-ordering/core/domain/get-pro
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { PopupModal } from "../modals";
 import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface StockOrderProcessStoreManagerDeliveryRecieveOrderApprovalProps {
   orderId: string;
@@ -21,31 +25,52 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
   const getProductDataState = useAppSelector(selectGetProductData);
 
   const [remarks, setRemarks] = useState("");
-  const [status, setStatus] = useState("");
-
-  const [openPopupModal, setOpenPopupModal] = useState(false);
 
   const franchiseType =
     getProductDataState.data?.order_information.franchise_type_id;
 
-  const handleOnclick = (value: string) => {
-    setStatus(value);
-    setOpenPopupModal(true);
-  };
-
-  const handleDeliveryRecieveApproval = () => {
-    const updateDeliveryReceiveApprovalParam: updateDeliveryReceiveApproval = {
-      id: props.orderId,
-      status: status,
-      remarks: remarks,
-    };
-
+  const handleDeliveryRecieveApproval = (status: string) => () => {
     dispatch(
-      updateDeliveryReceiveApprovalOrders(updateDeliveryReceiveApprovalParam)
-    );
+      openMessageModal({
+        message: `Confirming this action will ${
+          status === "5"
+            ? "reject the order"
+            : "approve and move the order for the next process"
+        }. Are you sure you want to proceed?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              const updateDeliveryReceiveApprovalParam: updateDeliveryReceiveApproval =
+                {
+                  id: props.orderId,
+                  status: status,
+                  remarks: remarks,
+                };
 
-    document.body.classList.remove("overflow-hidden");
-    props.onClose(true);
+              dispatch(
+                updateDeliveryReceiveApprovalOrders(
+                  updateDeliveryReceiveApprovalParam
+                )
+              );
+
+              document.body.classList.remove("overflow-hidden");
+              props.onClose(true);
+
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
 
   return (
@@ -56,7 +81,7 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
           <Button
             fullWidth
             variant="contained"
-            onClick={() => handleOnclick("5")}
+            onClick={handleDeliveryRecieveApproval("5")}
             sx={{
               color: "white",
               backgroundColor: "#CC5801",
@@ -68,13 +93,11 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
           <Button
             fullWidth
             variant="contained"
-            onClick={() => {
-              if (franchiseType !== 1) {
-                handleOnclick("9");
-              } else {
-                handleOnclick("7");
-              }
-            }}
+            onClick={
+              franchiseType !== 1
+                ? handleDeliveryRecieveApproval("9")
+                : handleDeliveryRecieveApproval("7")
+            }
             sx={{
               color: "white",
               backgroundColor: "#CC5801",
@@ -84,32 +107,6 @@ export function StockOrderProcessStoreManagerDeliveryRecieveOrderApproval(
           </Button>
         </div>
       </div>
-
-      <PopupModal
-        open={openPopupModal}
-        title={"Confirmation"}
-        message={
-          status === "4" ? (
-            <span>
-              Are you sure you want to{" "}
-              <span className="font-semibold underline underline-offset-1">
-                Reject the Order
-              </span>{" "}
-              ?
-            </span>
-          ) : (
-            <span>
-              Are you sure you want to{" "}
-              <span className="font-semibold underline underline-offset-1">
-                Approve the Order
-              </span>{" "}
-              ?
-            </span>
-          )
-        }
-        handleYesButton={handleDeliveryRecieveApproval}
-        handleNoButton={() => setOpenPopupModal(false)}
-      />
     </>
   );
 }

@@ -53,7 +53,7 @@ export const isQuantityEmpty = (
         empty = true;
       }
     });
-  } else if (process === 4) {
+  } else if (process === 5) {
     productData.map((product) => {
       if (
         (product.delivered_qty === "" && !product.out_of_stock) ||

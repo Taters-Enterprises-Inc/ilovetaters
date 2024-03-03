@@ -20,6 +20,7 @@ import {
   updateOrderItemsParam,
   stockOrderSettingsProductParam,
   FranchiseePayBillParam,
+  updatePenelizedPayBillingParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -203,6 +204,12 @@ export interface stockOrderActiveStatusResponse {
 }
 
 export interface updateFranchiseePayBillResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface updatePenalizedPayBillingOrdersResponse {
   data: {
     message: string;
   };
@@ -479,6 +486,21 @@ export function updateFranchiseePayBillRepository(
 ): Promise<updateFranchiseePayBillResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/stock/order/franchisee-pay-bill`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function updatePenalizedPayBillingOrdersRepository(
+  param: updatePenelizedPayBillingParam
+): Promise<updatePenalizedPayBillingOrdersResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/order/stock/order/penalized-pay-bill`,
     param,
     {
       headers: {

@@ -7,6 +7,10 @@ import { updateConfirmPayment } from "../slices/update-confirm-payment.slice";
 import { StockOrderRemarks } from "./stock-order-remarks";
 import { useAppDispatch } from "features/config/hooks";
 import { PopupModal } from "../modals";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface StockOrderProcessSupplierConfirmPaymentProps {
   orderId: string;
@@ -19,26 +23,45 @@ export function StockOrderProcessSupplierConfirmPayment(
 ) {
   const dispatch = useAppDispatch();
   const [remarks, setRemarks] = useState("");
-  const [status, setStatus] = useState("");
 
   const [openPopupModal, setOpenPopupModal] = useState(false);
 
-  const handleValidate = (value: string) => {
-    setStatus(value);
-    setOpenPopupModal(true);
-  };
+  const handleConfirmPayment = (orderStatus: string) => () => {
+    dispatch(
+      openMessageModal({
+        message: `Confirming this action will ${
+          orderStatus === "8"
+            ? "reject the receipt and revert the order status to TEI Finance"
+            : "mark the order as paid"
+        }. Are you sure you want to proceed?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              const updateConfirmPaymentParam: updateStatus = {
+                id: props.orderId,
+                remarks: remarks,
+                status: orderStatus,
+              };
 
-  const handleConfirmPayment = () => {
-    const updateConfirmPaymentParam: updateStatus = {
-      id: props.orderId,
-      remarks: remarks,
-      status: status,
-    };
+              dispatch(updateConfirmPayment(updateConfirmPaymentParam));
 
-    dispatch(updateConfirmPayment(updateConfirmPaymentParam));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose(true);
+              document.body.classList.remove("overflow-hidden");
+              props.onClose(true);
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
 
   return (
@@ -51,7 +74,7 @@ export function StockOrderProcessSupplierConfirmPayment(
             <Button
               fullWidth
               variant="contained"
-              onClick={() => handleValidate("8")}
+              onClick={handleConfirmPayment("8")}
               sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Return to Tei Finance
@@ -60,7 +83,7 @@ export function StockOrderProcessSupplierConfirmPayment(
             <Button
               fullWidth
               variant="contained"
-              onClick={() => handleValidate("10")}
+              onClick={handleConfirmPayment("10")}
               sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Validate
@@ -68,32 +91,6 @@ export function StockOrderProcessSupplierConfirmPayment(
           </div>
         </div>
       </div>
-
-      <PopupModal
-        open={openPopupModal}
-        title={"Confirmation"}
-        message={
-          status === "7" ? (
-            <span>
-              Are you sure you want to{" "}
-              <span className="font-semibold underline underline-offset-1">
-                Return to TEI the Receipt
-              </span>
-              ?
-            </span>
-          ) : (
-            <span>
-              Are you sure you want to{" "}
-              <span className="font-semibold underline underline-offset-1">
-                Confirm the Receipt
-              </span>
-              ?
-            </span>
-          )
-        }
-        handleNoButton={() => setOpenPopupModal(false)}
-        handleYesButton={handleConfirmPayment}
-      />
     </>
   );
 }

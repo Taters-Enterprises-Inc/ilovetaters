@@ -25,6 +25,8 @@ export const productDataInitialState = {
     logistic_id: "",
     logistic_type: "",
     tracking: [],
+    penalty: null,
+    payment_status_id: null,
 
     delivery_receipt: "",
     updated_delivery_receipt: "",

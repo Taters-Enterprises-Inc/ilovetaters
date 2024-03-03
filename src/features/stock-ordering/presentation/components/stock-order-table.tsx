@@ -480,7 +480,16 @@ export function StockOrderTable(props: StockOrderTableProps) {
             )}
           </div>
 
-          <Divider />
+          {Boolean(props.rowData.order_information.penalty) === true &&
+            props.rowData.order_information.payment_status_id === 1 && (
+              <>
+                <div className="px-5 text-red-500">
+                  <span className="font-bold">Note: </span>Please note that this
+                  order has been penalized and is required to pay first
+                </div>
+                <Divider />
+              </>
+            )}
 
           <StockOrderLogs order_details={props.rowData.order_information} />
         </div>

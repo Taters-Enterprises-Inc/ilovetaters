@@ -2,6 +2,7 @@ import { GetProductDataModel } from "features/stock-ordering/core/domain/get-pro
 import {
   StockOrderProcessCompleted,
   StockOrderProcessFranchiseePayBill,
+  StockOrderProcessPaybillPenalty,
   StockOrderProcessProcurementReviewOrder,
   StockOrderProcessStoreManagerDeliveryRecieveOrderApproval,
   StockOrderProcessStoreRecieveOrder,
@@ -83,14 +84,18 @@ export function StockOrderProcessActionEnabler(
         />
       );
 
+    // Change of process needs to disable
     // case 7:
-    //   return (
-    //     <StockOrderProcessSupplierConfirmPayment
-    //       orderId={props.orderId}
-    //       rows={props.row}
-    //       onClose={props.onClose}
-    //     />
-    //   );
+    //   if (props.row.order_information.penalty) {
+    //     return (
+    //       <StockOrderProcessPaybillPenalty
+    //         orderId={props.orderId}
+    //         rows={props.row}
+    //         onClose={props.onClose}
+    //       />
+    //     );
+    //   }
+    //   break;
 
     case 8:
       return (

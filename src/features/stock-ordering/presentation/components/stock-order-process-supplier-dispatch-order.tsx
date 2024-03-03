@@ -28,6 +28,11 @@ import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
 import dayjs from "dayjs";
 import { isValidFile } from "./stock-ordering-utils";
 import { selectGetProductData } from "../slices/get-product-data.slice";
+import { StockOrderUploadFile } from "./stock-order-upload-file-util";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface StockOrderProcessSupplierDispatchOrderProps {
   orderId: string;
@@ -43,7 +48,7 @@ export function StockOrderProcessSupplierDispatchOrder(
 
   const [remarks, setRemarks] = useState("");
   const [transport, setTransport] = useState("");
-  const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [uploadedReceipt, setUploadedReceipt] = useState<File | string>("");
   const [dispatchedDelivery, setDispachedDelivery] = useState<string | null>(
     null
   );
@@ -51,23 +56,41 @@ export function StockOrderProcessSupplierDispatchOrder(
   const [preview, setPreview] = useState(false);
   const [openPopup, setOpenPopUp] = useState(false);
   const [submit, setSubmit] = useState(false);
-  const [openExcelPreview, setOpenExcelPreview] = useState(false);
-  const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
-    useState(false);
 
   const franchiseType =
     getProductDataState.data?.order_information.franchise_type_id;
 
-  const handleOnSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-
-    setOpenPopUp(true);
-    setSubmit(true);
-  };
-
-  const handlePreviewButton = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    setPreview(true);
+  const handleOnSubmit = (isCancelled: boolean) => () => {
+    dispatch(
+      openMessageModal({
+        message: `Confirming this action will ${
+          isCancelled
+            ? "cancel the order"
+            : "move the order for the next process"
+        }. Are you sure you want to proceed?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              if (isCancelled) {
+                handleCancelledOrder();
+              } else {
+                handleDispatchOrder();
+              }
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
 
   const handleCancelledOrder = () => {
@@ -77,6 +100,7 @@ export function StockOrderProcessSupplierDispatchOrder(
     };
     dispatch(updateOrderCancelled(cancelParameter));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose(true);
   };
 
@@ -105,7 +129,7 @@ export function StockOrderProcessSupplierDispatchOrder(
 
   return (
     <>
-      <form className="space-y-3" onSubmit={handleOnSubmit}>
+      <div className="space-y-3">
         <div className="flex flex-col px-3 space-y-3">
           <div className="flex flex-col space-y-2 md:flex-row md:space-x-3">
             <FormControl
@@ -167,92 +191,58 @@ export function StockOrderProcessSupplierDispatchOrder(
 
           <StockOrderRemarks remarks={remarks} setRemarks={setRemarks} />
 
-          <div className="flex flex-col space-y-3">
-            <div className="flex flex-col md:flex-row gap-3">
-              {franchiseType !== 1 ? null : (
-                <Button
-                  fullWidth
-                  size="small"
-                  sx={STOCK_ORDERING_BUTTON_STYLE}
-                  onClick={() => {
-                    setOpenUploadDeliveryRecieptModal(true);
-                  }}
-                  variant="contained"
-                >
-                  Upload Sales Invoice
-                </Button>
-              )}
+          <div className="flex-1 w-full space-y-1">
+            <div
+              className={`md:flex w-full ${
+                uploadedReceipt === "" ? "flex-wrap" : ""
+              } md:space-x-3`}
+            >
+              <StockOrderUploadFile
+                uploadedImage={(file: File | string) =>
+                  setUploadedReceipt(file)
+                }
+                uploadButtonName={"Sales invoice"}
+                excelFile
+                className={`${uploadedReceipt !== "" && "md:basis-1/2"} `}
+              />
 
-              {preview || franchiseType !== 1 ? (
-                <Button
-                  fullWidth
-                  size="small"
-                  type="submit"
-                  variant="contained"
-                  disabled={transport === "" || dispatchedDelivery === null}
-                  sx={STOCK_ORDERING_BUTTON_STYLE}
-                >
-                  Dispatch Order
-                </Button>
-              ) : (
-                <Button
-                  fullWidth
-                  size="small"
-                  variant="contained"
-                  onClick={handlePreviewButton}
-                  sx={STOCK_ORDERING_BUTTON_STYLE}
-                  disabled={
-                    !isValidFile(uploadedReceipt, false) ||
-                    transport === "" ||
-                    dispatchedDelivery === null
-                  }
-                >
-                  Preview
-                </Button>
-              )}
-            </div>
-
-            <div className="flex justify-between">
-              {preview && uploadedReceipt && (
-                <div>
-                  <span>Click here to view file content: </span>
-                  <Button
-                    onClick={() => setOpenExcelPreview(true)}
-                    size="small"
-                    variant="text"
+              <div
+                className={`${
+                  uploadedReceipt !== "" && "flex items-end"
+                } md:basis-1/2`}
+              >
+                <div className="w-full">
+                  <div className={`${uploadedReceipt === "" && "hidden"}`}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      size="small"
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                      disabled={
+                        !isValidFile(uploadedReceipt, false) ||
+                        transport === "" ||
+                        dispatchedDelivery === null
+                      }
+                      onClick={handleOnSubmit(false)}
+                    >
+                      Confirm
+                    </Button>
+                  </div>
+                  <div
+                    className={`${
+                      uploadedReceipt !== "" && "flex justify-end"
+                    }`}
                   >
-                    {Object.values(uploadedReceipt).map((name) => name)}
-                  </Button>
+                    <Button variant="text" onClick={handleOnSubmit(true)}>
+                      Cancel Order
+                    </Button>
+                  </div>
                 </div>
-              )}
-              <div>
-                <Button size="small" onClick={() => setOpenPopUp(true)}>
-                  <span className="text-primary underline">Cancel Order</span>
-                </Button>
-
-                {preview && (
-                  <Button size="small" onClick={() => setPreview(false)}>
-                    <span className="text-primary underline">Re-edit</span>
-                  </Button>
-                )}
               </div>
             </div>
           </div>
         </div>
-      </form>
-
-      <UploadDeliveryRecieptModal
-        open={openUploadDeliveryRecieptModal}
-        onClose={() => setOpenUploadDeliveryRecieptModal(false)}
-        setUploadedReciept={setUploadedReciept}
-        isButtonAvailable={true}
-      />
-
-      <ExcelPreviewModal
-        open={openExcelPreview}
-        onClose={() => setOpenExcelPreview(false)}
-        file={uploadedReceipt}
-      />
+      </div>
 
       <PopupModal
         open={openPopup}

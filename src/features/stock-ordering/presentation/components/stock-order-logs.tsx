@@ -282,7 +282,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
             </div>
           )}
 
-          {(props.order_details.status_id >= 5 ||
+          {/* {(props.order_details.status_id >= 5 ||
             props.order_details["franchisee_payment_detail_image"]) &&
             props.order_details.status_id <= 10 && (
               <div className="space-y-2">
@@ -351,7 +351,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                   )}
                 </div>
               </div>
-            )}
+            )} */}
         </div>
       </div>
     </>

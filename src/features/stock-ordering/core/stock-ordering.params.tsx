@@ -81,6 +81,7 @@ export interface updateBillingOrderParam {
   remarks: string;
   uploadedGoodsReceipt: File | string;
   uploadedRegionReceipt: File | string;
+  uploadedPenaltyReceipt: File | string;
   withNewSI: boolean;
 }
 
@@ -96,6 +97,11 @@ export interface updatePayBillingParam {
   }>;
   paymentFile: File | string;
   remarks: string;
+}
+
+export interface updatePenelizedPayBillingParam {
+  remarks: string;
+  paymentFile: File | string;
 }
 
 export interface updatReviewParam {

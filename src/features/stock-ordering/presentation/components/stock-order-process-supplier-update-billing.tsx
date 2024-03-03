@@ -1,8 +1,8 @@
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { useEffect, useState } from "react";
-import { StockOrderRemarks } from ".";
-import { Button } from "@mui/material";
+import { StockOrderRemarks, StockOrderUploadFile } from ".";
+import { Button, useMediaQuery, useTheme } from "@mui/material";
 import {
   REACT_APP_DOMAIN_URL,
   STOCK_ORDERING_BUTTON_STYLE,
@@ -11,6 +11,11 @@ import { updateBillingOrders } from "../slices/update-billing-order.slice";
 import { useAppDispatch } from "features/config/hooks";
 import { PopupModal, UploadDeliveryRecieptModal } from "../modals";
 import { isValidFile } from "./stock-ordering-utils";
+import { ViewImageModal } from "../modals/view-image.modal";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface StockOrderProcessSupplierUpdateBillingProps {
   orderId: string;
@@ -22,6 +27,8 @@ export function StockOrderProcessSupplierUpdateBilling(
   props: StockOrderProcessSupplierUpdateBillingProps
 ) {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [remarks, setRemarks] = useState("");
   const [uploadedGoodsReceipt, setUploadedGoodsReceipt] = useState<
@@ -30,14 +37,13 @@ export function StockOrderProcessSupplierUpdateBilling(
   const [uploadedRegionReceipt, setUploadedRegionReceipt] = useState<
     string | File
   >("");
+  const [uploadedPenaltyReceipt, setUploadedPenaltyReceipt] = useState<
+    File | string
+  >("");
 
-  const [openPopupModal, setOpenPopupModal] = useState(false);
   const [warningMismatch, setWarningMismatch] = useState(false);
   const [warningNonNCR, setwarningNonNCR] = useState(false);
-  const [openUploadRegionReceiptModal, setOpenUploadRegionReceiptModal] =
-    useState(false);
-  const [openUploadedGoodsReceipt, setUploadedGoodsReceiptModal] =
-    useState(false);
+  const [warningPenalty, setWarningPenalty] = useState(false);
 
   useEffect(() => {
     if (
@@ -49,31 +55,96 @@ export function StockOrderProcessSupplierUpdateBilling(
       );
 
       const isWarningNonNCR = props.rows.order_information.region_id !== 2;
+      const isWarningPenalty = Boolean(props.rows.order_information.penalty);
 
-      setWarningMismatch(isWarningMismatch);
+      setWarningMismatch(
+        isWarningMismatch && Boolean(isWarningPenalty) === false
+      );
       setwarningNonNCR(isWarningNonNCR);
+      setWarningPenalty(isWarningPenalty);
     }
   }, [props.rows.product_data]);
 
   const handleUpdateBilling = () => {
-    const updateBillingOrderParam: updateBillingOrderParam = {
-      id: props.orderId,
-      remarks: remarks,
-      uploadedGoodsReceipt: uploadedGoodsReceipt ?? "",
-      uploadedRegionReceipt: uploadedRegionReceipt ?? "",
-      withNewSI: uploadedGoodsReceipt || uploadedRegionReceipt ? true : false,
-    };
+    dispatch(
+      openMessageModal({
+        message: `Are you sure you want to confirm ?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              const updateBillingOrderParam: updateBillingOrderParam = {
+                id: props.orderId,
+                remarks: remarks,
+                uploadedGoodsReceipt: uploadedGoodsReceipt ?? "",
+                uploadedRegionReceipt: uploadedRegionReceipt ?? "",
+                uploadedPenaltyReceipt: uploadedPenaltyReceipt ?? "",
+                withNewSI:
+                  uploadedGoodsReceipt || uploadedRegionReceipt ? true : false,
+              };
 
-    dispatch(updateBillingOrders(updateBillingOrderParam));
+              dispatch(updateBillingOrders(updateBillingOrderParam));
 
-    document.body.classList.remove("overflow-hidden");
-    props.onClose(true);
+              document.body.classList.remove("overflow-hidden");
+              props.onClose(true);
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
+
+  const penaltyAndRegionFileCheck =
+    warningNonNCR &&
+    isValidFile(uploadedPenaltyReceipt, false) &&
+    isValidFile(uploadedRegionReceipt, false);
+
+  const penaltyFileCheck =
+    !warningNonNCR && isValidFile(uploadedPenaltyReceipt, false);
+
+  const mismatchAndRegionFileCheck =
+    warningMismatch &&
+    warningNonNCR &&
+    isValidFile(uploadedGoodsReceipt, false) &&
+    isValidFile(uploadedRegionReceipt, false);
+
+  const mismatchFileCheck =
+    warningMismatch &&
+    !warningNonNCR &&
+    isValidFile(uploadedGoodsReceipt, false);
+  const regionFileCheck =
+    !warningMismatch &&
+    warningNonNCR &&
+    isValidFile(uploadedRegionReceipt, false);
+
+  const noMismatchAndNonNCR = !warningMismatch && !warningMismatch;
+
+  console.log(mismatchAndRegionFileCheck);
 
   return (
     <>
       <div className="px-3 space-y-2">
         <StockOrderRemarks remarks={remarks} setRemarks={setRemarks} />
+
+        <div
+          className={`${
+            warningPenalty ? "" : "hidden"
+          } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
+        >
+          <span className="font-semibold">Warning:</span>
+          <span className="text-sm">
+            The store is required to pay first. Please upload sales invoice.
+          </span>
+        </div>
 
         <div
           className={`${
@@ -100,122 +171,91 @@ export function StockOrderProcessSupplierUpdateBilling(
         </div>
 
         <div className="flex flex-col space-y-5 md:flex-row md:space-x-5 md:space-y-0">
-          <div className="basis-1/2">
-            <Button
-              onClick={() => {
-                const id = props.orderId;
-                const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
+          {warningPenalty ? (
+            <div className="flex-1 space-y-1">
+              <div className="flex flex-wrap  w-full md:flex-nowrap md:space-x-3">
+                <StockOrderUploadFile
+                  excelFile
+                  uploadButtonName={"Payable sales invoice"}
+                  uploadedImage={(uploadedFile: File | string) =>
+                    setUploadedPenaltyReceipt(uploadedFile)
+                  }
+                />
 
-                window.open(link, "_blank");
-              }}
-              fullWidth
-              variant="contained"
-              sx={{ color: "white", backgroundColor: "#CC5801" }}
-            >
-              Download SI
-            </Button>
-          </div>
+                <StockOrderUploadFile
+                  excelFile
+                  uploadButtonName={"Region sales invoice"}
+                  hidden={!warningNonNCR}
+                  uploadedImage={(uploadedFile: File | string) =>
+                    setUploadedRegionReceipt(uploadedFile)
+                  }
+                />
 
-          <div className="basis-1/2">
-            {(warningMismatch &&
-              !warningNonNCR &&
-              isValidFile(uploadedGoodsReceipt, false)) ||
-            (!warningMismatch &&
-              warningNonNCR &&
-              isValidFile(uploadedRegionReceipt, false)) ||
-            (warningMismatch &&
-              warningNonNCR &&
-              isValidFile(uploadedGoodsReceipt, false) &&
-              isValidFile(uploadedRegionReceipt, false)) ||
-            (!warningMismatch && !warningNonNCR) ? (
-              <div className="space-y-1">
-                <Button
-                  onClick={() => setOpenPopupModal(true)}
-                  fullWidth
-                  variant="contained"
-                  sx={STOCK_ORDERING_BUTTON_STYLE}
-                >
-                  Confirm
-                </Button>
-
-                <div className="flex flex-col space-y-1 md:flex-row md:space-x-3 md:space-y-0">
-                  {warningMismatch && (
+                {(penaltyAndRegionFileCheck || penaltyFileCheck) && (
+                  <div className="w-full flex items-center">
                     <Button
-                      onClick={() => setUploadedGoodsReceiptModal(true)}
-                      size="small"
-                      variant="outlined"
-                      sx={{ flexBasis: "50%" }}
+                      fullWidth
+                      onClick={handleUpdateBilling}
+                      variant="contained"
+                      size={isMobile ? "small" : "large"}
+                      style={{
+                        color: "white",
+                        backgroundColor: "#CC5801",
+                      }}
                     >
-                      Change SI (Goods)
+                      Confirm and submit
                     </Button>
-                  )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex w-full space-x-3">
+              <div className="flex-1 space-y-1">
+                <div className="flex flex-wrap w-full md:flex-nowrap md:space-x-3">
+                  <StockOrderUploadFile
+                    excelFile
+                    uploadButtonName={"Goods sales invoice"}
+                    hidden={!warningMismatch}
+                    uploadedImage={(uploadedFile: File | string) =>
+                      setUploadedGoodsReceipt(uploadedFile)
+                    }
+                  />
 
-                  {warningNonNCR && (
-                    <Button
-                      onClick={() => setOpenUploadRegionReceiptModal(true)}
-                      size="small"
-                      variant="outlined"
-                      sx={{ flexBasis: "50%" }}
-                    >
-                      change SI (Region)
-                    </Button>
+                  <StockOrderUploadFile
+                    excelFile
+                    uploadButtonName={"Region sales invoice"}
+                    hidden={!warningNonNCR}
+                    uploadedImage={(uploadedFile: File | string) =>
+                      setUploadedRegionReceipt(uploadedFile)
+                    }
+                  />
+
+                  {(mismatchAndRegionFileCheck ||
+                    mismatchFileCheck ||
+                    regionFileCheck ||
+                    noMismatchAndNonNCR) && (
+                    <div className="w-full flex items-center">
+                      <Button
+                        fullWidth
+                        onClick={handleUpdateBilling}
+                        variant="contained"
+                        size={isMobile ? "small" : "large"}
+                        style={{
+                          color: "white",
+                          backgroundColor: "#CC5801",
+                        }}
+                      >
+                        Confirm and submit
+                      </Button>
+                    </div>
                   )}
                 </div>
               </div>
-            ) : (
-              <div className="space-y-2">
-                {warningMismatch &&
-                  !isValidFile(uploadedGoodsReceipt, false) && (
-                    <Button
-                      id="goods"
-                      onClick={() => setUploadedGoodsReceiptModal(true)}
-                      fullWidth
-                      variant="contained"
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Upload updated sales invoice (GOODS)
-                    </Button>
-                  )}
-
-                {warningNonNCR &&
-                  !isValidFile(uploadedRegionReceipt, false) && (
-                    <Button
-                      id="region"
-                      onClick={() => setOpenUploadRegionReceiptModal(true)}
-                      fullWidth
-                      variant="contained"
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Upload updated sales invoice (REGION)
-                    </Button>
-                  )}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
-
-      <UploadDeliveryRecieptModal
-        open={openUploadedGoodsReceipt}
-        onClose={() => setUploadedGoodsReceiptModal(false)}
-        setUploadedReciept={setUploadedGoodsReceipt}
-        isButtonAvailable={true}
-      />
-
-      <UploadDeliveryRecieptModal
-        open={openUploadRegionReceiptModal}
-        onClose={() => setOpenUploadRegionReceiptModal(false)}
-        setUploadedReciept={setUploadedRegionReceipt}
-        isButtonAvailable={true}
-      />
-
-      <PopupModal
-        open={openPopupModal}
-        title={"Confirmation"}
-        message={<span>Are you sure you want to confirm ?</span>}
-        handleYesButton={handleUpdateBilling}
-        handleNoButton={() => setOpenPopupModal(false)}
-      />
     </>
   );
 }

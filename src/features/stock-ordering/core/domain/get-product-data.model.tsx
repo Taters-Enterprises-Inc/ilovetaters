@@ -23,6 +23,8 @@ export interface GetProductDataModel {
     region_name: string;
     logistic_id: string;
     logistic_type: string;
+    penalty: boolean | null;
+    payment_status_id: number | null;
 
     //files
     updated_delivery_goods_receipt: string;

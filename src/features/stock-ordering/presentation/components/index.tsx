@@ -29,7 +29,9 @@ export { StockOrderProcessFinancePayBilling } from "./stock-order-process-financ
 export { StockOrderProcessSupplierConfirmPayment } from "./stock-order-process-supplier-confirm-payment";
 export { StockOrderProcessFranchiseePayBill } from "./stock-order-process-franchisee-pay-bill";
 export { StockOrderProcessCompleted } from "./stock-order-process-completed";
+export { StockOrderProcessPaybillPenalty } from "./stock-order-process-paybill-penalty";
 
-//Field
+//Field / utils
 export { StockOrderRemarks } from "./stock-order-remarks";
 export { StockOrderProcessActionEnabler } from "./stock-order-process-action-enabler";
+export { StockOrderUploadFile } from "./stock-order-upload-file-util";

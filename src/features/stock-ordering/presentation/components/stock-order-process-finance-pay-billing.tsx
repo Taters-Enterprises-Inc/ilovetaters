@@ -23,6 +23,11 @@ import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import { PayBillingModal, ExcelPreviewModal, PopupModal } from "../modals";
 import { InvoiceFilter } from "./invoice-filter";
 import { isValidFile } from "./stock-ordering-utils";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
+import { StockOrderUploadFile } from ".";
 
 interface StockOrderProcessFinancePayBillingProps {
   onClose: () => void;
@@ -115,17 +120,38 @@ export function StockOrderProcessFinancePayBilling(
     setSelectedData(selectedRowsData);
   };
 
-  const handlePayBilling = async () => {
-    const payBilingParam: updatePayBillingParam = {
-      selectedData: selectedData ?? [],
-      paymentFile: uploadedReceipt,
-      remarks: remarks,
-    };
+  const handlePayBilling = () => {
+    dispatch(
+      openMessageModal({
+        message: `Are you sure you want to release the payment receipt?`,
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              const payBilingParam: updatePayBillingParam = {
+                selectedData: selectedData ?? [],
+                paymentFile: uploadedReceipt,
+                remarks: remarks,
+              };
 
-    dispatch(updatePayBillingOrders(payBilingParam));
+              dispatch(updatePayBillingOrders(payBilingParam));
 
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
+              document.body.classList.remove("overflow-hidden");
+              props.onClose();
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
+      })
+    );
   };
 
   return (
@@ -174,21 +200,22 @@ export function StockOrderProcessFinancePayBilling(
           />
         </div>
 
-        <div className="flex flex-col space-y-2">
-          <div className="flex space-x-3">
+        <div className="flex-1 w-full space-y-1 md:flex md:space-x-3">
+          <StockOrderUploadFile
+            uploadedImage={(file: File | string) => setUploadedReciept(file)}
+            uploadButtonName={"Billing payment"}
+            excelFile
+            className={`${uploadedReceipt === "" ? "w-full" : "basis-1/2"}`}
+          />
+          <div
+            className={`${
+              uploadedReceipt === "" ? "hidden" : "flex items-center"
+            } basis-1/2`}
+          >
             <Button
-              onClick={() => setOpenPayBillingModal(true)}
-              fullWidth
               variant="contained"
-              sx={STOCK_ORDERING_BUTTON_STYLE}
-            >
-              Upload Billing Receipt
-            </Button>
-
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => setOpenPopupModal(true)}
+              onClick={handlePayBilling}
+              size="small"
               disabled={
                 !(
                   isValidFile(uploadedReceipt, false) &&
@@ -201,40 +228,8 @@ export function StockOrderProcessFinancePayBilling(
               Confirm
             </Button>
           </div>
-          {uploadedReceipt && (
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => setOpenExcelPreview(true)}
-              sx={STOCK_ORDERING_BUTTON_STYLE}
-            >
-              Preview Excel File
-            </Button>
-          )}
         </div>
       </div>
-
-      <PopupModal
-        open={openPopupModal}
-        title={"Confirmation"}
-        message={"Are you sure you want to release the payment receipt??"}
-        handleNoButton={() => setOpenPopupModal(false)}
-        handleYesButton={handlePayBilling}
-      />
-
-      <PayBillingModal
-        open={openPayBillingModal}
-        onClose={() => setOpenPayBillingModal(false)}
-        setUploadedReciept={setUploadedReciept}
-        isButtonAvailable={true}
-        isExcel
-      />
-
-      <ExcelPreviewModal
-        open={openExcelPreview}
-        onClose={() => setOpenExcelPreview(false)}
-        file={uploadedReceipt}
-      />
     </>
   );
 }

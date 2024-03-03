@@ -10,6 +10,7 @@ interface UploadDeliveryRecieptModalProps {
   onClose: () => void;
   setUploadedReciept: ((file: File | string) => void) | undefined;
   isButtonAvailable: boolean;
+  title?: string;
 }
 
 export function UploadDeliveryRecieptModal(
@@ -22,9 +23,7 @@ export function UploadDeliveryRecieptModal(
     dispatch(togglePopupScroll());
   }, [props.open]);
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-
+  const handleSubmit = () => {
     props.setUploadedReciept?.(uploadedReceipt);
 
     document.body.classList.remove("overflow-hidden");
@@ -46,7 +45,11 @@ export function UploadDeliveryRecieptModal(
       >
         <div className="w-[97%] lg:w-[25%] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-            <span className="text-2xl text-white">Upload Sales Invoice</span>
+            <span className="text-2xl text-white">
+              {props.title === "" || props.title === undefined
+                ? "Upload Sales Invoice"
+                : "Upload " + props.title}
+            </span>
             <button
               className="text-2xl text-white"
               onClick={() => {
@@ -74,8 +77,8 @@ export function UploadDeliveryRecieptModal(
               {props.isButtonAvailable ? (
                 <div>
                   <Button
-                    type="submit"
                     fullWidth
+                    onClick={handleSubmit}
                     sx={{
                       bgcolor: "#CC5801",
                       "&:hover": {
