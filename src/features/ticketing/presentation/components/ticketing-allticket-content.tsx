@@ -5,13 +5,24 @@ import {
   DataTableCell,
   DataTableRow,
 } from "features/shared/presentation/components/data-table";
-import { ChangeEvent } from "react";
+import { useEffect } from "react";
 import { FaEye } from "react-icons/fa";
 import { TbCheckupList } from "react-icons/tb";
 import { TicketingTriageModal } from "../modals/ticketing-triage.modal";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
+import { createQueryParams } from "features/config/helpers";
+import {
+  getAllTickets,
+  selectGetAllTickets,
+} from "../slices/get-all-tickets.slice";
 
+// 👇 Edit this
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "ticketNumber", label: "Ticket Number" },
@@ -21,7 +32,33 @@ const columns: Array<Column> = [
 ];
 
 export function AllTicketsContents() {
+  const dispatch = useAppDispatch();
+  const query = useQuery();
+  const navigate = useNavigate();
+  const pageNo = query.get("page_no");
+  const perPage = query.get("per_page");
+  const status = query.get("status");
+  const id = query.get("id");
+  const orderBy = query.get("order_by");
+  const order = query.get("order");
+  const search = query.get("search");
+
   const [openTriageModal, setOpenTriageModal] = React.useState(false);
+
+  const getAllTicketStates = useAppSelector(selectGetAllTickets);
+
+  // 👇 Edit This
+  useEffect(() => {
+    const query = createQueryParams({
+      page_no: pageNo,
+      per_page: perPage,
+      status: status,
+      order_by: orderBy,
+      order: order,
+      search: search,
+    });
+    dispatch(getAllTickets(query));
+  }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
 
   return (
     <>
@@ -36,24 +73,64 @@ export function AllTicketsContents() {
         {/* Mobile View */}
         <div className="p-4 lg:hidden">
           <DataList
-            search={""} // 👈  Edit This
+            search={search ?? ""}
             emptyMessage="No tickets yet."
-            // 🔴 onSearch Not yet functional
-            onSearch={function (value: string): void {
-              throw new Error("Function not implemented.");
+            // 🟡 onSearch ongoing edits
+            onSearch={(val) => {
+              const params = {
+                page_no: null,
+                per_page: perPage,
+                status: status,
+                order_by: orderBy,
+                order: order,
+                search: val === "" ? null : val,
+              };
+
+              const queryParams = createQueryParams(params);
+
+              navigate({
+                pathname: "",
+                search: queryParams,
+              });
             }}
-            // 🔴 onRowsPerPageChange Not yet functional
-            onRowsPerPageChange={function (
-              event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ): void {
-              throw new Error("Function not implemented.");
+            // 🟡 onRowsPerPageChange ongoing edits
+            onRowsPerPageChange={(event) => {
+              if (perPage !== event.target.value) {
+                const params = {
+                  page_no: pageNo,
+                  per_page: event.target.value,
+                  status: status,
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
             }}
-            // 🔴 onPageChange Not yet functional
-            onPageChange={function (
-              event: ChangeEvent<unknown>,
-              value: number
-            ): void {
-              throw new Error("Function not implemented.");
+            // 🟡 onPageChange ongoing edits
+            onPageChange={(event, newPage) => {
+              const pageNoInt = pageNo ? parseInt(pageNo) : null;
+              if (newPage !== pageNoInt) {
+                const params = {
+                  page_no: newPage,
+                  per_page: perPage,
+                  status: status,
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
             }}
             totalRows={0} // 👈 Edit this
             perPage={0} // 👈 Edit this
@@ -106,32 +183,95 @@ export function AllTicketsContents() {
             order={"asc" ? "asc" : "desc"} // 👈  Edit This
             orderBy={"dateCreated"} // 👈  Edit This
             emptyMessage="No tickets yet."
-            search={""} // 👈  Edit This
-            // 🔴 onSearch Not yet functional
-            onSearch={function (value: string): void {
-              throw new Error("Function not implemented.");
+            search={search ?? ""} // 👈  Edit This
+            // 🟡 onSearch on editing stage
+            onSearch={(val) => {
+              const params = {
+                page_no: pageNo,
+                per_page: perPage,
+                status: status,
+                order_by: orderBy,
+                order: order,
+                search: val === "" ? null : val,
+              };
+
+              const queryParams = createQueryParams(params);
+
+              navigate({
+                pathname: "",
+                search: queryParams,
+              });
             }}
-            // 🔴 onRequestSort Not yet functional
-            onRequestSort={function (property: string): void {
-              throw new Error("Function not implemented.");
+            // 🟡 onRequestSort ongoing edits
+            onRequestSort={(column_selected) => {
+              if (column_selected !== "action") {
+                const isAsc = orderBy === column_selected && order === "asc";
+
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  status: status,
+                  order_by: column_selected,
+                  order: isAsc ? "desc" : "asc",
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
             }}
             columns={columns}
-            // 🔴 onRowsPerPageChange Not yet functional
-            onRowsPerPageChange={function (
-              event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ): void {
-              throw new Error("Function not implemented.");
+            // 🟡 onRowsPerPageChange ongoing edits
+            onRowsPerPageChange={(event) => {
+              if (perPage !== event.target.value) {
+                const params = {
+                  page_no: pageNo,
+                  per_page: event.target.value,
+                  status: status,
+                  order_by: orderBy,
+                  order: order,
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
             }}
-            // 🔴 onPageChange Not yet functional
-            onPageChange={function (
-              event: ChangeEvent<unknown>,
-              value: number
-            ): void {
-              throw new Error("Function not implemented.");
+            // 🟡 onPageChange ongoing edits
+            onPageChange={(event, newPage) => {
+              const pageNoInt = pageNo ? parseInt(pageNo) : null;
+              if (newPage !== pageNoInt) {
+                const params = {
+                  page_no: newPage,
+                  per_page: perPage,
+                  status: status,
+                  order_by: orderBy,
+                  order: order,
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
             }}
             totalRows={0} // 👈 Edit this
             perPage={0} // 👈 Edit this
-            page={0} // 👈 Edit this
+            page={pageNo ? parseInt(pageNo) : 1} // 👈 Edit this
           >
             <DataTableRow key={0}>
               <DataTableCell>
