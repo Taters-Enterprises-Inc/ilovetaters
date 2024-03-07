@@ -21,6 +21,8 @@ import {
   getAllTickets,
   selectGetAllTickets,
 } from "../slices/get-all-tickets.slice";
+import { AdminChipsButton } from "features/admin/presentation/components/chips-button";
+import { TICKET_STATUS } from "features/shared/constants";
 
 // 👇 Edit this
 const columns: Array<Column> = [
@@ -66,7 +68,23 @@ export function AllTicketsContents() {
         <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           All Tickets
         </span>
-        {/* Add Chips Here */}
+        <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={TICKET_STATUS}
+          dispatchAction={() => {
+            // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value === -1 ? null : value,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {/* 👇 EDIT THIS 👇 */}
