@@ -12,7 +12,7 @@ export interface GetAllTicketsResponse {
 export function GetAllTicketsRepository(
   query: string
 ): Promise<GetAllTicketsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discounts${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/ticketing/tickets${query}`, {
     withCredentials: true,
   });
 }
