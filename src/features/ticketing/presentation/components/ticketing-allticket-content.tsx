@@ -87,8 +87,7 @@ export function AllTicketsContents() {
         />
       </div>
 
-      {/* 👇 EDIT THIS 👇 */}
-      {getAllTicketStates.data?.discounts ? (
+      {getAllTicketStates.data?.tickets ? (
         <>
           {/* Mobile View */}
           <div className="p-4 lg:hidden">
@@ -157,43 +156,49 @@ export function AllTicketsContents() {
               page={0} // 👈 Edit this
             >
               <hr className="mt-4" />
-              <div className="flex justify-between items-center px-4 py-2 border-b">
-                <div className="flex flex-col">
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>My PC Isn't Working</span>
-                    <span
-                      className="px-2 py-1 text-xs rounded-full"
-                      style={{
-                        color: "white",
-                        backgroundColor: "#cca300",
+
+              {getAllTicketStates.data.tickets.map((row, i) => (
+                <div
+                  key={i}
+                  className="flex justify-between items-center px-4 py-2 border-b"
+                >
+                  <div className="flex flex-col">
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>{row.ticket_title}</span>
+                      <span
+                        className="px-2 py-1 text-xs rounded-full"
+                        style={{
+                          color: "white",
+                          backgroundColor: "#cca300",
+                        }}
+                      >
+                        Open
+                      </span>
+                    </span>
+                    <span className="text-xs text-gray-600">
+                      <strong>Ticket Number:</strong> {row.id}
+                    </span>
+                    <span className="text-xs text-gray-600">
+                      <strong>Date Created:</strong> February 13, 2024
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Link
+                      to="/admin/ticketing/view-ticket"
+                      style={{ marginRight: "10px" }}
+                    >
+                      <FaEye className="text-lg" />
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setOpenTriageModal(true);
                       }}
                     >
-                      Open
-                    </span>
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    <strong>Ticket Number:</strong> 159
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    <strong>Date Created:</strong> February 13, 2024
-                  </span>
+                      <TbCheckupList className="text-lg" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <Link
-                    to="/admin/ticketing/view-ticket"
-                    style={{ marginRight: "10px" }}
-                  >
-                    <FaEye className="text-lg" />
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setOpenTriageModal(true);
-                    }}
-                  >
-                    <TbCheckupList className="text-lg" />
-                  </button>
-                </div>
-              </div>
+              ))}
             </DataList>
           </div>
 
@@ -201,7 +206,7 @@ export function AllTicketsContents() {
           <div className="hidden p-4 lg:block">
             <DataTable
               order={"asc" ? "asc" : "desc"} // 👈  Edit This
-              orderBy={"dateCreated"} // 👈  Edit This
+              orderBy={"ticketNumber"} // 👈  Edit This
               emptyMessage="No tickets yet."
               search={search ?? ""} // 👈  Edit This
               // 🟡 onSearch on editing stage
@@ -294,7 +299,7 @@ export function AllTicketsContents() {
               page={pageNo ? parseInt(pageNo) : 1} // 👈 Edit this
             >
               {/* 👇 EDIT THIS 👇 */}
-              {getAllTicketStates.data.discounts.map((row, i) => (
+              {getAllTicketStates.data.tickets.map((row, i) => (
                 <>
                   <DataTableRow key={i}>
                     <DataTableCell>
@@ -310,8 +315,8 @@ export function AllTicketsContents() {
                       </span>
                     </DataTableCell>
                     <DataTableCell>{row.id}</DataTableCell>
-                    <DataTableCell>{row.discount_name}</DataTableCell>
-                    <DataTableCell>{row.dateadded}</DataTableCell>
+                    <DataTableCell>{row.ticket_title}</DataTableCell>
+                    <DataTableCell>No data on db yet.</DataTableCell>
                     <DataTableCell>
                       <div className="flex items-center">
                         <Link
@@ -332,42 +337,6 @@ export function AllTicketsContents() {
                   </DataTableRow>
                 </>
               ))}
-
-              {/* 👇 HARDCODED VERSION 👇 */}
-              {/* <DataTableRow key={0}>
-                <DataTableCell>
-                  <span
-                    className="px-2 py-1 text-xs rounded-full"
-                    style={{
-                      color: "white",
-                      backgroundColor: "#cca300",
-                    }}
-                  >
-                    {" "}
-                    Open{" "}
-                  </span>
-                </DataTableCell>
-                <DataTableCell>159</DataTableCell>
-                <DataTableCell>My PC Isn't Working</DataTableCell>
-                <DataTableCell>February 13, 2024</DataTableCell>
-                <DataTableCell>
-                  <div className="flex items-center">
-                    <Link
-                      to="/admin/ticketing/view-ticket"
-                      style={{ marginRight: "10px" }}
-                    >
-                      <FaEye className="text-lg" />
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setOpenTriageModal(true);
-                      }}
-                    >
-                      <TbCheckupList className="text-lg" />
-                    </button>
-                  </div>
-                </DataTableCell>
-              </DataTableRow> */}
             </DataTable>
           </div>
         </>
