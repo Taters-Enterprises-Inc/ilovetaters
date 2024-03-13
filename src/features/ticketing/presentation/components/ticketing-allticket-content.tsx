@@ -1,34 +1,35 @@
-// This code referenced from admin-user-discounts.tsx
-import { DataList, DataTable } from "features/shared/presentation/components";
-import {
-  Column,
-  DataTableCell,
-  DataTableRow,
-} from "features/shared/presentation/components/data-table";
+import React from "react";
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { TbCheckupList } from "react-icons/tb";
+import { createQueryParams } from "features/config/helpers";
 import { TicketingTriageModal } from "../modals/ticketing-triage.modal";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { DataList } from "features/shared/presentation/components";
+import { AdminChipsButton } from "features/admin/presentation/components/chips-button";
+import { TICKET_STATUS } from "features/shared/constants";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { createQueryParams } from "features/config/helpers";
+import {
+  Column,
+  DataTable,
+  DataTableCell,
+  DataTableRow,
+} from "features/shared/presentation/components/data-table";
 import {
   getAllTickets,
+  resetGetAllTicketsStatus,
   selectGetAllTickets,
 } from "../slices/get-all-tickets.slice";
-import { AdminChipsButton } from "features/admin/presentation/components/chips-button";
-import { TICKET_STATUS } from "features/shared/constants";
 
-// 👇 Edit this
+// Table Columns
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
-  { id: "ticketNumber", label: "Ticket Number" },
-  { id: "ticketTitle", label: "Ticket Title" },
+  { id: "id", label: "Ticket Number" },
+  { id: "ticket_title", label: "Ticket Title" },
   { id: "dateCreated", label: "Date Created" },
   { id: "actions", label: "Actions" },
 ];
@@ -49,7 +50,6 @@ export function AllTicketsContents() {
 
   const getAllTicketStates = useAppSelector(selectGetAllTickets);
 
-  // 👇 Edit This
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -72,7 +72,7 @@ export function AllTicketsContents() {
           createQueryParams={createQueryParams}
           data={TICKET_STATUS}
           dispatchAction={() => {
-            // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+            dispatch(resetGetAllTicketsStatus());
           }}
           status={status}
           params={(value) => {
@@ -94,7 +94,6 @@ export function AllTicketsContents() {
             <DataList
               search={search ?? ""}
               emptyMessage="No tickets yet."
-              // 🟡 onSearch ongoing edits
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -112,7 +111,6 @@ export function AllTicketsContents() {
                   search: queryParams,
                 });
               }}
-              // 🟡 onRowsPerPageChange ongoing edits
               onRowsPerPageChange={(event) => {
                 if (perPage !== event.target.value) {
                   const params = {
@@ -124,14 +122,13 @@ export function AllTicketsContents() {
 
                   const queryParams = createQueryParams(params);
 
-                  // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                  dispatch(resetGetAllTicketsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              // 🟡 onPageChange ongoing edits
               onPageChange={(event, newPage) => {
                 const pageNoInt = pageNo ? parseInt(pageNo) : null;
                 if (newPage !== pageNoInt) {
@@ -144,16 +141,16 @@ export function AllTicketsContents() {
 
                   const queryParams = createQueryParams(params);
 
-                  // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                  dispatch(resetGetAllTicketsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={0} // 👈 Edit this
-              perPage={0} // 👈 Edit this
-              page={0} // 👈 Edit this
+              totalRows={getAllTicketStates.data.pagination.total_rows}
+              perPage={getAllTicketStates.data.pagination.per_page}
+              page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
@@ -169,19 +166,20 @@ export function AllTicketsContents() {
                         className="px-2 py-1 text-xs rounded-full"
                         style={{
                           color: "white",
-                          backgroundColor: "#cca300",
+                          backgroundColor: TICKET_STATUS[row.status].color,
                         }}
                       >
-                        Open
+                        {TICKET_STATUS[row.status].name}
                       </span>
                     </span>
                     <span className="text-xs text-gray-600">
                       <strong>Ticket Number:</strong> {row.id}
                     </span>
                     <span className="text-xs text-gray-600">
-                      <strong>Date Created:</strong> February 13, 2024
+                      <strong>Date Created:</strong> No data on db yet.
                     </span>
                   </div>
+                  {/* 👇 EDIT THIS 👇 */}
                   <div className="flex items-center">
                     <Link
                       to="/admin/ticketing/view-ticket"
@@ -205,11 +203,10 @@ export function AllTicketsContents() {
           {/* Desktop View */}
           <div className="hidden p-4 lg:block">
             <DataTable
-              order={"asc" ? "asc" : "desc"} // 👈  Edit This
-              orderBy={"ticketNumber"} // 👈  Edit This
+              order={order === "asc" ? "asc" : "desc"}
+              orderBy={orderBy ?? "id"}
               emptyMessage="No tickets yet."
-              search={search ?? ""} // 👈  Edit This
-              // 🟡 onSearch on editing stage
+              search={search ?? ""}
               onSearch={(val) => {
                 const params = {
                   page_no: pageNo,
@@ -227,9 +224,8 @@ export function AllTicketsContents() {
                   search: queryParams,
                 });
               }}
-              // 🟡 onRequestSort ongoing edits
               onRequestSort={(column_selected) => {
-                if (column_selected !== "action") {
+                if (column_selected !== "actions") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
@@ -243,7 +239,7 @@ export function AllTicketsContents() {
 
                   const queryParams = createQueryParams(params);
 
-                  // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                  dispatch(resetGetAllTicketsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -251,7 +247,6 @@ export function AllTicketsContents() {
                 }
               }}
               columns={columns}
-              // 🟡 onRowsPerPageChange ongoing edits
               onRowsPerPageChange={(event) => {
                 if (perPage !== event.target.value) {
                   const params = {
@@ -265,14 +260,13 @@ export function AllTicketsContents() {
 
                   const queryParams = createQueryParams(params);
 
-                  // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                  dispatch(resetGetAllTicketsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              // 🟡 onPageChange ongoing edits
               onPageChange={(event, newPage) => {
                 const pageNoInt = pageNo ? parseInt(pageNo) : null;
                 if (newPage !== pageNoInt) {
@@ -287,18 +281,17 @@ export function AllTicketsContents() {
 
                   const queryParams = createQueryParams(params);
 
-                  // dispatch(resetGetAdminUserDiscountsStatus()); // 👈  Edit This
+                  dispatch(resetGetAllTicketsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={0} // 👈 Edit this
-              perPage={0} // 👈 Edit this
-              page={pageNo ? parseInt(pageNo) : 1} // 👈 Edit this
+              totalRows={getAllTicketStates.data.pagination.total_rows}
+              perPage={getAllTicketStates.data.pagination.per_page}
+              page={pageNo ? parseInt(pageNo) : 1}
             >
-              {/* 👇 EDIT THIS 👇 */}
               {getAllTicketStates.data.tickets.map((row, i) => (
                 <>
                   <DataTableRow key={i}>
@@ -307,17 +300,17 @@ export function AllTicketsContents() {
                         className="px-2 py-1 text-xs rounded-full"
                         style={{
                           color: "white",
-                          backgroundColor: "#cca300",
+                          backgroundColor: TICKET_STATUS[row.status].color,
                         }}
                       >
-                        {" "}
-                        Open{" "}
+                        {TICKET_STATUS[row.status].name}
                       </span>
                     </DataTableCell>
                     <DataTableCell>{row.id}</DataTableCell>
                     <DataTableCell>{row.ticket_title}</DataTableCell>
                     <DataTableCell>No data on db yet.</DataTableCell>
                     <DataTableCell>
+                      {/* 👇 EDIT THIS 👇 */}
                       <div className="flex items-center">
                         <Link
                           to="/admin/ticketing/view-ticket"
