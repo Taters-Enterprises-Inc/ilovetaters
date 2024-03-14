@@ -30,6 +30,7 @@ const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "id", label: "Ticket Number" },
   { id: "ticket_title", label: "Ticket Title" },
+  { id: "department", label: "Department" },
   { id: "dateCreated", label: "Date Created" },
   { id: "actions", label: "Actions" },
 ];
@@ -176,6 +177,10 @@ export function AllTicketsContents() {
                       <strong>Ticket Number:</strong> {row.id}
                     </span>
                     <span className="text-xs text-gray-600">
+                      <strong>Department:</strong> Has db data, but backend not
+                      yet implemented.
+                    </span>
+                    <span className="text-xs text-gray-600">
                       <strong>Date Created:</strong> No data on db yet.
                     </span>
                   </div>
@@ -308,6 +313,9 @@ export function AllTicketsContents() {
                     </DataTableCell>
                     <DataTableCell>{row.id}</DataTableCell>
                     <DataTableCell>{row.ticket_title}</DataTableCell>
+                    <DataTableCell>
+                      Has db data, but backend not yet implemented.
+                    </DataTableCell>
                     <DataTableCell>No data on db yet.</DataTableCell>
                     <DataTableCell>
                       {/* 👇 EDIT THIS 👇 */}
