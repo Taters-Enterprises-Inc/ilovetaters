@@ -178,8 +178,8 @@ export function AllTicketsContents() {
                       <strong>Ticket Number:</strong> {row.id}
                     </span>
                     <span className="text-xs text-gray-600">
-                      <strong>Department:</strong> Has db data, but backend not
-                      yet implemented.
+                      <strong>Department: </strong>
+                      {department[row.department_id].name}
                     </span>
                     <span className="text-xs text-gray-600">
                       <strong>Date Created:</strong> No data on db yet.
