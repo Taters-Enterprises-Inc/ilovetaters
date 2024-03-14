@@ -66,7 +66,7 @@ export function MyTicketContents() {
     <>
       <div className="flex flex-col lg:flex-row lg:items-end">
         <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          My Tickets {">"} MANAGEMENT INFOMATION SYSTEM DEPARTMENT
+          My Tickets: MANAGEMENT INFORMATION SYSTEM DEPARTMENT
         </span>
         <AdminChipsButton
           createQueryParams={createQueryParams}
