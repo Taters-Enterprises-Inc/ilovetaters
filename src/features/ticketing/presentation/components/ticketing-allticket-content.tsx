@@ -24,6 +24,7 @@ import {
   resetGetAllTicketsStatus,
   selectGetAllTickets,
 } from "../slices/get-all-tickets.slice";
+import { department } from "./ticketing-utils";
 
 // Table Columns
 const columns: Array<Column> = [
@@ -314,7 +315,7 @@ export function AllTicketsContents() {
                     <DataTableCell>{row.id}</DataTableCell>
                     <DataTableCell>{row.ticket_title}</DataTableCell>
                     <DataTableCell>
-                      Has db data, but backend not yet implemented.
+                      {department[row.department_id].name}
                     </DataTableCell>
                     <DataTableCell>No data on db yet.</DataTableCell>
                     <DataTableCell>
