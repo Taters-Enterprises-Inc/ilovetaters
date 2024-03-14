@@ -28,7 +28,7 @@ export function GetAllTicketsRepository(
 export function GetMyTicketsRepository(
   query: string
 ): Promise<GetAllTicketsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/ticketing/tickets${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/ticketing/my-tickets${query}`, {
     withCredentials: true,
   });
 }
