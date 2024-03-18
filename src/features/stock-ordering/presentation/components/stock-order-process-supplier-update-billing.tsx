@@ -9,9 +9,9 @@ import {
 } from "features/shared/constants";
 import { updateBillingOrders } from "../slices/update-billing-order.slice";
 import { useAppDispatch } from "features/config/hooks";
-import { PopupModal, UploadDeliveryRecieptModal } from "../modals";
+
 import { isValidFile } from "./stock-ordering-utils";
-import { ViewImageModal } from "../modals/view-image.modal";
+
 import {
   openMessageModal,
   closeMessageModal,

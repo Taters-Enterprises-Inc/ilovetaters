@@ -4,9 +4,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField,
   Divider,
-  ButtonGroup,
   Button,
   IconButton,
 } from "@mui/material";
@@ -15,11 +13,7 @@ import { StockOrderLogs } from "./stock-order-logs";
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
-import {
-  AiFillCheckSquare,
-  AiFillCloseSquare,
-  AiFillDelete,
-} from "react-icons/ai";
+import { AiFillCheckSquare, AiFillCloseSquare } from "react-icons/ai";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import {
@@ -32,8 +26,10 @@ import {
   selectGetStockOrderProducts,
 } from "../slices/get-products.slice";
 import { updateOrderItems } from "../slices/update-order-items.slice";
-import { PopupModal } from "../modals";
-import { getProductData } from "../slices/get-product-data.slice";
+import {
+  openMessageModal,
+  closeMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface StockOrderTableProps {
   isCommitedTextFieldAvailable?: boolean;
@@ -68,7 +64,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
   const [addButtonDisabled, setAddButtonDisabled] = useState(false);
   const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(false);
   const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(false);
-  const [openPopUpMessage, setOpenPopupMessage] = useState(false);
 
   useEffect(() => {
     const lastIndex = props.rowData.product_data.length;
@@ -144,7 +139,30 @@ export function StockOrderTable(props: StockOrderTableProps) {
 
   const handleTableEdit = () => {
     if (edit) {
-      setOpenPopupMessage(true);
+      dispatch(
+        openMessageModal({
+          message:
+            "Please be aware that this action is irreversible. Are you certain you want to continue?",
+          buttons: [
+            {
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                handleCommitChanges();
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                handleDiscardChanges();
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
+        })
+      );
     } else {
       setEdit(true);
       setDeleteButtonDisabled(true);
@@ -180,7 +198,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
     updateTempId();
 
     setEdit(false);
-    setOpenPopupMessage(false);
   };
 
   const updateTempId = () => {
@@ -210,7 +227,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
       order_information: props.rowData.order_information,
     });
     setEdit(false);
-    setOpenPopupMessage(false);
   };
 
   const handleProductChange = (rowIndex: number, value: string) => {
@@ -494,15 +510,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
           <StockOrderLogs order_details={props.rowData.order_information} />
         </div>
       </div>
-      <PopupModal
-        open={openPopUpMessage}
-        title={"Warning!"}
-        message={
-          "Please be aware that this action is irreversible. Are you certain you want to continue?"
-        }
-        handleYesButton={handleCommitChanges}
-        handleNoButton={handleDiscardChanges}
-      />
     </>
   );
 }

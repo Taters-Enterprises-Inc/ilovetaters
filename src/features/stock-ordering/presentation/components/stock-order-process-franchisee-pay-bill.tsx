@@ -2,7 +2,6 @@ import { GetProductDataModel } from "features/stock-ordering/core/domain/get-pro
 import {
   ExcelPreviewModal,
   PayBillingModal,
-  PopupModal,
   UploadDeliveryRecieptModal,
 } from "../modals";
 import { StockOrderRemarks } from "./stock-order-remarks";

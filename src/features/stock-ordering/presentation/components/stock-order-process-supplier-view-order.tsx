@@ -5,7 +5,6 @@ import {
   Button,
   ButtonGroup,
   FormControlLabel,
-  FormGroup,
   Switch,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -14,21 +13,17 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
-import { PopupModal } from "../modals";
 import {
   newOrdersParam,
   updateCancelledStatus,
 } from "features/stock-ordering/core/stock-ordering.params";
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { updateNewOrders } from "../slices/update-new-order.slice";
-import { BsCheckCircleFill } from "react-icons/bs";
 import { isQuantityEmpty } from "./stock-ordering-utils";
 import {
   openMessageModal,
   closeMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
-import { categoryModel } from "features/stock-ordering/core/domain/store-and-category.model";
-import { insertNewOrder } from "../slices/insert-new-order.slice";
 
 interface SupplierViewOrderProps {
   orderId: string;

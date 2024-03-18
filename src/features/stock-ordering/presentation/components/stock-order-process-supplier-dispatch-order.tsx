@@ -14,11 +14,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import {
-  ExcelPreviewModal,
-  PopupModal,
-  UploadDeliveryRecieptModal,
-} from "../modals";
-import {
   dispatchOrderParam,
   updateCancelledStatus,
 } from "features/stock-ordering/core/stock-ordering.params";
@@ -54,7 +49,6 @@ export function StockOrderProcessSupplierDispatchOrder(
   );
 
   const [preview, setPreview] = useState(false);
-  const [openPopup, setOpenPopUp] = useState(false);
   const [submit, setSubmit] = useState(false);
 
   const franchiseType =
@@ -243,33 +237,6 @@ export function StockOrderProcessSupplierDispatchOrder(
           </div>
         </div>
       </div>
-
-      <PopupModal
-        open={openPopup}
-        title={submit ? "Submit Confirmation" : "Order Cancellation"}
-        message={
-          submit ? (
-            <span>
-              Are you sure you want to{" "}
-              <span className="font-semibold underline underline-offset-1">
-                Dispatch the Order?
-              </span>
-            </span>
-          ) : (
-            <span>
-              Are you sure you want to{" "}
-              <span className="font-semibold underline underline-offset-1">
-                cancel the order
-              </span>
-            </span>
-          )
-        }
-        handleYesButton={submit ? handleDispatchOrder : handleCancelledOrder}
-        handleNoButton={() => {
-          setOpenPopUp(false);
-          setSubmit(false);
-        }}
-      />
     </>
   );
 }

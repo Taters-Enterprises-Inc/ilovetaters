@@ -5,7 +5,7 @@ import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stoc
 import { updateDeliveryReceiveApprovalOrders } from "../slices/update-delivery-receive-approval.slice";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { PopupModal } from "../modals";
+
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import {
   openMessageModal,

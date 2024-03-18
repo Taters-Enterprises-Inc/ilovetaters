@@ -6,7 +6,7 @@ import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateReviewOrders } from "../slices/update-review-order.slice";
 import { useAppDispatch } from "features/config/hooks";
-import { PopupModal } from "../modals";
+
 import { BsCheckCircleFill } from "react-icons/bs";
 import {
   closeMessageModal,
