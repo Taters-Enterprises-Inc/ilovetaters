@@ -13,7 +13,8 @@ interface CompleteModalProps {
   children?: React.ReactNode;
   title: string;
   message: string | React.ReactElement;
-  icon?: React.ReactElement;
+  icon?: React.ReactElement | null;
+  noIcon?: boolean;
   customButton?: boolean;
   handleYesButton?: () => void;
   handleNoButton?: () => void;
@@ -45,14 +46,16 @@ export function PopupModal(props: CompleteModalProps) {
             </span>
           </div>
           <div className="flex flex-col bg-paper p-3 rounded-b-md space-y-8">
-            <div className="flex space-x-3">
-              {props.icon ? (
-                props.icon
-              ) : (
-                <AiFillWarning className="text-5xl text-tertiary" />
-              )}
-              <span>{props.message}</span>
-            </div>
+            {!props.noIcon && (
+              <div className="flex space-x-3">
+                {props.icon ? (
+                  props.icon
+                ) : (
+                  <AiFillWarning className="text-5xl text-tertiary" />
+                )}
+                <span>{props.message}</span>
+              </div>
+            )}
 
             {props.children && (
               <div className="space-y-4">{props.children}</div>

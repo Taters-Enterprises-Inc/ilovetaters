@@ -5,8 +5,8 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { Badge, BadgeProps, Box, Button, Switch, styled } from "@mui/material";
+import { ChangeEvent, useEffect, useState } from "react";
+import Button from "@mui/material/Button";
 
 import {
   Column,
@@ -14,40 +14,47 @@ import {
   DataTableCell,
   DataTableRow,
 } from "features/shared/presentation/components/data-table";
-import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 import {
   DataList,
+  MaterialInput,
   MaterialSwitch,
 } from "features/shared/presentation/components";
 
 import {
-  GetStockOrderSettingProductsState,
   getStockOrderSettingProducts,
   resetGetStockOrderSettingProductsStatus,
   selectGetStockOrderSettingProducts,
 } from "../slices/stock-order-get-settings-products.slice";
-import { AiFillFolderAdd } from "react-icons/ai";
+import { AiFillCaretRight, AiFillFolderAdd } from "react-icons/ai";
 import {
   selectstockOrderActiveStatus,
   stockOrderActiveStatus,
 } from "../slices/stock-order-settings-product-active-status.slice";
-import { updateAdminSettingPopclubDealStatus } from "features/admin/presentation/slices/update-admin-setting-popclub-deal-status.slice";
 import {
   openMessageModal,
   closeMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
-import { resetGetStockOrderSettingProductsEditStatus } from "../slices/stock-order-get-settings-products-edit.slice";
+import { PopupModal } from "../modals";
+import {
+  Step,
+  StepConnector,
+  StepContent,
+  StepIconProps,
+  StepLabel,
+  Stepper,
+  TextField,
+  stepConnectorClasses,
+  styled,
+} from "@mui/material";
+import { FaDiamond } from "react-icons/fa6";
+import { PiDiamondLight, PiDiamondFill } from "react-icons/pi";
 
 export function StockOrderSettingsProductContents() {
   let columns: Array<Column> = [
     { id: "id", label: "id" },
     { id: "product_id", label: "Product Id" },
     { id: "product_name", label: "Product Name" },
-    // {
-    //   id: "uom_qty",
-    //   label: "UOM Quantity",
-    // },
     { id: "uom", label: "UOM" },
     { id: "category_id", label: "Category Id" },
     { id: "cost", label: "Cost" },
@@ -64,6 +71,8 @@ export function StockOrderSettingsProductContents() {
   const updateStockOrderProductActiveStatus = useAppSelector(
     selectstockOrderActiveStatus
   );
+
+  const [openPriceChange, setOpenPriceChange] = useState(false);
 
   const query = useQuery();
   const pageNo = query.get("page_no");
@@ -93,6 +102,76 @@ export function StockOrderSettingsProductContents() {
     search,
     updateStockOrderProductActiveStatus,
   ]);
+
+  const steps = [
+    { label: "test 1" },
+    { label: "test 2" },
+    { label: "test 3" },
+    { label: "test 4" },
+    { label: "test 5" },
+  ];
+
+  const QontoConnector = styled(StepConnector)(({ theme }) => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 10,
+      left: "calc(-50% + 16px)",
+      right: "calc(50% + 16px)",
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: "#784af4",
+      },
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: "#784af4",
+      },
+    },
+
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#eaeaf0",
+      borderLeftWidth: 3,
+      borderRadius: 1,
+    },
+  }));
+
+  const QontoStepIconRoot = styled("div")<{ ownerState: { active?: boolean } }>(
+    ({ theme, ownerState }) => ({
+      color: "#eaeaf0",
+      display: "flex",
+      height: 22,
+      alignItems: "center",
+      ...(ownerState.active && {
+        color: "#784af4",
+      }),
+      "& .QontoStepIcon-completedIcon": {
+        color: "#784af4",
+        zIndex: 1,
+        fontSize: 18,
+      },
+      "& .QontoStepIcon-circle": {
+        width: 8,
+        color: "#784af4",
+        height: 8,
+        borderRadius: "50%",
+        backgroundColor: "currentColor",
+      },
+    })
+  );
+
+  function QontoStepIcon(props: StepIconProps) {
+    const { active, completed, className } = props;
+
+    return (
+      <QontoStepIconRoot ownerState={{ active }} className={className}>
+        {completed ? (
+          <PiDiamondLight className="QontoStepIcon-completedIcon" />
+        ) : (
+          <PiDiamondFill className="QontoStepIcon-completedIcon" />
+        )}
+      </QontoStepIconRoot>
+    );
+  }
 
   return (
     <>
@@ -214,7 +293,6 @@ export function StockOrderSettingsProductContents() {
                   <DataTableCell>{product.id}</DataTableCell>
                   <DataTableCell>{product.product_id}</DataTableCell>
                   <DataTableCell>{product.product_name}</DataTableCell>
-                  {/* <DataTableCell>{product.uom_qty}</DataTableCell> */}
                   <DataTableCell>{product.uom}</DataTableCell>
                   <DataTableCell>{product.category_id}</DataTableCell>
                   <DataTableCell>{product.cost}</DataTableCell>
@@ -257,13 +335,30 @@ export function StockOrderSettingsProductContents() {
                     />
                   </DataTableCell>
 
-                  <DataTableCell>
+                  <DataTableCell
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      "& > * + *": {
+                        marginTop: "0.25rem",
+                      },
+                    }}
+                  >
                     <Link
                       to={`edit/${product.id}`}
-                      className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
+                      className="inline-flex items-center px-4 tracking-wide py-1 bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700 text-center" // Apply text-center class
                     >
                       <span>Edit</span>
                     </Link>
+
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{ backgroundColor: "rgba(204, 88, 1, 1)" }}
+                      onClick={() => setOpenPriceChange(true)}
+                    >
+                      <span className="capitalize text-xs">Price change</span>
+                    </Button>
                   </DataTableCell>
                 </DataTableRow>
               )
@@ -368,6 +463,43 @@ export function StockOrderSettingsProductContents() {
           </DataList>
         </div>
       </div>
+
+      <PopupModal
+        noIcon
+        open={openPriceChange}
+        title={"Price Change"}
+        message={""}
+        customButton
+      >
+        <div className="px-5">
+          <Stepper
+            orientation="vertical"
+            activeStep={4}
+            connector={<QontoConnector />}
+          >
+            {steps.map((label, index) => (
+              <Step key={label.label}>
+                <div className="flex">
+                  <div className="flex items-center text-xs">15 Mar</div>
+                  <StepLabel
+                    StepIconComponent={QontoStepIcon}
+                    sx={{ display: "flex", alignItems: "end" }}
+                  >
+                    {label.label}
+                  </StepLabel>
+                </div>
+              </Step>
+            ))}
+          </Stepper>
+        </div>
+
+        <MaterialInput
+          fullWidth
+          colorTheme={"black"}
+          onChange={() => {}}
+          name={"priceInput"}
+        />
+      </PopupModal>
     </>
   );
 }
