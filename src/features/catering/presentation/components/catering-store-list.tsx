@@ -2,10 +2,19 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { selectGetStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
+import { openCateringSelectTypeModal } from "../slices/catering-select-type.slice";
 
 interface StoreListProps {
   address: string | null;
-  onClickStore: (storeId: number, regionId: number) => void;
+  onClickStore: (
+    storeId: number,
+    regionId: number,
+    type: "catering" | "bulk-order-pickup" | "bulk-order-delivery"
+  ) => void;
 }
 
 export function CateringStoreList(props: StoreListProps) {
@@ -43,10 +52,53 @@ export function CateringStoreList(props: StoreListProps) {
                               })
                             );
                           } else {
-                            props.onClickStore(
-                              store.store_id,
-                              store.region_store_id
-                            );
+                            if (store.menu_name == "Kiosk Menu") {
+                              dispatch(
+                                openMessageModal({
+                                  useHtml: true,
+                                  message: `<b>${store.store_name}</b> only serves snacks. Are you sure you want to proceed?`,
+                                  buttons: [
+                                    {
+                                      color: "#CC5801",
+                                      text: "Yes",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                        dispatch(
+                                          openCateringSelectTypeModal({
+                                            onClick: (value) => {
+                                              props.onClickStore(
+                                                store.store_id,
+                                                store.region_store_id,
+                                                value
+                                              );
+                                            },
+                                          })
+                                        );
+                                      },
+                                    },
+                                    {
+                                      color: "#22201A",
+                                      text: "No",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                  ],
+                                })
+                              );
+                            } else {
+                              dispatch(
+                                openCateringSelectTypeModal({
+                                  onClick: (value) => {
+                                    props.onClickStore(
+                                      store.store_id,
+                                      store.region_store_id,
+                                      value
+                                    );
+                                  },
+                                })
+                              );
+                            }
                           }
                         }
                   }

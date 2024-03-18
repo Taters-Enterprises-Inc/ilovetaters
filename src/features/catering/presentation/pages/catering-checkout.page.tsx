@@ -244,7 +244,7 @@ export function CateringCheckout() {
     const orders = getSessionState.data?.orders;
     const service_charge_percentage = 0.1;
 
-    if (orders && getSessionState.data?.distance_rate_price) {
+    if (orders && getSessionState.data) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }

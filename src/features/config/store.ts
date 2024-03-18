@@ -307,6 +307,11 @@ import getStockOrderAllStores from "features/stock-ordering/presentation/slices/
 import stockOrderEditProduct from "features/stock-ordering/presentation/slices/stock-order-settings-product-edit.slice";
 import stockOrderActiveStatus from "features/stock-ordering/presentation/slices/stock-order-settings-product-active-status.slice";
 import updateFranchiseePayBill from "features/stock-ordering/presentation/slices/update-franchisee-pay-bill.slice";
+import cateringFreeItemModal from "features/catering/presentation/slices/catering-free-item-modal.slice";
+import cateringSelectTypeModal from "features/catering/presentation/slices/catering-select-type.slice";
+import adminCateringBookingOverrideEventDate from "features/admin/presentation/slices/admin-catering-booking-override-event-date.slice";
+import getCateringOverrides from "features/admin/presentation/slices/get-catering-overrides.slice";
+import adminCateringBookingApproveOverride from "features/admin/presentation/slices/admin-catering-booking-approve-override.slice";
 
 export const store = configureStore({
   reducer: {
@@ -617,6 +622,11 @@ export const store = configureStore({
     stockOrderEditProduct,
     stockOrderActiveStatus,
     updateFranchiseePayBill,
+    cateringFreeItemModal,
+    cateringSelectTypeModal,
+    adminCateringBookingOverrideEventDate,
+    getCateringOverrides,
+    adminCateringBookingApproveOverride,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

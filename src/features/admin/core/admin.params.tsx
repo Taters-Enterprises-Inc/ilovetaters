@@ -424,3 +424,17 @@ export interface changePasswordParam {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface AdminCateringBookingOverrideEventDateParam {
+  transactionId: number;
+  startDate: Date;
+  endDate: Date;
+  storeId: number;
+}
+
+export interface AdminCateringBookingApproveOverrideParam {
+  transactionId: number;
+  overrideId: number;
+  startDate: string;
+  endDate: string;
+}

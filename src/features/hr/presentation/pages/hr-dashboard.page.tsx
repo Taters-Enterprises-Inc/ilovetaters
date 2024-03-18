@@ -68,6 +68,41 @@ export function HrDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoutHrState]);
 
+  const cardClicked = (value: any) => {
+    if (value.item_id == 1 && value.status_id != undefined) {
+      setOpenCreateKraModal({
+        item_id: value.item_id,
+        action_item_id: value.id,
+        action_item_status_id: value.status_id,
+        modal: true,
+      });
+    } else if (
+      (value.item_id == 2 || value.item_id == 4 || value.item_id == 6) &&
+      value.status_id != undefined
+    ) {
+      setOpenStaffActionItemModal({
+        item_id: value.item_id,
+        action_item_id: value.id,
+        action_item_status_id: value.status_id,
+        modal: true,
+        fetch_item_id:
+          value.item_id == 2
+            ? 1
+            : value.item_id == 4
+            ? 3
+            : value.item_id == 6
+            ? 5
+            : 0,
+      });
+    } else if (value.item_id == 3 && value.status_id != undefined) {
+      navigate("/hr/self-assessment");
+    } else if (value.item_id == 5 && value.status_id != undefined) {
+      navigate("/hr/180-degree-assessment");
+    } else if (value.item_id == 7 && value.status_id != undefined) {
+      navigate("/hr/assessment-summary");
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -105,90 +140,167 @@ export function HrDashboard() {
           </div>
         </div>
 
-        <section className="flex-auto flex justify-center items-start py-8">
-          <div className="w-[80vw] border border-radius rounded-[10px]">
-            <table className="w-full text-left text-sm font-light">
-              <thead className="border-b">
-                <tr>
-                  <th className="pl-8 py-2">Module</th>
-                  <th className="py-2">Item</th>
-                  <th className="py-2">Status</th>
-                  <th className="py-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {getHrActionItemsState.data?.action_items.map(
-                  (value, index) => (
-                    <tr
-                      className={`${
-                        getHrActionItemsState.data &&
-                        index ==
-                          getHrActionItemsState.data.action_items.length - 1
-                          ? ""
-                          : "border-b"
-                      }`}
-                    >
-                      <td className="pl-8 py-2">{value.module}</td>
-                      <td className="py-2">{value.item}</td>
-                      <td className="py-2">{value.status}</td>
-                      <td className="py-2">
-                        <FaEye
-                          onClick={() => {
-                            if (
-                              value.item_id == 1 &&
-                              value.status_id != undefined
-                            ) {
-                              setOpenCreateKraModal({
-                                item_id: value.item_id,
-                                action_item_id: value.id,
-                                action_item_status_id: value.status_id,
-                                modal: true,
-                              });
-                            } else if (
-                              (value.item_id == 2 ||
-                                value.item_id == 4 ||
-                                value.item_id == 6) &&
-                              value.status_id != undefined
-                            ) {
-                              setOpenStaffActionItemModal({
-                                item_id: value.item_id,
-                                action_item_id: value.id,
-                                action_item_status_id: value.status_id,
-                                modal: true,
-                                fetch_item_id:
-                                  value.item_id == 2
-                                    ? 1
-                                    : value.item_id == 4
-                                    ? 3
-                                    : value.item_id == 6
-                                    ? 5
-                                    : 0,
-                              });
-                            } else if (
-                              value.item_id == 3 &&
-                              value.status_id != undefined
-                            ) {
-                              navigate("/hr/self-assessment");
-                            } else if (
-                              value.item_id == 5 &&
-                              value.status_id != undefined
-                            ) {
-                              navigate("/hr/180-degree-assessment");
-                            } else if (
-                              value.item_id == 7 &&
-                              value.status_id != undefined
-                            ) {
-                              navigate("/hr/assessment-summary");
-                            }
-                          }}
-                          className="text-lg cursor-pointer"
-                        />
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
+        <section className="flex-auto flex justify-start items-start py-8 px-8 space-x-2">
+          <div className="border border-[#D4D4D5] border-radius rounded-[5px] h-[600px] bg-[#F2F2F3] p-4 flex-1">
+            <h1 className="font-bold text-lg mb-4">
+              Todo 📝{" "}
+              <span className="rounded-[10px] bg-white text-[12px]  border border-[#D4D4D5] font-semibold py-[2px] px-2">
+                {
+                  getHrActionItemsState.data?.action_items.filter(
+                    (item) => item.status_id == 1
+                  ).length
+                }
+              </span>
+            </h1>
+
+            <div className="space-y-2">
+              {getHrActionItemsState.data?.action_items
+                .filter((item) => item.status_id == 1)
+                .map((value, index) => (
+                  <div
+                    className="bg-white  shadow-md flex flex-col px-2 pt-4  cursor-pointer"
+                    onClick={() => cardClicked(value)}
+                  >
+                    <div className="flex-1 mb-4">
+                      <h2>{value.item}</h2>
+                    </div>
+
+                    <div className="space-x-1 pb-2">
+                      {/* <span className="text-[12px] font-semibold bg-[#61BD4F] rounded-[4px] text-white px-[5px] py-[2px]">
+                  Needs review
+                </span> */}
+
+                      {value.status_id == 1 ? (
+                        <span className="text-[12px] font-semibold bg-[#F2D600] rounded-[4px] text-white px-[5px] py-[2px]">
+                          Pending
+                        </span>
+                      ) : null}
+                      <span className="text-[12px] font-semibold bg-[#C377E0] rounded-[4px] text-white px-[5px] py-[2px]">
+                        {value.module} 🚩
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="border border-[#D4D4D5] border-radius rounded-[5px] h-[600px] bg-[#F2F2F3] p-4 flex-1">
+            <h1 className="font-bold text-lg mb-4">
+              In Progress 🚀{" "}
+              <span className="rounded-[10px] bg-white text-[12px]  border border-[#D4D4D5] font-semibold py-[2px] px-2">
+                {
+                  getHrActionItemsState.data?.action_items.filter(
+                    (item) => item.status_id == 2
+                  ).length
+                }
+              </span>
+            </h1>
+
+            <div className="space-y-2">
+              {getHrActionItemsState.data?.action_items
+                .filter((item) => item.status_id == 2)
+                .map((value, index) => (
+                  <div
+                    className="bg-white  shadow-md flex flex-col px-2 pt-4  cursor-pointer"
+                    onClick={() => cardClicked(value)}
+                  >
+                    <div className="flex-1 mb-4">
+                      <h2>{value.item}</h2>
+                    </div>
+
+                    <div className="space-x-1 pb-2">
+                      {value.status_id == 2 ? (
+                        <span className="text-[12px] font-semibold bg-[#61BD4F] rounded-[4px] text-white px-[5px] py-[2px]">
+                          Completed
+                        </span>
+                      ) : null}
+                      <span className="text-[12px] font-semibold bg-[#C377E0] rounded-[4px] text-white px-[5px] py-[2px]">
+                        {value.module} 🚩
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="border border-[#D4D4D5] border-radius rounded-[5px] h-[600px] bg-[#F2F2F3] p-4 flex-1">
+            <h1 className="font-bold text-lg mb-4">
+              Done ✅{" "}
+              <span className="rounded-[10px] bg-white text-[12px]  border border-[#D4D4D5] font-semibold py-[2px] px-2">
+                {
+                  getHrActionItemsState.data?.action_items.filter(
+                    (item) => item.status_id == 4
+                  ).length
+                }
+              </span>
+            </h1>
+
+            <div className="space-y-2">
+              {getHrActionItemsState.data?.action_items
+                .filter((item) => item.status_id == 4)
+                .map((value, index) => (
+                  <div
+                    className="bg-white  shadow-md flex flex-col px-2 pt-4  cursor-pointer"
+                    onClick={() => cardClicked(value)}
+                  >
+                    <div className="flex-1 mb-4">
+                      <h2>{value.item}</h2>
+                    </div>
+
+                    <div className="space-x-1 pb-2">
+                      {value.status_id == 4 ? (
+                        <span className="text-[12px] font-semibold bg-[#FF9F1A] rounded-[4px] text-white px-[5px] py-[2px]">
+                          Manager Reviewed
+                        </span>
+                      ) : null}
+                      <span className="text-[12px] font-semibold bg-[#C377E0] rounded-[4px] text-white px-[5px] py-[2px]">
+                        {value.module} 🚩
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="border border-[#D4D4D5] border-radius rounded-[5px] h-[600px] bg-[#F2F2F3] p-4 flex-1">
+            <h1 className="font-bold text-lg mb-4">
+              Backlog ⌛{" "}
+              <span className="rounded-[10px] bg-white text-[12px]  border border-[#D4D4D5] font-semibold py-[2px] px-2">
+                {
+                  getHrActionItemsState.data?.action_items.filter(
+                    (item) => item.status_id == 3 || item.status_id == 5
+                  ).length
+                }
+              </span>
+            </h1>
+
+            <div className="space-y-2">
+              {getHrActionItemsState.data?.action_items
+                .filter((item) => item.status_id == 3 || item.status_id == 5)
+                .map((value, index) => (
+                  <div
+                    className="bg-white  shadow-md flex flex-col px-2 pt-4  cursor-pointer"
+                    onClick={() => cardClicked(value)}
+                  >
+                    <div className="flex-1 mb-4">
+                      <h2>{value.item}</h2>
+                    </div>
+
+                    <div className="space-x-1 pb-2">
+                      {value.status_id == 5 ? (
+                        <span className="text-[12px] font-semibold bg-[#009AA5] rounded-[4px] text-white px-[5px] py-[2px]">
+                          Summary
+                        </span>
+                      ) : null}
+                      {value.status_id == 3 ? (
+                        <span className="text-[12px] font-semibold bg-[#EB5A46] rounded-[4px] text-white px-[5px] py-[2px]">
+                          Approved
+                        </span>
+                      ) : null}
+                      <span className="text-[12px] font-semibold bg-[#C377E0] rounded-[4px] text-white px-[5px] py-[2px]">
+                        {value.module} 🚩
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
         </section>
       </main>

@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  GetCateringCategoryPackagesState,
   getCateringCategoryPackages,
   selectGetCateringCategoryPackages,
 } from "../slices/get-catering-category-packages.slice";
@@ -17,24 +18,39 @@ import NumberFormat from "react-number-format";
 import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 import { BsFillBagCheckFill } from "react-icons/bs";
+import { ProductModel } from "features/shared/core/domain/product.model";
+import {
+  GetCateringCategoryProductsState,
+  selectGetCateringCategoryProducts,
+} from "../slices/get-catering-category-products.slice";
+import { openCateringFreeItemModal } from "features/catering/presentation/slices/catering-free-item-modal.slice";
 
 export function CateringProducts() {
-  const [
-    openCateringPackageCustomizationModal,
-    setOpenCateringPackageCustomizationModal,
-  ] = useState(false);
-  const getSessionState = useAppSelector(selectGetSession);
-  const getCateringCategoryPackagesState = useAppSelector(
-    selectGetCateringCategoryPackages
-  );
-
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
+  const getSessionState = useAppSelector(selectGetSession);
+  const getCateringCategoryPackagesState = useAppSelector(
+    selectGetCateringCategoryPackages
+  );
+  const getCateringCategoryProductsState = useAppSelector(
+    selectGetCateringCategoryProducts
+  );
+
+  const [
+    openCateringPackageCustomizationModal,
+    setOpenCateringPackageCustomizationModal,
+  ] = useState(false);
+
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
+    if (
+      getCateringCategoryPackagesState.status ===
+      GetCateringCategoryPackagesState.success
+    ) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+  }, [getCateringCategoryPackagesState]);
 
   useEffect(() => {
     if (
@@ -50,6 +66,66 @@ export function CateringProducts() {
       }
     }
   }, [dispatch, getSessionState]);
+
+  const checkFreeItem = (param: {
+    freeItemAvailable: (freeItem: Array<ProductModel>) => void;
+    freeItemNotAvailable: (
+      almostItem: ProductModel | null,
+      totalPrice: number
+    ) => void;
+  }) => {
+    if (
+      getCateringCategoryProductsState.data &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getCateringCategoryProductsState.status ===
+        GetCateringCategoryProductsState.success
+    ) {
+      const addons = getCateringCategoryProductsState.data.addons;
+      let freeItem: Array<ProductModel> = [];
+      let calculatedPrice = 0;
+      let almostItem: ProductModel | null = null;
+
+      const orders = getSessionState.data.orders;
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+          calculatedPrice += order.prod_calc_amount;
+        }
+      }
+      const totalPrice = calculatedPrice;
+
+      if (addons) {
+        for (let i = 0; i < addons.length; i++) {
+          const freeThreshold = addons[i].free_threshold;
+          console.log(freeThreshold);
+          if (freeThreshold) {
+            if (totalPrice >= freeThreshold) {
+              freeItem.push(addons[i]);
+            }
+
+            if (almostItem == null && freeThreshold != undefined) {
+              almostItem = addons[i];
+            } else if (
+              almostItem != null &&
+              almostItem.free_threshold != undefined &&
+              freeThreshold != undefined &&
+              freeThreshold < almostItem.free_threshold
+            ) {
+              almostItem = addons[i];
+            }
+          }
+        }
+      }
+
+      if (freeItem.length > 0) {
+        param.freeItemAvailable(freeItem);
+      } else {
+        param.freeItemNotAvailable(almostItem, totalPrice);
+      }
+    }
+  };
 
   return (
     <main className="min-h-screen bg-primary">
@@ -130,7 +206,21 @@ export function CateringProducts() {
               getSessionState.data?.orders.length <= 0 ? null : (
                 <button
                   onClick={() => {
-                    navigate("/shop/checkout");
+                    checkFreeItem({
+                      freeItemAvailable: (val) => {
+                        if (getSessionState.data) {
+                          if (
+                            getSessionState.data.catering_type == "catering"
+                          ) {
+                            dispatch(openCateringFreeItemModal());
+                          }
+                          navigate("/shop/checkout");
+                        }
+                      },
+                      freeItemNotAvailable: () => {
+                        navigate("/shop/checkout");
+                      },
+                    });
                   }}
                   className="flex items-center justify-center px-2 py-1 space-x-2 text-white shadow-lg sm:max-h-fit rounded-xl bg-button"
                 >

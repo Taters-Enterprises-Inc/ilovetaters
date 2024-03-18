@@ -51,6 +51,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 import { numberWithCommas } from "features/config/helpers";
+import { openCateringFreeItemModal } from "features/catering/presentation/slices/catering-free-item-modal.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -76,7 +77,6 @@ export function CateringProduct() {
   const dispatch = useAppDispatch();
   let { hash } = useParams();
   const location = useLocation();
-  const cateringAddonsRef = useRef<null | HTMLDivElement>(null);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -192,24 +192,29 @@ export function CateringProduct() {
   };
 
   const calculateFreeAddon = () => {
-    let freeItem: Array<ProductModel> = [];
+    if (getSessionState.data) {
+      let freeItem: Array<ProductModel> = [];
 
-    checkFreeItem({
-      freeItemAvailable: (val) => {
-        freeItem = val;
-      },
-      freeItemNotAvailable: (val) => {
-        freeItem = [];
-      },
-    });
+      checkFreeItem({
+        freeItemAvailable: (val) => {
+          freeItem = val;
+        },
+        freeItemNotAvailable: (val) => {
+          freeItem = [];
+        },
+      });
 
-    if (freeItem.length > 0) {
-      return (
-        <div className="text-white ">
-          🎉 <strong>Claim</strong> FREE{" "}
-          <strong>{freeItem[freeItem.length - 1].name}</strong>
-        </div>
-      );
+      if (
+        freeItem.length > 0 &&
+        getSessionState.data.catering_type == "catering"
+      ) {
+        return (
+          <div className="text-white ">
+            🎉 <strong>Claim</strong> FREE{" "}
+            <strong>{freeItem[freeItem.length - 1].name}</strong>
+          </div>
+        );
+      }
     }
 
     return null;
@@ -376,49 +381,26 @@ export function CateringProduct() {
   const handleCheckout = () => {
     checkFreeItem({
       freeItemAvailable: () => {
-        SweetAlert.fire({
-          title: "Claim you free item! 🎉",
-          text: "You're eligible to claim a free item!",
-          icon: "info",
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: "Check the free item",
-          denyButtonText: `Proceed to checkout`,
-          background: "#22201A",
-          color: "white",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            setTimeout(() => {
-              if (cateringAddonsRef.current)
-                cateringAddonsRef.current.scrollIntoView();
-            }, 500);
-          } else if (result.isDenied) {
-            dispatchAddToCartCatering(() => {
-              setQuantity(1);
-              setCurrentMultiFlavors({});
-              navigate("/shop/checkout");
-            });
-          }
-        });
-      },
-      freeItemNotAvailable(val, totalPrice) {
-        if (val && val.free_threshold != null) {
+        if (
+          getSessionState.data &&
+          getSessionState.data.catering_type == "catering"
+        ) {
           SweetAlert.fire({
-            title: "Unlock a Free Item! 🎉",
-            text: `You're on your way to unlocking a free ${
-              val.name
-            }. You'll need to add items worth ₱${numberWithCommas(
-              val.free_threshold - totalPrice
-            )} more to your cart to claim your freebies.`,
+            title: "Claim you free item! 🎉",
+            text: "You're eligible to claim a free item!",
             icon: "info",
             showDenyButton: true,
-            confirmButtonText: "Okay",
+            showCancelButton: true,
+            confirmButtonText: "Check the free item",
             denyButtonText: `Proceed to checkout`,
             background: "#22201A",
             color: "white",
           }).then((result) => {
             if (result.isConfirmed) {
-              navigate("/shop/products");
+              // setTimeout(() => {
+              //   if (cateringAddonsRef.current)
+              //     cateringAddonsRef.current.scrollIntoView();
+              // }, 500);
             } else if (result.isDenied) {
               dispatchAddToCartCatering(() => {
                 setQuantity(1);
@@ -429,38 +411,12 @@ export function CateringProduct() {
           });
         }
       },
-    });
-  };
-
-  const handleAddToCart = () => {
-    checkFreeItem({
-      freeItemAvailable: () => {
-        SweetAlert.fire({
-          title: "Claim you free item! 🎉",
-          text: "You're eligible to claim a free item!",
-          icon: "info",
-          showCancelButton: true,
-          confirmButtonText: "Add to cart, then check the item",
-          background: "#22201A",
-          color: "white",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatchAddToCartCatering(() => {
-              setQuantity(1);
-              setCurrentMultiFlavors({});
-              setTimeout(() => {
-                if (cateringAddonsRef.current)
-                  cateringAddonsRef.current.scrollIntoView();
-              }, 500);
-            });
-          }
-        });
-      },
       freeItemNotAvailable(val, totalPrice) {
-        dispatchAddToCartCatering(() => {
-          setQuantity(1);
-          setCurrentMultiFlavors({});
-          if (val && val.free_threshold != null) {
+        if (val && val.free_threshold != null) {
+          if (
+            getSessionState.data &&
+            getSessionState.data.catering_type == "catering"
+          ) {
             SweetAlert.fire({
               title: "Unlock a Free Item! 🎉",
               text: `You're on your way to unlocking a free ${
@@ -469,17 +425,102 @@ export function CateringProduct() {
                 val.free_threshold - totalPrice
               )} more to your cart to claim your freebies.`,
               icon: "info",
-              showCancelButton: true,
+              showDenyButton: true,
               confirmButtonText: "Okay",
+              denyButtonText: `Proceed to checkout`,
               background: "#22201A",
               color: "white",
             }).then((result) => {
               if (result.isConfirmed) {
                 navigate("/shop/products");
+              } else if (result.isDenied) {
+                dispatchAddToCartCatering(() => {
+                  setQuantity(1);
+                  setCurrentMultiFlavors({});
+                  navigate("/shop/checkout");
+                });
               }
             });
+          } else {
+            dispatchAddToCartCatering(() => {
+              setQuantity(1);
+              setCurrentMultiFlavors({});
+              navigate("/shop/checkout");
+            });
           }
-        });
+        }
+      },
+    });
+  };
+
+  const handleAddToCart = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        if (
+          getSessionState.data &&
+          getSessionState.data.catering_type == "catering"
+        ) {
+          SweetAlert.fire({
+            title: "Claim you free item! 🎉",
+            text: "You're eligible to claim a free item!",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Add to cart, then check the item",
+            background: "#22201A",
+            color: "white",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              dispatchAddToCartCatering(() => {
+                setQuantity(1);
+                setCurrentMultiFlavors({});
+                navigate("/shop/products");
+                dispatch(openCateringFreeItemModal());
+              });
+            }
+          });
+        } else {
+          dispatchAddToCartCatering(() => {
+            setQuantity(1);
+            setCurrentMultiFlavors({});
+            navigate("/shop/products");
+          });
+        }
+      },
+      freeItemNotAvailable(val, totalPrice) {
+        if (
+          getSessionState.data &&
+          getSessionState.data.catering_type == "catering"
+        ) {
+          dispatchAddToCartCatering(() => {
+            setQuantity(1);
+            setCurrentMultiFlavors({});
+            if (val && val.free_threshold != null) {
+              SweetAlert.fire({
+                title: "Unlock a Free Item! 🎉",
+                text: `You're on your way to unlocking a free ${
+                  val.name
+                }. You'll need to add items worth ₱${numberWithCommas(
+                  val.free_threshold - totalPrice
+                )} more to your cart to claim your freebies.`,
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonText: "Okay",
+                background: "#22201A",
+                color: "white",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  navigate("/shop/products");
+                }
+              });
+            }
+          });
+        } else {
+          dispatchAddToCartCatering(() => {
+            setQuantity(1);
+            setCurrentMultiFlavors({});
+            navigate("/shop/products");
+          });
+        }
       },
     });
   };
@@ -823,10 +864,7 @@ export function CateringProduct() {
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div
-                      ref={cateringAddonsRef}
-                      className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4"
-                    >
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
                       {getCateringPackageDetailsState.data.addons.map(
                         (product, i) => {
                           if (
@@ -836,6 +874,9 @@ export function CateringProduct() {
                             let calculatedPrice = 0;
 
                             const orders = getSessionState.data.orders;
+                            const isCateringTypePickup =
+                              getSessionState.data.catering_type ==
+                              "bulk-order-pickup";
                             let isFreeItemClaimed = false;
 
                             if (orders) {
@@ -868,9 +909,13 @@ export function CateringProduct() {
                               <CateringAddon
                                 key={i}
                                 product={product}
-                                isFreeItem={isFreeItem}
+                                isFreeItem={
+                                  isCateringTypePickup ? false : isFreeItem
+                                }
                                 isFreeItemButAddToCartFirst={
-                                  isFreeItemButAddToCartFirst
+                                  isCateringTypePickup
+                                    ? false
+                                    : isFreeItemButAddToCartFirst
                                 }
                                 isFreeItemClaimed={isFreeItemClaimed}
                               />

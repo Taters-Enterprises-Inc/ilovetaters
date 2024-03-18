@@ -4,3 +4,4 @@ export { MobileForgotPasswordModal } from "./mobile-forgot-password.modal";
 export { MessageModal } from "./message-modal";
 export { LoginChooserModal } from "./login-chooser.modal";
 export { PaymentCardModal } from "./payment-card.modal";
+export { FreeItemModal } from "../../../catering/presentation/modals/catering-free-item-modal";

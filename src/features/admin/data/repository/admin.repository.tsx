@@ -40,6 +40,8 @@ import {
   AdminInfluencerCashoutChangeStatusParam,
   ValidatePartnerCompanyEmployeeIdNumberParam,
   changePasswordParam,
+  AdminCateringBookingOverrideEventDateParam,
+  AdminCateringBookingApproveOverrideParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -99,6 +101,7 @@ import { AdminInfluencerCashoutModel } from "features/admin/core/domain/admin-in
 import { AdminUsersTotalModel } from "features/admin/core/domain/admin-users-total.model";
 import { AdminFeaturedProductModel } from "features/admin/core/domain/admin-featured-product.model";
 import { AdminCustomerFeedbackRatingsSectionAvarageModel } from "features/admin/core/domain/admin-customer-feedback-ratings-section-avarage.model";
+import { CateringOverridesModel } from "features/admin/core/domain/catering-overrides.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -829,6 +832,60 @@ export interface changePasswordResponse {
   data: {
     message: string;
   };
+}
+
+export interface AdminCateringBookingOverrideEventDateResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetCateringOverridesResponse {
+  data: {
+    message: string;
+    data: Array<CateringOverridesModel>;
+  };
+}
+
+export interface AdminCateringBookingApproveOverrideResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AdminCateringBookingApproveOverrideRepository(
+  param: AdminCateringBookingApproveOverrideParam
+): Promise<AdminCateringBookingApproveOverrideResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering/overrides/approve`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetCateringOverridesRepository(
+  transactionId: number
+): Promise<GetCateringOverridesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering/overrides/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminCateringBookingOverrideEventDateRepository(
+  param: AdminCateringBookingOverrideEventDateParam
+): Promise<AdminCateringBookingOverrideEventDateResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-override-event-date`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminDashboardCustomerFeedbackRatingsRepository(

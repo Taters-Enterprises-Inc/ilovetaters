@@ -244,53 +244,12 @@ export function CateringHome() {
             />
           </div>
 
-          <button
-            onClick={() => {
-              if (cateringHomePageState.address === null) {
-                dispatch(
-                  popUpSnackBar({
-                    message: "Please input an address",
-                    severity: "error",
-                  })
-                );
-                return;
-              }
-
-              if (cateringHomePageState.eventStartDate === null) {
-                dispatch(
-                  popUpSnackBar({
-                    message: "Please select a event end date",
-                    severity: "error",
-                  })
-                );
-                return;
-              }
-
-              if (cateringHomePageState.eventEndDate === null) {
-                dispatch(
-                  popUpSnackBar({
-                    message: "Please select a event end date",
-                    severity: "error",
-                  })
-                );
-                return;
-              }
-
-              dispatch(
-                getStoresAvailableCatering({
-                  address: cateringHomePageState.address,
-                  service: "CATERING",
-                })
-              );
-            }}
-            className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white border border-white bg-button rounded-xl"
-          >
-            <FaSearchLocation />
-            <span>Check Availability</span>
-          </button>
-
           <CateringStoreList
-            onClickStore={(storeId: number, regionId: number) => {
+            onClickStore={(
+              storeId: number,
+              regionId: number,
+              type: "catering" | "bulk-order-pickup" | "bulk-order-delivery"
+            ) => {
               if (
                 cateringHomePageState &&
                 cateringHomePageState.address &&
@@ -304,6 +263,7 @@ export function CateringHome() {
                     regionId,
                     cateringEndDate: cateringHomePageState.eventEndDate,
                     cateringStartDate: cateringHomePageState.eventStartDate,
+                    cateringType: type,
                     service: "CATERING",
                   })
                 );
