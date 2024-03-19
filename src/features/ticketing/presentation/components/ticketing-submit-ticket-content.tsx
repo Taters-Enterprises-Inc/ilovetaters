@@ -53,6 +53,13 @@ export function SubmitTicketContents() {
     console.log(submitTicketParam);
 
     dispatch(ticketingSubmitTicket(submitTicketParam));
+
+    setFormState({
+      ticketTitle: "",
+      department: null,
+      urgency: null,
+      ticketDetails: "",
+    });
   };
 
   useEffect(() => {
