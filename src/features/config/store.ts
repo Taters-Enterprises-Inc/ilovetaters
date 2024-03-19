@@ -310,6 +310,7 @@ import updateFranchiseePayBill from "features/stock-ordering/presentation/slices
 import ticketSideBar from "features/ticketing/presentation/slices/ticketing-sidebar.slice";
 import getAllTickets from "features/ticketing/presentation/slices/get-all-tickets.slice";
 import getMyTickets from "features/ticketing/presentation/slices/get-my-tickets.slice";
+import ticketingSubmitTicket from "features/ticketing/presentation/slices/ticketing-submit.slice";
 
 export const store = configureStore({
   reducer: {
@@ -623,6 +624,7 @@ export const store = configureStore({
     ticketSideBar,
     getAllTickets,
     getMyTickets,
+    ticketingSubmitTicket,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
