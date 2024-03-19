@@ -73,6 +73,6 @@ export const ticketingSubmitTicketSlice = createSlice({
 export const selectTicketingSubmitTicket = (state: RootState) =>
   state.ticketingSubmitTicket;
 
-export const { resetTicketingSubmitTicket: resetTicketingSubmitTicket } =
+export const { resetTicketingSubmitTicket } =
   ticketingSubmitTicketSlice.actions;
 export default ticketingSubmitTicketSlice.reducer;
