@@ -493,6 +493,10 @@ import {
   AdminCateringBookingApproveOverrideState,
   selectAdminCateringBookingApproveOverride,
 } from "features/admin/presentation/slices/admin-catering-booking-approve-override.slice";
+import {
+  selectTicketingSubmitTicket,
+  ticketingSubmitTicketState,
+} from "features/ticketing/presentation/slices/ticketing-submit.slice";
 
 Swal.mixin({
   background: "#22201A",
@@ -784,6 +788,11 @@ export function LoadingAndSnackbarWrapper() {
     selectstockOrderCreateProduct
   );
 
+  // Submit Ticket
+  const ticketingSubmitTicketStates = useAppSelector(
+    selectTicketingSubmitTicket
+  );
+
   const stockOrderActiveStatusStates = useAppSelector(
     selectstockOrderActiveStatus
   );
@@ -878,6 +887,26 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [stockOrderCreateProductStates]);
+
+  // Submit Ticket
+  useEffect(() => {
+    switch (ticketingSubmitTicketStates.status) {
+      case ticketingSubmitTicketState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ticketingSubmitTicketState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ticketingSubmitTicketState.success:
+        setOpenBackdropLoading(false);
+        showAlert(setSuccessAlert, ticketingSubmitTicketStates.message);
+        break;
+      case ticketingSubmitTicketState.fail:
+        setOpenBackdropLoading(false);
+        showAlert(setFailsAlert, ticketingSubmitTicketStates.message);
+        break;
+    }
+  }, [ticketingSubmitTicketStates]);
 
   useEffect(() => {
     switch (stockOrderEditProductStates.status) {
