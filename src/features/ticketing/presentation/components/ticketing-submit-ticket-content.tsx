@@ -3,9 +3,17 @@ import {
   MaterialInputAutoComplete,
 } from "features/shared/presentation/components";
 import { department, urgency } from "./ticketing-utils";
-import { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button } from "@mui/material";
 import { TICKETING_BUTTON_STYLE } from "features/shared/constants";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useNavigate } from "react-router-dom";
+import {
+  selectTicketingSubmitTicket,
+  ticketingSubmitTicket,
+  ticketingSubmitTicketState,
+} from "../slices/ticketing-submit.slice";
+import { ticketingTicketParam } from "features/ticketing/core/ticketing.params";
 
 interface formData {
   ticketTitle: string;
@@ -15,6 +23,10 @@ interface formData {
 }
 
 export function SubmitTicketContents() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const submitTicketState = useAppSelector(selectTicketingSubmitTicket);
+  // const getAllTicketState = useAppSelector(selectGetStockOrderAllStores);
   const [formState, setFormState] = useState<formData>({
     ticketTitle: "",
     department: null,
@@ -29,6 +41,26 @@ export function SubmitTicketContents() {
     }));
   };
 
+  const handleOnSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    const submitTicketParam: ticketingTicketParam = {
+      ticketTitle: formState.ticketTitle,
+      departmentId: formState.department?.id,
+      // urgency: formState.urgency,
+      ticketDetails: formState.ticketDetails,
+    };
+
+    console.log(submitTicketParam);
+
+    dispatch(ticketingSubmitTicket(submitTicketParam));
+  };
+
+  useEffect(() => {
+    if (ticketingSubmitTicketState.success === submitTicketState.status) {
+      navigate("/admin/ticketing/submit-ticket");
+    }
+  }, [submitTicketState.status, ticketingSubmitTicketState.success]);
+
   return (
     <div className="flex flex-col space-y-5">
       <div>
@@ -36,7 +68,7 @@ export function SubmitTicketContents() {
           Submit a Ticket
         </span>
       </div>
-      <form action="" className="w-full px-10 space-y-5">
+      <form onSubmit={handleOnSubmit} className="w-full px-10 space-y-5">
         <MaterialInput
           fullWidth
           required
@@ -65,7 +97,8 @@ export function SubmitTicketContents() {
           }}
         />
 
-        <MaterialInputAutoComplete
+        {/* 👇 URGENCY AUTOCOMPLETE FIELD 👇 */}
+        {/* <MaterialInputAutoComplete
           required
           colorTheme={"black"}
           options={urgency ?? []}
@@ -79,7 +112,7 @@ export function SubmitTicketContents() {
               handleOnChange(selectedValue, "urgency");
             }
           }}
-        />
+        /> */}
 
         <MaterialInput
           multiline
