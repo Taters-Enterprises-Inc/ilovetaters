@@ -15,10 +15,7 @@ export function MessageModal() {
   const dispatch = useAppDispatch();
   const messageModalState = useAppSelector(selectMessageModal);
 
-  if (messageModalState.status) {
-    document.body.classList.add("overflow-hidden");
-  } else {
-    document.body.classList.remove("overflow-hidden");
+  if (!messageModalState.status) {
     return null;
   }
 
@@ -28,16 +25,24 @@ export function MessageModal() {
         <button
           className="absolute text-2xl text-secondary top-2 right-4"
           onClick={() => {
-            document.body.classList.remove("overflow-hidden");
             dispatch(closeMessageModal());
           }}
         >
           <IoMdClose />
         </button>
 
-        <div className="mt-2 leading-tight">
-          {messageModalState.data.message}
-        </div>
+        {messageModalState.data.useHtml ? (
+          <div
+            className="text-sm"
+            dangerouslySetInnerHTML={{
+              __html: messageModalState.data.message,
+            }}
+          />
+        ) : (
+          <div className={`mt-2 leading-tight`}>
+            {messageModalState.data.message}
+          </div>
+        )}
 
         <div className="flex items-center justify-end mt-4 space-x-2">
           {messageModalState.data.buttons?.map((button) => (
@@ -51,19 +56,6 @@ export function MessageModal() {
               {button.text}
             </button>
           ))}
-
-          {/* <button
-            onClick={props.onClose}
-            className="py-1 w-[100px] font-bold bg-secondary rounded-full text-white"
-          >
-            No
-          </button>
-          <button
-            onClick={props.onYes}
-            className="py-1 w-[100px] text-white bg-button font-bold rounded-full"
-          >
-            Yes
-          </button> */}
         </div>
       </div>
     </div>

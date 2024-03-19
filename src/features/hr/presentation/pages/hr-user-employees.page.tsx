@@ -38,10 +38,7 @@ import {
 import { HrEmployeeInfoModal } from "../modals";
 import { getEmployeeInfo } from "../slices/get-employee-info.slice";
 
-const columns: Array<Column> = [
-  { id: "name", label: "Name" },
-  { id: "action", label: "Action" },
-];
+const columns: Array<Column> = [{ id: "name", label: "Name" }];
 
 export function HrUserEmployees() {
   const dispatch = useAppDispatch();
@@ -291,30 +288,6 @@ export function HrUserEmployees() {
                           <div className="font-semibold text-[10px]">
                             {row.position}
                           </div>
-                        </DataTableCell>
-                        <DataTableCell align="left">
-                          <button
-                            onClick={() => {
-                              const params = {
-                                page_no: pageNo,
-                                per_page: perPage,
-                                order_by: orderBy,
-                                department_id: departmentId,
-                                user_id: row.id,
-                                order: order,
-                                search: search,
-                              };
-
-                              const queryParams = createQueryParams(params);
-
-                              navigate({
-                                pathname: "",
-                                search: queryParams,
-                              });
-                            }}
-                          >
-                            <FaEye className="text-lg" />
-                          </button>
                         </DataTableCell>
                       </DataTableRow>
                     ))}

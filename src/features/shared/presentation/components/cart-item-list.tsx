@@ -17,9 +17,19 @@ import { useEffect } from "react";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
+import {
+  getSession,
+  GetSessionState,
+  selectGetSession,
+} from "../slices/get-session.slice";
 import { ActiveUrl } from "./header-nav";
 import { Media } from "./media";
+import { openCateringFreeItemModal } from "../../../catering/presentation/slices/catering-free-item-modal.slice";
+import { ProductModel } from "features/shared/core/domain/product.model";
+import {
+  GetCateringCategoryProductsState,
+  selectGetCateringCategoryProducts,
+} from "features/catering/presentation/slices/get-catering-category-products.slice";
 
 export interface CartListItemProps {
   activeUrl: ActiveUrl;
@@ -34,6 +44,9 @@ export function CartListItem(props: CartListItemProps) {
   );
   const removeItemFromCartCateringState = useAppSelector(
     selectRemoveItemFromCartCatering
+  );
+  const getCateringCategoryProductsState = useAppSelector(
+    selectGetCateringCategoryProducts
   );
 
   useEffect(() => {
@@ -336,6 +349,69 @@ export function CartListItem(props: CartListItemProps) {
       );
     }
   };
+  const checkFreeItem = (param: {
+    freeItemAvailable: (freeItem: Array<ProductModel>) => void;
+    freeItemNotAvailable: (
+      almostItem: ProductModel | null,
+      totalPrice: number
+    ) => void;
+  }) => {
+    if (
+      getCateringCategoryProductsState.data &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getCateringCategoryProductsState.status ===
+        GetCateringCategoryProductsState.success
+    ) {
+      const addons = getCateringCategoryProductsState.data.addons;
+      let freeItem: Array<ProductModel> = [];
+      let calculatedPrice = 0;
+      let almostItem: ProductModel | null = null;
+      let isFreeItemClaimed = false;
+
+      const orders = getSessionState.data.orders;
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+          calculatedPrice += order.prod_calc_amount;
+
+          if (orders[i].is_free_item == 1) {
+            isFreeItemClaimed = true;
+          }
+        }
+      }
+      const totalPrice = calculatedPrice;
+
+      if (addons) {
+        for (let i = 0; i < addons.length; i++) {
+          const freeThreshold = addons[i].free_threshold;
+          if (freeThreshold) {
+            if (totalPrice >= freeThreshold) {
+              freeItem.push(addons[i]);
+            }
+
+            if (almostItem == null && freeThreshold != undefined) {
+              almostItem = addons[i];
+            } else if (
+              almostItem != null &&
+              almostItem.free_threshold != undefined &&
+              freeThreshold != undefined &&
+              freeThreshold < almostItem.free_threshold
+            ) {
+              almostItem = addons[i];
+            }
+          }
+        }
+      }
+
+      if (freeItem.length > 0 && isFreeItemClaimed == false) {
+        param.freeItemAvailable(freeItem);
+      } else {
+        param.freeItemNotAvailable(almostItem, totalPrice);
+      }
+    }
+  };
 
   return (
     <>
@@ -498,7 +574,21 @@ export function CartListItem(props: CartListItemProps) {
                 </div>
                 <button
                   onClick={() => {
-                    props.onProcessOrder();
+                    checkFreeItem({
+                      freeItemAvailable: (val) => {
+                        if (getSessionState.data) {
+                          if (
+                            getSessionState.data.catering_type == "catering"
+                          ) {
+                            dispatch(openCateringFreeItemModal());
+                          }
+                          props.onProcessOrder();
+                        }
+                      },
+                      freeItemNotAvailable: () => {
+                        props.onProcessOrder();
+                      },
+                    });
                   }}
                   className="w-full py-2 text-lg text-white border rounded-lg bg-button border-secondary"
                 >

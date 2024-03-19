@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { Media } from "features/shared/presentation/components";
 import {
+  GetSessionState,
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
@@ -16,6 +17,12 @@ import {
   resetRemoveItemFromCartCatering,
   selectRemoveItemFromCartCatering,
 } from "../slices/remove-item-from-cart-catering.slice";
+import {
+  GetCateringCategoryProductsState,
+  selectGetCateringCategoryProducts,
+} from "../slices/get-catering-category-products.slice";
+import { ProductModel } from "features/shared/core/domain/product.model";
+import { openCateringFreeItemModal } from "features/catering/presentation/slices/catering-free-item-modal.slice";
 
 interface CateringCartModalProps {
   open: boolean;
@@ -28,6 +35,9 @@ export function CateringCartModal(props: CateringCartModalProps) {
   const dispatch = useAppDispatch();
   const removeItemFromCartCateringState = useAppSelector(
     selectRemoveItemFromCartCatering
+  );
+  const getCateringCategoryProductsState = useAppSelector(
+    selectGetCateringCategoryProducts
   );
 
   useEffect(() => {
@@ -84,6 +94,71 @@ export function CateringCartModal(props: CateringCartModalProps) {
           prefix={"₱"}
         />
       );
+    }
+  };
+
+  const checkFreeItem = (param: {
+    freeItemAvailable: (freeItem: Array<ProductModel>) => void;
+    freeItemNotAvailable: (
+      almostItem: ProductModel | null,
+      totalPrice: number
+    ) => void;
+  }) => {
+    if (
+      getCateringCategoryProductsState.data &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getCateringCategoryProductsState.status ===
+        GetCateringCategoryProductsState.success
+    ) {
+      const addons = getCateringCategoryProductsState.data.addons;
+      let freeItem: Array<ProductModel> = [];
+      let calculatedPrice = 0;
+      let almostItem: ProductModel | null = null;
+      let isFreeItemClaimed = false;
+
+      const orders = getSessionState.data.orders;
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+          calculatedPrice += order.prod_calc_amount;
+
+          if (orders[i].is_free_item == 1) {
+            isFreeItemClaimed = true;
+          }
+        }
+      }
+      const totalPrice = calculatedPrice;
+
+      if (addons) {
+        for (let i = 0; i < addons.length; i++) {
+          const freeThreshold = addons[i].free_threshold;
+          console.log(freeThreshold);
+          if (freeThreshold) {
+            if (totalPrice >= freeThreshold) {
+              freeItem.push(addons[i]);
+            }
+
+            if (almostItem == null && freeThreshold != undefined) {
+              almostItem = addons[i];
+            } else if (
+              almostItem != null &&
+              almostItem.free_threshold != undefined &&
+              freeThreshold != undefined &&
+              freeThreshold < almostItem.free_threshold
+            ) {
+              almostItem = addons[i];
+            }
+          }
+        }
+      }
+
+      if (freeItem.length > 0 && isFreeItemClaimed == false) {
+        param.freeItemAvailable(freeItem);
+      } else {
+        param.freeItemNotAvailable(almostItem, totalPrice);
+      }
     }
   };
 
@@ -194,8 +269,24 @@ export function CateringCartModal(props: CateringCartModalProps) {
 
                   <button
                     onClick={() => {
-                      props.onClose();
-                      navigate("/shop/checkout");
+                      checkFreeItem({
+                        freeItemAvailable: (val) => {
+                          if (getSessionState.data) {
+                            props.onClose();
+
+                            if (
+                              getSessionState.data.catering_type == "catering"
+                            ) {
+                              dispatch(openCateringFreeItemModal());
+                            }
+                            navigate("/shop/checkout");
+                          }
+                        },
+                        freeItemNotAvailable: () => {
+                          props.onClose();
+                          navigate("/shop/checkout");
+                        },
+                      });
                     }}
                     className="w-full py-2 text-lg text-white border rounded-lg border-secondary bg-button"
                   >

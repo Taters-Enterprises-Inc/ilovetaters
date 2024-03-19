@@ -311,6 +311,11 @@ import ticketSideBar from "features/ticketing/presentation/slices/ticketing-side
 import getAllTickets from "features/ticketing/presentation/slices/get-all-tickets.slice";
 import getMyTickets from "features/ticketing/presentation/slices/get-my-tickets.slice";
 import ticketingSubmitTicket from "features/ticketing/presentation/slices/ticketing-submit.slice";
+import cateringFreeItemModal from "features/catering/presentation/slices/catering-free-item-modal.slice";
+import cateringSelectTypeModal from "features/catering/presentation/slices/catering-select-type.slice";
+import adminCateringBookingOverrideEventDate from "features/admin/presentation/slices/admin-catering-booking-override-event-date.slice";
+import getCateringOverrides from "features/admin/presentation/slices/get-catering-overrides.slice";
+import adminCateringBookingApproveOverride from "features/admin/presentation/slices/admin-catering-booking-approve-override.slice";
 
 export const store = configureStore({
   reducer: {
@@ -625,6 +630,11 @@ export const store = configureStore({
     getAllTickets,
     getMyTickets,
     ticketingSubmitTicket,
+    cateringFreeItemModal,
+    cateringSelectTypeModal,
+    adminCateringBookingOverrideEventDate,
+    getCateringOverrides,
+    adminCateringBookingApproveOverride,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

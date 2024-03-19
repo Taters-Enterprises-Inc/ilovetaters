@@ -484,6 +484,15 @@ import {
   selectstockOrderActiveStatus,
   stockOrderActiveStatusState,
 } from "features/stock-ordering/presentation/slices/stock-order-settings-product-active-status.slice";
+import {
+  adminCateringBookingOverrideEventDate,
+  AdminCateringBookingOverrideEventDateState,
+  selectAdminCateringBookingOverrideEventDate,
+} from "features/admin/presentation/slices/admin-catering-booking-override-event-date.slice";
+import {
+  AdminCateringBookingApproveOverrideState,
+  selectAdminCateringBookingApproveOverride,
+} from "features/admin/presentation/slices/admin-catering-booking-approve-override.slice";
 
 Swal.mixin({
   background: "#22201A",
@@ -778,6 +787,63 @@ export function LoadingAndSnackbarWrapper() {
   const stockOrderActiveStatusStates = useAppSelector(
     selectstockOrderActiveStatus
   );
+
+  const getSnacksDeliveredDealAvailableStoresState = useAppSelector(
+    selectGetSnacksDeliveredDealAvailableStores
+  );
+
+  const setSnacksDeliveredDealStoreAndAddressState = useAppSelector(
+    selectSetSnacksDeliveredDealStoreAndAddress
+  );
+
+  const adminCateringBookingOverrideEventDateState = useAppSelector(
+    selectAdminCateringBookingOverrideEventDate
+  );
+
+  const adminCateringBookingApproveOverrideState = useAppSelector(
+    selectAdminCateringBookingApproveOverride
+  );
+
+  useEffect(() => {
+    switch (adminCateringBookingApproveOverrideState.status) {
+      case AdminCateringBookingApproveOverrideState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminCateringBookingApproveOverrideState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingApproveOverrideState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingApproveOverrideState.fail:
+        SweetAlert.fire({
+          title: "Oops!",
+          text: adminCateringBookingApproveOverrideState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminCateringBookingApproveOverrideState, dispatch]);
+
+  useEffect(() => {
+    switch (stockOrderActiveStatusStates.status) {
+      case stockOrderActiveStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case stockOrderActiveStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case stockOrderActiveStatusState.success:
+        showAlert(setSuccessAlert, stockOrderActiveStatusStates.message);
+        break;
+      case stockOrderActiveStatusState.fail:
+        showAlert(setFailsAlert, stockOrderActiveStatusStates.message);
+        break;
+    }
+  }, [stockOrderActiveStatusStates]);
 
   useEffect(() => {
     switch (stockOrderActiveStatusStates.status) {
@@ -1604,13 +1670,29 @@ export function LoadingAndSnackbarWrapper() {
     }
   }, [createAdminSettingStoreState]);
 
-  const getSnacksDeliveredDealAvailableStoresState = useAppSelector(
-    selectGetSnacksDeliveredDealAvailableStores
-  );
-
-  const setSnacksDeliveredDealStoreAndAddressState = useAppSelector(
-    selectSetSnacksDeliveredDealStoreAndAddress
-  );
+  useEffect(() => {
+    switch (adminCateringBookingOverrideEventDateState.status) {
+      case AdminCateringBookingOverrideEventDateState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminCateringBookingOverrideEventDateState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingOverrideEventDateState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingOverrideEventDateState.fail:
+        SweetAlert.fire({
+          title: "Oops...",
+          text: adminCateringBookingOverrideEventDateState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminCateringBookingOverrideEventDateState, dispatch]);
 
   useEffect(() => {
     switch (setCateringStoreAndAddressState.status) {
@@ -1624,6 +1706,13 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case SetCateringStoreAndAddressState.fail:
+        SweetAlert.fire({
+          title: "Oops!",
+          text: setCateringStoreAndAddressState.message,
+          icon: "error",
+          background: "#22201A",
+          color: "white",
+        });
         setOpenBackdropLoading(false);
         break;
     }

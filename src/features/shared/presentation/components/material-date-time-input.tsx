@@ -91,7 +91,7 @@ export function MaterialDateTimeInput(props: MaterialDateTimeInputProps) {
             onClick={() => {
               props.setOpenCalendar(true);
             }}
-            className="w-full lg:w-fit"
+            className="w-full lg:w-fit hide"
           />
         )}
       />

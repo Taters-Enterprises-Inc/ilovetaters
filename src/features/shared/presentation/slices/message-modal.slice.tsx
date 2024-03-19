@@ -7,6 +7,7 @@ interface InitialState {
   data: {
     message: string;
     buttons: Array<MessageModalButtonProps> | null;
+    useHtml: boolean;
   };
 }
 
@@ -15,11 +16,13 @@ const initialState: InitialState = {
   data: {
     message: "",
     buttons: null,
+    useHtml: false,
   },
 };
 
 interface OpenMessageModalParam {
   message: string;
+  useHtml?: boolean;
   buttons: Array<MessageModalButtonProps>;
 }
 
@@ -28,18 +31,20 @@ export const messageModalSlice = createSlice({
   initialState,
   reducers: {
     openMessageModal: (state, action: PayloadAction<OpenMessageModalParam>) => {
-      const { message, buttons } = action.payload;
+      const { message, buttons, useHtml } = action.payload;
 
       state.status = true;
 
       state.data.message = message;
       state.data.buttons = buttons;
+      state.data.useHtml = useHtml ?? false;
     },
 
     closeMessageModal: (state) => {
       state.status = false;
       state.data.message = "";
       state.data.buttons = null;
+      state.data.useHtml = false;
     },
   },
 });

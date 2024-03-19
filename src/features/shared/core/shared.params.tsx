@@ -38,6 +38,7 @@ export interface SetStoreAndAddressParm {
   service: "SNACKSHOP" | "CATERING" | "POPCLUB";
   cateringStartDate?: Date;
   cateringEndDate?: Date;
+  cateringType?: "catering" | "bulk-order-pickup" | "bulk-order-delivery";
 }
 
 export interface SetSessionParam {

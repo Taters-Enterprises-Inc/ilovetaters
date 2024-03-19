@@ -221,6 +221,9 @@ import { TicketingSidebarWrapper } from "features/ticketing/presentation/compone
 import { MyTickets } from "features/ticketing/presentation/pages";
 import { SubmitTicket } from "features/ticketing/presentation/pages";
 import { ViewTicket } from "features/ticketing/presentation/pages/view-ticket.page";
+import { CateringFreeItemModalWrapper } from "features/catering/presentation/wrappers/catering-free-item-modal.wrapper";
+import { CateringDefaultWrappers } from "features/catering/presentation/wrappers/catering-default-wrappers";
+import { CateringSelectTypeWrapper } from "features/catering/presentation/wrappers/catering-select-type-modal.wrapper";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -366,41 +369,49 @@ root.render(
                             path="shop/login"
                             element={<Navigate to={"/admin"} />}
                           />
+                          <Route element={<CateringDefaultWrappers />}>
+                            <Route element={<CateringFreeItemModalWrapper />}>
+                              <Route path="shop" element={<Catering />}>
+                                <Route element={<CateringSelectTypeWrapper />}>
+                                  <Route index element={<CateringHome />} />
+                                </Route>
 
-                          <Route path="shop" element={<Catering />}>
-                            <Route index element={<CateringHome />} />
+                                <Route path="products">
+                                  <Route element={<CateringProductsGuard />}>
+                                    <Route
+                                      index
+                                      element={<CateringProducts />}
+                                    />
+                                    <Route
+                                      path="build-your-own-package"
+                                      element={<CateringBuildYourOwnPackage />}
+                                    />
+                                  </Route>
 
-                            <Route path="products">
-                              <Route element={<CateringProductsGuard />}>
-                                <Route index element={<CateringProducts />} />
+                                  <Route
+                                    path=":hash"
+                                    element={<CateringProduct />}
+                                  />
+                                </Route>
+
                                 <Route
-                                  path="build-your-own-package"
-                                  element={<CateringBuildYourOwnPackage />}
+                                  path="contract/:hash"
+                                  element={<CateringContract />}
+                                />
+
+                                <Route element={<CateringCheckoutGuard />}>
+                                  <Route
+                                    path="checkout"
+                                    element={<CateringCheckout />}
+                                  />
+                                </Route>
+
+                                <Route
+                                  path="order/:hash"
+                                  element={<CateringOrder />}
                                 />
                               </Route>
-
-                              <Route
-                                path=":hash"
-                                element={<CateringProduct />}
-                              />
                             </Route>
-
-                            <Route
-                              path="contract/:hash"
-                              element={<CateringContract />}
-                            />
-
-                            <Route element={<CateringCheckoutGuard />}>
-                              <Route
-                                path="checkout"
-                                element={<CateringCheckout />}
-                              />
-                            </Route>
-
-                            <Route
-                              path="order/:hash"
-                              element={<CateringOrder />}
-                            />
                           </Route>
 
                           <Route path="feedback">

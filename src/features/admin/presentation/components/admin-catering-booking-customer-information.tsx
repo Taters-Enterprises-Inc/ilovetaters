@@ -16,7 +16,11 @@ import {
   selectGetAdminCateringStores,
   getAdminCateringStores,
 } from "../slices/get-admin-catering-stores.slice";
-import { AdminPasswordModal } from "../modals";
+import {
+  AdminOverrideApprovalModal,
+  AdminOverrideDateModal,
+  AdminPasswordModal,
+} from "../modals";
 import {
   adminCateringPrivilege,
   AdminCateringPrivilegeState,
@@ -34,6 +38,8 @@ import moment from "moment";
 import { MaterialInput } from "features/shared/presentation/components";
 import { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
 import { selectUpdateAdminCateringOrderItemRemarks } from "../slices/update-admin-catering-order-item-remarks.slice";
+import { adminCateringBookingOverrideEventDate } from "../slices/admin-catering-booking-override-event-date.slice";
+import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -50,6 +56,10 @@ export function AdminCateringBookingCustomerInformation() {
     openAdminPasswordStatusChangeModal,
     setOpenAdminPasswordStatusChangeModal,
   ] = useState<boolean>(false);
+  const [openOverrideDateModal, setOpenOverrideDateModal] =
+    useState<boolean>(false);
+  const [openOverrideApprovalModal, setOpenOverrideApprovalModal] =
+    useState<boolean>(false);
 
   const trackingNo = query.get("tracking_no");
 
@@ -67,6 +77,7 @@ export function AdminCateringBookingCustomerInformation() {
   const updateAdminCateringOrderItemRemarksState = useAppSelector(
     selectUpdateAdminCateringOrderItemRemarks
   );
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
     if (
@@ -168,7 +179,7 @@ export function AdminCateringBookingCustomerInformation() {
   };
 
   return (
-    <div>
+    <>
       <div className="pt-1 text-secondary">
         <div className="space-y-1 ">
           <div className="grid-cols-3 gap-4 lg:grid ">
@@ -379,6 +390,38 @@ export function AdminCateringBookingCustomerInformation() {
                       )}
                     </Moment>
                   </span>
+                  {getAdminCateringBookingState.data.override_id &&
+                  getAdminCateringBookingState.data.override_status != null &&
+                  getAdminSessionState.data?.admin.user_id ==
+                    getAdminCateringBookingState.data.approver_id &&
+                  getAdminCateringBookingState.data.override_status == 0 ? (
+                    <span
+                      onClick={() => {
+                        setOpenOverrideApprovalModal(true);
+                      }}
+                      className="px-2 py-1 text-[10px] text-white bg-green-700 shadow-md lg:mb-0 ml-2 cursor-pointer"
+                    >
+                      Click to check date to approve
+                    </span>
+                  ) : getAdminCateringBookingState.data.override_id == null ? (
+                    <span
+                      onClick={() => {
+                        setOpenOverrideDateModal(true);
+                      }}
+                      className="px-2 py-1 text-[10px] text-white bg-orange-700 shadow-md lg:mb-0 ml-2 cursor-pointer"
+                    >
+                      Override
+                    </span>
+                  ) : getAdminCateringBookingState.data.override_status == 0 ? (
+                    <span
+                      onClick={() => {
+                        setOpenOverrideApprovalModal(true);
+                      }}
+                      className="px-2 py-1 text-[10px] text-white bg-yellow-700 shadow-md lg:mb-0 ml-2 cursor-pointer"
+                    >
+                      Pending Approval
+                    </span>
+                  ) : null}
                 </div>
                 <div>
                   <strong>Event Time:</strong>{" "}
@@ -439,21 +482,6 @@ export function AdminCateringBookingCustomerInformation() {
           <div className="pt-2 pb-3">
             <span className="text-xl font-bold">Attached Documents</span>
 
-            {getAdminCateringBookingState.data.uploaded_contract ? (
-              <div className="mt-1">
-                <strong>Uploaded Signed Contract:</strong>{" "}
-                <span className="font-semibold">
-                  <a
-                    className="text-blue-600 underline"
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`${REACT_APP_DOMAIN_URL}api/load-image-catering-contract/${getAdminCateringBookingState.data?.uploaded_contract}`}
-                  >
-                    Click to view
-                  </a>
-                </span>
-              </div>
-            ) : null}
             {getAdminCateringBookingState.data.initial_payment_proof ? (
               <div>
                 <strong>Proof of initial payment:</strong>{" "}
@@ -850,8 +878,19 @@ export function AdminCateringBookingCustomerInformation() {
                 href={`${REACT_APP_DOMAIN_URL}api/download/contract/${getAdminCateringBookingState.data?.hash_key}`}
                 className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
               >
-                Download Catering Contract
+                Download Original Contract
               </a>
+              {getAdminCateringBookingState.data &&
+              getAdminCateringBookingState.data.uploaded_contract ? (
+                <a
+                  className="px-3 py-1 text-base text-white bg-blue-700 rounded-md shadow-md"
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${REACT_APP_DOMAIN_URL}api/load-image-catering-contract/${getAdminCateringBookingState.data?.uploaded_contract}`}
+                >
+                  Download Signed Contract
+                </a>
+              ) : null}
             </div>
             <div className="order-1 space-x-2 lg:order-2">
               <AdminCateringBookingCustomerInformationButtons />
@@ -901,6 +940,34 @@ export function AdminCateringBookingCustomerInformation() {
           setOpenAdminPasswordStoreChangeModal(false);
         }}
       />
-    </div>
+      <AdminOverrideDateModal
+        open={openOverrideDateModal}
+        title="Override Event Datetime"
+        onClickOverride={(startDate, endDate) => {
+          if (getAdminCateringBookingState.data) {
+            dispatch(
+              adminCateringBookingOverrideEventDate({
+                transactionId: getAdminCateringBookingState.data.id,
+                startDate: startDate,
+                endDate: endDate,
+                storeId: getAdminCateringBookingState.data.store,
+              })
+            );
+          }
+
+          setOpenOverrideDateModal(false);
+        }}
+        onClose={() => {
+          setOpenOverrideDateModal(false);
+        }}
+      />
+      <AdminOverrideApprovalModal
+        open={openOverrideApprovalModal}
+        title="Pending Approval"
+        onClose={() => {
+          setOpenOverrideApprovalModal(false);
+        }}
+      />
+    </>
   );
 }

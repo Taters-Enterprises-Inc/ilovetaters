@@ -16,6 +16,9 @@ export interface AdminCateringBookingModel {
   discount_name: string | null;
   discount_percentage: string | null;
   hash_key: string;
+  override_id: string | null;
+  approver_id: string | null;
+  override_status: number | null;
 
   service_fee: number;
   night_diff_fee: number;

@@ -141,20 +141,6 @@ export function CateringBuildYourOwnPackage() {
     }
   }, [dispatch, hash]);
 
-  useEffect(() => {
-    if (
-      getSessionState.status === GetSessionState.success &&
-      getSessionState.data &&
-      getSessionState.data.cache_data?.region_id
-    ) {
-      dispatch(
-        getCateringCategoryProducts({
-          region_id: getSessionState.data.cache_data.region_id,
-        })
-      );
-    }
-  }, [getSessionState, dispatch]);
-
   const calculateFreeAddon = () => {
     let freeItem: Array<ProductModel> = [];
 
@@ -251,51 +237,68 @@ export function CateringBuildYourOwnPackage() {
   const handleAddToCart = (product: CustomizePackageProduct) => {
     checkFreeItem({
       freeItemAvailable: () => {
-        SweetAlert.fire({
-          title: "Claim you free item! 🎉",
-          text: "You're eligible to claim a free item!",
-          icon: "info",
-          showCancelButton: true,
-          confirmButtonText: "Add to cart, then check the item",
-          background: "#22201A",
-          color: "white",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(
-              addToCartCateringProduct({
-                product: product,
-              })
-            ).then(() => {
-              setTimeout(() => {
-                if (cateringAddonsRef.current)
-                  cateringAddonsRef.current.scrollIntoView();
-              }, 500);
-            });
-          }
-        });
+        if (
+          getSessionState.data &&
+          getSessionState.data.catering_type == "catering"
+        ) {
+          SweetAlert.fire({
+            title: "Claim you free item! 🎉",
+            text: "You're eligible to claim a free item!",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Add to cart, then check the item",
+            background: "#22201A",
+            color: "white",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              dispatch(
+                addToCartCateringProduct({
+                  product: product,
+                })
+              );
+            }
+          });
+        } else {
+          dispatch(
+            addToCartCateringProduct({
+              product: product,
+            })
+          );
+        }
       },
       freeItemNotAvailable(val, totalPrice) {
-        dispatch(
-          addToCartCateringProduct({
-            product: product,
-          })
-        ).then(() => {
-          if (val && val.free_threshold != null) {
-            SweetAlert.fire({
-              title: "Unlock a Free Item! 🎉",
-              text: `You're on your way to unlocking a free ${
-                val.name
-              }. You'll need to add items worth ₱${numberWithCommas(
-                val.free_threshold - totalPrice
-              )} more to your cart to claim your freebies.`,
-              icon: "info",
-              showCancelButton: true,
-              confirmButtonText: "Okay",
-              background: "#22201A",
-              color: "white",
-            });
-          }
-        });
+        if (
+          getSessionState.data &&
+          getSessionState.data.catering_type == "catering"
+        ) {
+          dispatch(
+            addToCartCateringProduct({
+              product: product,
+            })
+          ).then(() => {
+            if (val && val.free_threshold != null) {
+              SweetAlert.fire({
+                title: "Unlock a Free Item! 🎉",
+                text: `You're on your way to unlocking a free ${
+                  val.name
+                }. You'll need to add items worth ₱${numberWithCommas(
+                  val.free_threshold - totalPrice
+                )} more to your cart to claim your freebies.`,
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonText: "Okay",
+                background: "#22201A",
+                color: "white",
+              });
+            }
+          });
+        } else {
+          dispatch(
+            addToCartCateringProduct({
+              product: product,
+            })
+          );
+        }
       },
     });
   };
@@ -482,9 +485,15 @@ export function CateringBuildYourOwnPackage() {
                             <CateringAddon
                               key={i}
                               product={product}
-                              isFreeItem={isFreeItem}
+                              isFreeItem={
+                                getSessionState.data.catering_type == "catering"
+                                  ? isFreeItem
+                                  : false
+                              }
                               isFreeItemButAddToCartFirst={
-                                isFreeItemButAddToCartFirst
+                                getSessionState.data.catering_type == "catering"
+                                  ? isFreeItemButAddToCartFirst
+                                  : false
                               }
                               isFreeItemClaimed={isFreeItemClaimed}
                             />
