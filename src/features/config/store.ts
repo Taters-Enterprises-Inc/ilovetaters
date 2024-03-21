@@ -316,6 +316,7 @@ import cateringSelectTypeModal from "features/catering/presentation/slices/cater
 import adminCateringBookingOverrideEventDate from "features/admin/presentation/slices/admin-catering-booking-override-event-date.slice";
 import getCateringOverrides from "features/admin/presentation/slices/get-catering-overrides.slice";
 import adminCateringBookingApproveOverride from "features/admin/presentation/slices/admin-catering-booking-approve-override.slice";
+import getTicket from "features/ticketing/presentation/slices/get-ticket.slice";
 
 export const store = configureStore({
   reducer: {
@@ -627,6 +628,7 @@ export const store = configureStore({
     stockOrderActiveStatus,
     updateFranchiseePayBill,
     ticketSideBar,
+    getTicket,
     getAllTickets,
     getMyTickets,
     ticketingSubmitTicket,
