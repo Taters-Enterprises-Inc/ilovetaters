@@ -2,6 +2,14 @@ import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetAllTicketsModel } from "../core/domain/get-all-tickets.model";
 import { ticketingTicketParam } from "../core/ticketing.params";
+import { GetTicketModel } from "../core/domain/get-ticket.model";
+
+export interface GetTicketResponse {
+  data: {
+    message: string;
+    data: GetTicketModel;
+  };
+}
 
 export interface GetAllTicketsResponse {
   data: {
@@ -21,6 +29,12 @@ export interface ticketingSubmitTicketResponse {
   data: {
     message: string;
   };
+}
+
+export function GetTicketRepository(id: string): Promise<GetTicketResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/ticketing/ticket/${id}`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAllTicketsRepository(
