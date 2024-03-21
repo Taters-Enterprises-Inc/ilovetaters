@@ -48,7 +48,7 @@ export function TicketingTriageModal(props: TicketingTriageModalProps) {
         </div>
 
         <div className="px-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
-          <form className="p-4 space-y-4 bg-paper">
+          <form className="p-4 space-y-4 bg-white">
             <span className="text-xl text-secondary">
               Assign the Ticket to a Department
             </span>
