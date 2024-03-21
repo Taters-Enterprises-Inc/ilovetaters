@@ -25,6 +25,7 @@ import {
   selectGetAllTickets,
 } from "../slices/get-all-tickets.slice";
 import { department } from "./ticketing-utils";
+import { getTicket } from "../slices/get-ticket.slice";
 
 // Table Columns
 const columns: Array<Column> = [
@@ -51,6 +52,14 @@ export function AllTicketsContents() {
   const [openTriageModal, setOpenTriageModal] = React.useState(false);
 
   const getAllTicketStates = useAppSelector(selectGetAllTickets);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getTicket(id)).then(() => {
+        setOpenTriageModal(true);
+      });
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     const query = createQueryParams({
@@ -329,7 +338,22 @@ export function AllTicketsContents() {
                         </Link>
                         <button
                           onClick={() => {
-                            setOpenTriageModal(true);
+                            const params = {
+                              page_no: pageNo,
+                              per_page: perPage,
+                              status: status,
+                              id: row.id,
+                              order_by: orderBy,
+                              order: order,
+                              search: search,
+                            };
+
+                            const queryParams = createQueryParams(params);
+
+                            navigate({
+                              pathname: "",
+                              search: queryParams,
+                            });
                           }}
                         >
                           <TbCheckupList className="text-lg" />
@@ -346,7 +370,24 @@ export function AllTicketsContents() {
 
       <TicketingTriageModal
         open={openTriageModal}
-        onClose={() => setOpenTriageModal(false)}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            status: status,
+            order_by: orderBy,
+            order: order,
+            search: search,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+          setOpenTriageModal(false);
+        }}
       />
     </>
   );
