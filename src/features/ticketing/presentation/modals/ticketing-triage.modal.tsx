@@ -5,6 +5,8 @@ import { useState } from "react";
 import { ticketingTriageTicket } from "../slices/ticketing-triage-ticket.slice";
 import { useAppDispatch, useQuery } from "features/config/hooks";
 import { ticketingTriageTicketParam } from "features/ticketing/core/ticketing.params";
+import { getAllTickets } from "../slices/get-all-tickets.slice";
+import { createQueryParams } from "features/config/helpers";
 
 interface TicketingTriageModalProps {
   open: boolean;
@@ -19,6 +21,12 @@ export function TicketingTriageModal(props: TicketingTriageModalProps) {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const id = query.get("id");
+  const pageNo = query.get("page_no");
+  const perPage = query.get("per_page");
+  const status = query.get("status");
+  const orderBy = query.get("order_by");
+  const order = query.get("order");
+  const search = query.get("search");
 
   const [formState, setFormState] = useState<formData>({
     department: null,
@@ -37,9 +45,30 @@ export function TicketingTriageModal(props: TicketingTriageModalProps) {
       departmentId: formState.department?.id,
     };
 
+    const params = {
+      page_no: pageNo,
+      per_page: perPage,
+      status: status,
+      order_by: orderBy,
+      order: order,
+      search: search,
+    };
+
     dispatch(
       ticketingTriageTicket({ id: id ?? "", ticketData: triageTicketParam })
-    );
+    )
+      .then(() => {
+        dispatch(getAllTickets(createQueryParams(params)));
+
+        setFormState({
+          department: null,
+        });
+
+        props.onClose();
+      })
+      .catch((error) => {
+        console.error("Error updating department:", error);
+      });
   };
 
   if (props.open) {
