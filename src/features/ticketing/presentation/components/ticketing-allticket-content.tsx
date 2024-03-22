@@ -204,7 +204,22 @@ export function AllTicketsContents() {
                     </Link>
                     <button
                       onClick={() => {
-                        setOpenTriageModal(true);
+                        const params = {
+                          page_no: pageNo,
+                          per_page: perPage,
+                          status: status,
+                          id: row.id,
+                          order_by: orderBy,
+                          order: order,
+                          search: search,
+                        };
+
+                        const queryParams = createQueryParams(params);
+
+                        navigate({
+                          pathname: "",
+                          search: queryParams,
+                        });
                       }}
                     >
                       <TbCheckupList className="text-lg" />
