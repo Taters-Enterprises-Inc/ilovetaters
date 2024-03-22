@@ -26,7 +26,6 @@ export function SubmitTicketContents() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const submitTicketState = useAppSelector(selectTicketingSubmitTicket);
-  // const getAllTicketState = useAppSelector(selectGetStockOrderAllStores);
   const [formState, setFormState] = useState<formData>({
     ticketTitle: "",
     department: null,
