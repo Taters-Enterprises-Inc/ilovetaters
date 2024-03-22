@@ -3,3 +3,7 @@ export interface ticketingTicketParam {
   departmentId: number | undefined;
   ticketDetails: string;
 }
+
+export interface ticketingTriageTicketParam {
+  departmentId: number | undefined;
+}
