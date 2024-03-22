@@ -1,7 +1,10 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetAllTicketsModel } from "../core/domain/get-all-tickets.model";
-import { ticketingTicketParam } from "../core/ticketing.params";
+import {
+  ticketingTicketParam,
+  ticketingTriageTicketParam,
+} from "../core/ticketing.params";
 import { GetTicketModel } from "../core/domain/get-ticket.model";
 
 export interface GetTicketResponse {
@@ -26,6 +29,12 @@ export interface GetMyTicketsResponse {
 }
 
 export interface ticketingSubmitTicketResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface ticketingTriageTicketResponse {
   data: {
     message: string;
   };
@@ -60,6 +69,19 @@ export function ticketingSubmitTicketRepository(
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/ticketing/submit-ticket`,
     param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function ticketingTriageTicketRepository(param: {
+  id: string;
+  ticketData: ticketingTriageTicketParam;
+}): Promise<ticketingTriageTicketResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/ticketing/ticket/triage/${param.id}`,
+    param.ticketData,
     {
       withCredentials: true,
     }
