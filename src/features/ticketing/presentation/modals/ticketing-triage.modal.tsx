@@ -2,6 +2,9 @@ import { MaterialInputAutoComplete } from "features/shared/presentation/componen
 import { IoMdClose } from "react-icons/io";
 import { department } from "../components/ticketing-utils";
 import { useState } from "react";
+import { ticketingTriageTicket } from "../slices/ticketing-triage-ticket.slice";
+import { useAppDispatch, useQuery } from "features/config/hooks";
+import { ticketingTriageTicketParam } from "features/ticketing/core/ticketing.params";
 
 interface TicketingTriageModalProps {
   open: boolean;
@@ -13,6 +16,10 @@ interface formData {
 }
 
 export function TicketingTriageModal(props: TicketingTriageModalProps) {
+  const dispatch = useAppDispatch();
+  const query = useQuery();
+  const id = query.get("id");
+
   const [formState, setFormState] = useState<formData>({
     department: null,
   });
@@ -22,6 +29,17 @@ export function TicketingTriageModal(props: TicketingTriageModalProps) {
       ...prevValue,
       [property]: value,
     }));
+  };
+
+  const handleOnSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    const triageTicketParam: ticketingTriageTicketParam = {
+      departmentId: formState.department?.id,
+    };
+
+    dispatch(
+      ticketingTriageTicket({ id: id ?? "", ticketData: triageTicketParam })
+    );
   };
 
   if (props.open) {
@@ -48,7 +66,7 @@ export function TicketingTriageModal(props: TicketingTriageModalProps) {
         </div>
 
         <div className="px-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
-          <form className="p-4 space-y-4 bg-white">
+          <form onSubmit={handleOnSubmit} className="p-4 space-y-4 bg-white">
             <span className="text-xl text-secondary">
               Assign the Ticket to a Department
             </span>
