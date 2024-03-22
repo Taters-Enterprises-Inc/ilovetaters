@@ -213,7 +213,10 @@ export function MyTicketContents() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected !== "actions") {
+                if (
+                  column_selected !== "actions" &&
+                  column_selected !== "dateCreated" // 👈 REMOVE THIS LINE, if okay na sa database hehe: 👤 Dale
+                ) {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {

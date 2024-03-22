@@ -32,7 +32,7 @@ const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "id", label: "Ticket Number" },
   { id: "ticket_title", label: "Ticket Title" },
-  { id: "department", label: "Department" },
+  { id: "department_id", label: "Department" },
   { id: "dateCreated", label: "Date Created" },
   { id: "actions", label: "Actions" },
 ];
@@ -255,7 +255,10 @@ export function AllTicketsContents() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected !== "actions") {
+                if (
+                  column_selected !== "actions" &&
+                  column_selected !== "dateCreated" // 👈 REMOVE THIS LINE, if okay na sa database hehe: 👤 Dale
+                ) {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
