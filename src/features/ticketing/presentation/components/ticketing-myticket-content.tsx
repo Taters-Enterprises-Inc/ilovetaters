@@ -1,10 +1,7 @@
-import React from "react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
-import { TbCheckupList } from "react-icons/tb";
 import { createQueryParams } from "features/config/helpers";
-import { TicketingTriageModal } from "../modals/ticketing-triage.modal";
 import { DataList } from "features/shared/presentation/components";
 import { AdminChipsButton } from "features/admin/presentation/components/chips-button";
 import { TICKET_STATUS } from "features/shared/constants";
@@ -45,8 +42,6 @@ export function MyTicketContents() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
-
-  const [openTriageModal, setOpenTriageModal] = React.useState(false);
 
   const getMyTicketStates = useAppSelector(selectGetMyTickets);
 
@@ -187,13 +182,6 @@ export function MyTicketContents() {
                     >
                       <FaEye className="text-lg" />
                     </Link>
-                    <button
-                      onClick={() => {
-                        setOpenTriageModal(true);
-                      }}
-                    >
-                      <TbCheckupList className="text-lg" />
-                    </button>
                   </div>
                 </div>
               ))}
@@ -318,13 +306,6 @@ export function MyTicketContents() {
                         >
                           <FaEye className="text-lg" />
                         </Link>
-                        <button
-                          onClick={() => {
-                            setOpenTriageModal(true);
-                          }}
-                        >
-                          <TbCheckupList className="text-lg" />
-                        </button>
                       </div>
                     </DataTableCell>
                   </DataTableRow>
@@ -334,11 +315,6 @@ export function MyTicketContents() {
           </div>
         </>
       ) : null}
-
-      <TicketingTriageModal
-        open={openTriageModal}
-        onClose={() => setOpenTriageModal(false)}
-      />
     </>
   );
 }
