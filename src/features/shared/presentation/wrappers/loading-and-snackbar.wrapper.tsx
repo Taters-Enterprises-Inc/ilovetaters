@@ -494,9 +494,21 @@ import {
   selectAdminCateringBookingApproveOverride,
 } from "features/admin/presentation/slices/admin-catering-booking-approve-override.slice";
 import {
+  GetAllTicketsState,
+  selectGetAllTickets,
+} from "features/ticketing/presentation/slices/get-all-tickets.slice";
+import {
+  GetMyTicketsState,
+  selectGetMyTickets,
+} from "features/ticketing/presentation/slices/get-my-tickets.slice";
+import {
   selectTicketingSubmitTicket,
   ticketingSubmitTicketState,
 } from "features/ticketing/presentation/slices/ticketing-submit.slice";
+import {
+  selectTicketingTriageTicket,
+  ticketingTriageTicketState,
+} from "features/ticketing/presentation/slices/ticketing-triage-ticket.slice";
 
 Swal.mixin({
   background: "#22201A",
@@ -788,9 +800,20 @@ export function LoadingAndSnackbarWrapper() {
     selectstockOrderCreateProduct
   );
 
+  // Get All Tickets
+  const getAllTickets = useAppSelector(selectGetAllTickets);
+
+  // Get My Tickets
+  const getMyTickets = useAppSelector(selectGetMyTickets);
+
   // Submit Ticket
   const ticketingSubmitTicketStates = useAppSelector(
     selectTicketingSubmitTicket
+  );
+
+  // Triage Ticket
+  const ticketingTriageTicketStates = useAppSelector(
+    selectTicketingTriageTicket
   );
 
   const stockOrderActiveStatusStates = useAppSelector(
@@ -888,6 +911,42 @@ export function LoadingAndSnackbarWrapper() {
     }
   }, [stockOrderCreateProductStates]);
 
+  // Get All Tickets
+  useEffect(() => {
+    switch (getAllTickets.status) {
+      case GetAllTicketsState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAllTicketsState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAllTicketsState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAllTicketsState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAllTickets]);
+
+  // Get My Tickets
+  useEffect(() => {
+    switch (getMyTickets.status) {
+      case GetMyTicketsState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetMyTicketsState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetMyTicketsState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetMyTicketsState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getMyTickets]);
+
   // Submit Ticket
   useEffect(() => {
     switch (ticketingSubmitTicketStates.status) {
@@ -898,15 +957,35 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case ticketingSubmitTicketState.success:
-        setOpenBackdropLoading(false);
         showAlert(setSuccessAlert, ticketingSubmitTicketStates.message);
+        setOpenBackdropLoading(false);
         break;
       case ticketingSubmitTicketState.fail:
-        setOpenBackdropLoading(false);
         showAlert(setFailsAlert, ticketingSubmitTicketStates.message);
+        setOpenBackdropLoading(false);
         break;
     }
   }, [ticketingSubmitTicketStates]);
+
+  // Triage Ticket
+  useEffect(() => {
+    switch (ticketingTriageTicketStates.status) {
+      case ticketingTriageTicketState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ticketingTriageTicketState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ticketingTriageTicketState.success:
+        showAlert(setSuccessAlert, ticketingTriageTicketStates.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ticketingTriageTicketState.fail:
+        showAlert(setFailsAlert, ticketingTriageTicketStates.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [ticketingTriageTicketStates]);
 
   useEffect(() => {
     switch (stockOrderEditProductStates.status) {
